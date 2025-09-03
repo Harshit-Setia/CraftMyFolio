@@ -13,7 +13,8 @@ const userSchema = new mongoose.Schema({
   resume: { type: String }, // resume URL
   createdAt: { type: Date, default: Date.now },
   isAdmin: { type: Boolean, default: false },
-
+  folio_id: { type: mongoose.Schema.Types.ObjectId, ref: "Folio" },
+  
   // Education (flexible array, not fixed to xth/xiith/graduation)
   education: {
     type: [
