@@ -34,7 +34,7 @@ const Footer = () => {
   ];
 
   return (
-    <footer className="bg-slate-50 border-t pt-16 pb-8">
+    <footer className="bg-white border-t pt-16 pb-8">
       <div className="container mx-auto px-6">
         {/* Top section with links */}
         <div className="grid gap-10 row-gap-6 mb-8 sm:grid-cols-2 lg:grid-cols-3">

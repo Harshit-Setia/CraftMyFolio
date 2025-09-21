@@ -2,8 +2,9 @@ import Layout from "./Layout";
 import Home from "./pages/Home";
 import PlaceholderPage from "./backup/PlaceholderPage";
 import ErrorPage from "./backup/ErrorPage";
-
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import AuthProvider from "./context/AuthContext";
+import Dashboard from "./pages/Dashboard";
 
 // 2. Define the Error Page
 
@@ -21,6 +22,10 @@ const router = createBrowserRouter([
       {
         path: "templates",
         element: <PlaceholderPage title="Templates" />,
+      },
+      {
+        path: "dashboard",
+        element: <Dashboard />,
       },
       {
         path: "features",
@@ -56,7 +61,11 @@ const router = createBrowserRouter([
 
 // 4. The main App component renders the RouterProvider
 function App() {
-  return <RouterProvider router={router} />;
+  return (
+    <AuthProvider>
+      <RouterProvider router={router} />
+    </AuthProvider>
+  );
 }
 
 export default App;
