@@ -6,8 +6,6 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import AuthProvider from "./context/AuthContext";
 import Dashboard from "./pages/Dashboard";
 import SignIn from "./pages/Signin";
-import AuthLayout from "./AuthLayout";
-
 // 2. Define the Error Page
 
 // 3. Create the router configuration object
