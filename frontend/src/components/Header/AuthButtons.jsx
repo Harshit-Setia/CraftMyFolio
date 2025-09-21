@@ -12,8 +12,8 @@ function AuthButtons() {
   return (
     <div className="flex items-center space-x-5">
       <Link
-        // to="/signin"
-        onClick={handleLogin}
+        to="/signin"
+        // onClick={handleLogin}
         className="text-gray-800 font-medium hover:text-indigo-600"
       >
         Sign In

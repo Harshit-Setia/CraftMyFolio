@@ -5,6 +5,8 @@ import ErrorPage from "./backup/ErrorPage";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import AuthProvider from "./context/AuthContext";
 import Dashboard from "./pages/Dashboard";
+import SignIn from "./pages/Signin";
+import AuthLayout from "./AuthLayout";
 
 // 2. Define the Error Page
 
@@ -47,15 +49,17 @@ const router = createBrowserRouter([
         path: "terms",
         element: <PlaceholderPage title="Terms of Service" />,
       },
-      {
-        path: "signin",
-        element: <PlaceholderPage title="Sign In" />,
-      },
-      {
-        path: "signup",
-        element: <PlaceholderPage title="Sign Up" />,
-      },
     ],
+  },
+   {
+    path: "signin",
+    element:<SignIn/>,
+    errorElement: <ErrorPage />, // It's good practice for each top-level route to have an error element
+  },
+  {
+    path: "signup",
+    element: <PlaceholderPage title="Sign Up" />,
+    errorElement: <ErrorPage />,
   },
 ]);
 
