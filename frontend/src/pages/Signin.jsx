@@ -1,7 +1,8 @@
 import React, { useState } from "react";
-import { Link, Navigate } from "react-router-dom";
+import { Link, Navigate, useNavigate } from "react-router-dom";
 import FormButton from "../components/FormButton";
 import FormInput from "../components/FormInput";
+import { useAuth } from "../context/AuthContext";
 // --- SVG Icons ---
 const EmailIcon = () => (
   <svg
@@ -92,13 +93,15 @@ const SignIn = () => {
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [errors, setErrors] = useState({});
+  const { login, user } = useAuth();
+  const navigate = useNavigate();
 
   const validateEmail = (email) => {
     // Simple regex for email validation
     return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     const newErrors = {};
 
@@ -117,108 +120,143 @@ const SignIn = () => {
     setErrors(newErrors);
 
     // If there are no errors, proceed with form submission
-    if (Object.keys(newErrors).length === 0) {
-      console.log("Form submitted:", { email, password });
-      // Here you would typically make an API call to authenticate the user
+    // if (Object.keys(newErrors).length === 0) {
+    //   console.log("Form submitted:", { email, password });
+    //   // Here you would typically make an API call to authenticate the user
+    // }
+
+    try {
+      const res = await fetch(`${import.meta.env.VITE_BE_URL}/signin`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email, password }),
+      });
+
+      if (!res.ok) {
+        // console.log(res);
+        const errorData = await res.json();
+        throw new Error(errorData.message || "Something went wrong");
+      }
+      const response = await res.json();
+      console.log(response);
+      login(response.data);
+      navigate("/dashboard");
+
+      if (Object.keys(newErrors).length === 0) {
+        console.log("Form submitted:", { email, password });
+        // Here you would typically make an API call to authenticate the user
+      }
+    } catch (error) {
+      console.error("Submission Failed:", error);
     }
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 flex flex-col justify-center items-center py-6">
-      <div className="text-center">
-        <Link to="/" className="text-3xl font-bold text-indigo-700">
-          CraftFolio
-        </Link>
-        <p className="text-gray-500 mt-2">
-          Welcome back! Sign in to your account.
-        </p>
-      </div>
-
-      <div className="mt-8 w-full max-w-md">
-        <form
-          onSubmit={handleSubmit}
-          className="bg-white py-8 px-10 rounded-xl shadow-md border border-gray-100"
-        >
-          <FormInput
-            id="email"
-            label="Email Address"
-            type="email"
-            placeholder="Enter your email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            error={errors.email}
-            icon={<EmailIcon />}
-          />
-
-          <FormInput
-            id="password"
-            label="Password"
-            type={showPassword ? "text" : "password"}
-            placeholder="Enter your password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            error={errors.password}
-            icon={<PasswordIcon />}
-            rightAccessory={
-              <button
-                type="button"
-                onClick={() => setShowPassword(!showPassword)}
-              >
-                {showPassword ? <EyeOpenIcon /> : <EyeClosedIcon />}
-              </button>
-            }
-          />
-
-          <div className="text-right mb-6">
-            <Link
-              to="/forgot-password"
-              className="text-sm font-medium text-indigo-600 hover:text-indigo-700"
-            >
-              Forgot your password?
+    <>
+      {user ? (
+        <Navigate to="/dashboard" />
+      ) : (
+        <div className="min-h-screen bg-gray-50 flex flex-col justify-center items-center py-6">
+          <div className="text-center">
+            <Link to="/" className="text-3xl font-bold text-indigo-700">
+              CraftFolio
             </Link>
+            <p className="text-gray-500 mt-2">
+              Welcome back! Sign in to your account.
+            </p>
           </div>
 
-          <FormButton>Sign In</FormButton>
-        </form>
-
-        <div className="text-center mt-6">
-          <p className="text-gray-600">
-            Don't have an account?{" "}
-            <Link
-              to="/signup"
-              className="font-semibold text-indigo-600 hover:text-indigo-700"
+          <div className="mt-8 w-full max-w-md">
+            <form
+              onSubmit={handleSubmit}
+              className="bg-white py-8 px-10 rounded-xl shadow-md border border-gray-100"
             >
-              Sign up here
-            </Link>
-          </p>
-        </div>
+              <FormInput
+                id="email"
+                label="Email Address"
+                type="email"
+                placeholder="Enter your email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                error={errors.email}
+                icon={<EmailIcon />}
+              />
 
-        <div className="my-6 flex items-center">
-          <div className="flex-grow border-t border-gray-300"></div>
-          <span className="mx-4 text-gray-500 text-sm">Or continue with</span>
-          <div className="flex-grow border-t border-gray-300"></div>
-        </div>
+              <FormInput
+                id="password"
+                label="Password"
+                type={showPassword ? "text" : "password"}
+                placeholder="Enter your password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                error={errors.password}
+                icon={<PasswordIcon />}
+                rightAccessory={
+                  <button
+                    type="button"
+                    onClick={() => setShowPassword(!showPassword)}
+                  >
+                    {showPassword ? <EyeOpenIcon /> : <EyeClosedIcon />}
+                  </button>
+                }
+              />
 
-        <div className="flex space-x-4">
-          <button className="w-1/2 flex items-center justify-center py-2.5 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-100 transition-colors">
-            <img
-              src="https://www.vectorlogo.zone/logos/google/google-icon.svg"
-              alt="Google"
-              className="w-5 h-5 mr-2"
-            />
-            Google
-          </button>
-          <button className="w-1/2 flex items-center justify-center py-2.5 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-100 transition-colors">
-            <img
-              src="https://www.vectorlogo.zone/logos/facebook/facebook-icon.svg"
-              alt="Facebook"
-              className="w-5 h-5 mr-2"
-            />
-            Facebook
-          </button>
+              <div className="text-right mb-6">
+                <Link
+                  to="/forgot-password"
+                  className="text-sm font-medium text-indigo-600 hover:text-indigo-700"
+                >
+                  Forgot your password?
+                </Link>
+              </div>
+
+              <FormButton>Sign In</FormButton>
+            </form>
+
+            <div className="text-center mt-6">
+              <p className="text-gray-600">
+                Don't have an account?{" "}
+                <Link
+                  to="/signup"
+                  className="font-semibold text-indigo-600 hover:text-indigo-700"
+                >
+                  Sign up here
+                </Link>
+              </p>
+            </div>
+
+            <div className="my-6 flex items-center">
+              <div className="flex-grow border-t border-gray-300"></div>
+              <span className="mx-4 text-gray-500 text-sm">
+                Or continue with
+              </span>
+              <div className="flex-grow border-t border-gray-300"></div>
+            </div>
+
+            <div className="flex space-x-4">
+              <button className="w-1/2 flex items-center justify-center py-2.5 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-100 transition-colors">
+                <img
+                  src="https://www.vectorlogo.zone/logos/google/google-icon.svg"
+                  alt="Google"
+                  className="w-5 h-5 mr-2"
+                />
+                Google
+              </button>
+              <button className="w-1/2 flex items-center justify-center py-2.5 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-100 transition-colors">
+                <img
+                  src="https://www.vectorlogo.zone/logos/facebook/facebook-icon.svg"
+                  alt="Facebook"
+                  className="w-5 h-5 mr-2"
+                />
+                Facebook
+              </button>
+            </div>
+          </div>
         </div>
-      </div>
-    </div>
+      )}
+    </>
   );
 };
 

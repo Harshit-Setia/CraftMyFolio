@@ -19,7 +19,7 @@ const HeroSection = () => {
         {/* Call to Action Button */}
         <div className="mt-10 flex justify-center">
           <Link
-            to="/signin"
+            to="/signup"
             className="bg-indigo-600 text-white font-semibold px-8 py-3 rounded-lg shadow-lg hover:bg-indigo-700 transition-all transform hover:scale-105 duration-300 ease-in-out"
           >
             Create Your Portfolio
