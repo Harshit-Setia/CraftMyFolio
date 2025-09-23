@@ -1,6 +1,6 @@
-import React from 'react';
+import React from "react";
 
-const FormButton = ({ children, type = 'submit' }) => {
+const FormButton = ({ children, type = "submit" }) => {
   return (
     <button
       type={type}

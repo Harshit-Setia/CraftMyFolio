@@ -14,7 +14,7 @@ const userSchema = new mongoose.Schema({
   createdAt: { type: Date, default: Date.now },
   isAdmin: { type: Boolean, default: false },
   folio_id: { type: mongoose.Schema.Types.ObjectId, ref: "Folio" },
-  
+
   // Education (flexible array, not fixed to xth/xiith/graduation)
   education: {
     type: [
@@ -63,13 +63,23 @@ const userSchema = new mongoose.Schema({
   // Work Experience
   experience: [
     {
-      title: { type: String, required: true },
-      company: { type: String, required: true },
-      location: { type: String },
-      from: { type: Date, required: true },
-      to: { type: Date },
-      description: { type: String },
       _id: false,
+      title: { type: String, required: true, trim: true },
+      company: { type: String, required: true, trim: true },
+      location: { type: String, trim: true },
+      from: { type: Date, required: true },
+      to: {
+        type: Date,
+        // 'to' is not required if 'isCurrent' is true
+        required: function () {
+          return !this.isCurrent;
+        },
+      },
+      isCurrent: {
+        type: Boolean,
+        default: false,
+      },
+      description: { type: String, trim: true },
     },
   ],
 
