@@ -28,8 +28,8 @@ const userSchema = new mongoose.Schema({
         score: { type: String }, // percentage or CGPA
         status: {
           type: String,
-          enum: ["completed", "ongoing"],
-          default: "completed",
+          enum: ["Completed", "Ongoing"],
+          default: "Completed",
         },
         _id: false,
       },
@@ -94,5 +94,4 @@ const userSchema = new mongoose.Schema({
   ],
 });
 
-const User = mongoose.model("User", userSchema);
-export default User;
+export const User = mongoose.model("User", userSchema);

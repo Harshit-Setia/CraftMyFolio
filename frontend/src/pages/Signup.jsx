@@ -1,5 +1,6 @@
 import React, { useState, useRef } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, Navigate, useNavigate } from "react-router-dom";
+import { useAuth } from "../context/AuthContext";
 
 // --- Reusable Components & Icons ---
 const CameraIcon = () => (
@@ -650,6 +651,8 @@ const Step5_FinalDetails = ({ data, handleInputChange, errors }) => (
 // --- Main Multi-Step Form Component ---
 
 const SignUpForm = () => {
+  // eslint-disable-next-line no-unused-vars
+  const { login, user } = useAuth();
   const [step, setStep] = useState(1);
   const [formData, setFormData] = useState({
     name: "",
@@ -693,6 +696,7 @@ const SignUpForm = () => {
 
   const handleInputChange = (e) => {
     const { name, value, type, checked } = e.target;
+    console.log("INPUT EVENT:", { name, value, type, checked }); // Debug
     setFormData((prev) => ({
       ...prev,
       [name]: type === "checkbox" ? checked : value,
@@ -843,7 +847,7 @@ const SignUpForm = () => {
   };
   const prevStep = () => setStep((prev) => prev - 1);
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     if (validateStep()) {
       const finalData = {
         ...formData,
@@ -857,101 +861,129 @@ const SignUpForm = () => {
       }
       delete finalData.confirmPassword;
       delete finalData.hasExperience;
-      console.log("Final Data Submitted:", finalData);
-      alert("Portfolio created successfully! Redirecting to dashboard.");
-      navigate("/dashboard");
+
+      try {
+        const response = await fetch(`${import.meta.env.VITE_BE_URL}/signup`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(finalData),
+        });
+
+        if (!response.ok) {
+          console.log(response);
+          const errorData = await response.json();
+          throw new Error(errorData.message || "Something went wrong");
+        }
+
+        const result = await response.json();
+        console.log("Server Response:", result);
+        // login(result.data);
+        alert("Signed up successfully! Redirecting to Login Page.");
+        navigate("/signin");
+      } catch (error) {
+        console.error("Submission Failed:", error);
+        alert(`Error: ${error.message}`);
+      }
     }
   };
 
   const totalSteps = 5;
 
   return (
-    <div className="min-h-screen bg-gray-50 flex flex-col items-center justify-center py-12 px-4">
-      <div className="w-full max-w-3xl mx-auto">
-        <div className="mb-3 text-center">
-          {" "}
-          {/* Changed from mb-2 to mb-8 and wrapped in div */}
-          <Link to="/" className="text-3xl font-bold text-indigo-700">
-            CraftFolio
-          </Link>
-        </div>
-        <StepIndicator currentStep={step} totalSteps={totalSteps} />
-        <div className="bg-white p-6 md:p-8 rounded-xl shadow-lg border border-gray-100">
-          {step === 1 && (
-            <Step1_BasicInfo
-              data={formData}
-              handleInputChange={handleInputChange}
-              handleAvatarChange={handleAvatarChange}
-              avatarPreview={avatarPreview}
-              errors={errors}
-            />
-          )}
-          {step === 2 && (
-            <Step2_Education
-              education={formData.education}
-              handleEducationChange={handleEducationChange}
-              addEducation={addEducation}
-              removeEducation={removeEducation}
-              errors={errors.education || []}
-            />
-          )}
-          {step === 3 && (
-            <Step3_Experience
-              data={formData}
-              handleInputChange={handleInputChange}
-              experience={formData.experience}
-              handleExperienceChange={handleExperienceChange}
-              addExperience={addExperience}
-              removeExperience={removeExperience}
-              errors={errors.experience || []}
-            />
-          )}
-          {step === 4 && (
-            <Step4_Skills
-              data={formData}
-              handleInputChange={handleInputChange}
-              errors={errors}
-            />
-          )}
-          {step === 5 && (
-            <Step5_FinalDetails
-              data={formData}
-              handleInputChange={handleInputChange}
-              errors={errors}
-            />
-          )}
+    <>
+      {user ? (
+        <Navigate to="/dashboard" />
+      ) : (
+        <div className="min-h-screen bg-gray-50 flex flex-col items-center justify-center py-12 px-4">
+          <div className="w-full max-w-3xl mx-auto">
+            <div className="mb-3 text-center">
+              {" "}
+              {/* Changed from mb-2 to mb-8 and wrapped in div */}
+              <Link to="/" className="text-3xl font-bold text-indigo-700">
+                CraftFolio
+              </Link>
+            </div>
+            <StepIndicator currentStep={step} totalSteps={totalSteps} />
+            <div className="bg-white p-6 md:p-8 rounded-xl shadow-lg border border-gray-100">
+              {step === 1 && (
+                <Step1_BasicInfo
+                  data={formData}
+                  handleInputChange={handleInputChange}
+                  handleAvatarChange={handleAvatarChange}
+                  avatarPreview={avatarPreview}
+                  errors={errors}
+                />
+              )}
+              {step === 2 && (
+                <Step2_Education
+                  education={formData.education}
+                  handleEducationChange={handleEducationChange}
+                  addEducation={addEducation}
+                  removeEducation={removeEducation}
+                  errors={errors.education || []}
+                />
+              )}
+              {step === 3 && (
+                <Step3_Experience
+                  data={formData}
+                  handleInputChange={handleInputChange}
+                  experience={formData.experience}
+                  handleExperienceChange={handleExperienceChange}
+                  addExperience={addExperience}
+                  removeExperience={removeExperience}
+                  errors={errors.experience || []}
+                />
+              )}
+              {step === 4 && (
+                <Step4_Skills
+                  data={formData}
+                  handleInputChange={handleInputChange}
+                  errors={errors}
+                />
+              )}
+              {step === 5 && (
+                <Step5_FinalDetails
+                  data={formData}
+                  handleInputChange={handleInputChange}
+                  errors={errors}
+                />
+              )}
 
-          <div
-            className={`mt-8 flex ${step > 1 ? "justify-between" : "justify-end"}`}
-          >
-            {step > 1 && (
-              <button
-                onClick={prevStep}
-                className="px-6 py-2 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50"
+              <div
+                className={`mt-8 flex ${step > 1 ? "justify-between" : "justify-end"}`}
               >
-                Back
-              </button>
-            )}
-            {step < totalSteps && (
-              <button
-                onClick={nextStep}
-                className="px-6 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700"
-              >
-                Next Step
-              </button>
-            )}
-            {step === totalSteps && (
-              <button
-                onClick={handleSubmit}
-                className="px-6 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700"
-              >
-                Create My Portfolio
-              </button>
-            )}
+                {step > 1 && (
+                  <button
+                    onClick={prevStep}
+                    className="px-6 py-2 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50"
+                  >
+                    Back
+                  </button>
+                )}
+                {step < totalSteps && (
+                  <button
+                    onClick={nextStep}
+                    className="px-6 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700"
+                  >
+                    Next Step
+                  </button>
+                )}
+                {step === totalSteps && (
+                  <button
+                    onClick={handleSubmit}
+                    className="px-6 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700"
+                  >
+                    Sign Up
+                  </button>
+                )}
+              </div>
+            </div>
           </div>
         </div>
-      </div>
-    </div>
+      )}
+    </>
   );
 };
 
