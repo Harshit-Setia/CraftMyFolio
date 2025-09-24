@@ -696,7 +696,7 @@ const SignUpForm = () => {
 
   const handleInputChange = (e) => {
     const { name, value, type, checked } = e.target;
-    console.log("INPUT EVENT:", { name, value, type, checked }); // Debug
+    // console.log("INPUT EVENT:", { name, value, type, checked }); // Debug
     setFormData((prev) => ({
       ...prev,
       [name]: type === "checkbox" ? checked : value,

@@ -111,7 +111,7 @@ const loginUser = async (req, res) => {
       .json({
         success: true,
         message: "Logged in successfully.",
-        data: { user: userResponse, token },
+        data: { ...userResponse, token },
       });
   } catch (error) {
     console.error("Signin Error:", error);
