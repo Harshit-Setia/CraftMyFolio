@@ -120,10 +120,11 @@ const SignIn = () => {
     setErrors(newErrors);
 
     // If there are no errors, proceed with form submission
-    // if (Object.keys(newErrors).length === 0) {
-    //   console.log("Form submitted:", { email, password });
-    //   // Here you would typically make an API call to authenticate the user
-    // }
+    if (!Object.keys(newErrors).length === 0) {
+      // console.log("Form submitted:", { email, password });
+      // Here you would typically make an API call to authenticate the user
+      return;
+    }
 
     try {
       const res = await fetch(`${import.meta.env.VITE_BE_URL}/signin`, {
@@ -143,11 +144,6 @@ const SignIn = () => {
       console.log(response);
       login(response.data);
       navigate("/dashboard");
-
-      if (Object.keys(newErrors).length === 0) {
-        console.log("Form submitted:", { email, password });
-        // Here you would typically make an API call to authenticate the user
-      }
     } catch (error) {
       console.error("Submission Failed:", error);
     }

@@ -19,7 +19,7 @@ const Header = () => {
         <SearchBar />
 
         {user ? (
-          <Avatar userName={user.user.name} imageUrl={user.user.avatar} />
+          <Avatar userName={user.name} imageUrl={user.avatar} />
         ) : (
           <AuthButtons />
         )}
