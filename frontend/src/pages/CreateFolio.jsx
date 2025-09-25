@@ -15,18 +15,20 @@ export default function CreateFolio() {
     }
     try {
       // ... (handleSubmit logic remains the same)
-      const response = await fetch("/folio", {
+      const response = await fetch(`${import.meta.env.VITE_BE_URL}/folio`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ user_id: user.id, template_id: selected }),
+        body: JSON.stringify({ user_id: user._id, template_id: selected }),
       });
-
+      
       if (!response.ok) {
         const err = await response.json();
         throw new Error(err.message || "Failed to create folio");
       }
       const data = await response.json();
       console.log("Folio created:", data);
+      alert("Portfolio created")
+      console.log(user)
     } catch (error)      {
       console.error(error);
       alert(error.message);

@@ -1,4 +1,5 @@
 import { Folio } from "../model/folioModel.js";
+import { User } from "../model/userModel.js";
 
 export const getFolio = async (req, res) => {
   const id = req.params.id;
@@ -33,6 +34,7 @@ export const createFolio = async (req, res) => {
     // font,
   });
   await folio.save();
+  await User.findByIdAndUpdate(user_id, { folio_id: folio._id });
   res.status(201).json(folio);
 };
 
