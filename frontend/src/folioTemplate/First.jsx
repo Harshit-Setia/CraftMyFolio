@@ -1,26 +1,23 @@
 import React from "react";
 
-const PortfolioTemplate = ({ user, folio }) => {
-  const {
-    name,
-    bio,
-    avatar,
-    resume,
-    education,
-    social,
-    skills,
-    projects,
-    experience,
-    testimonials,
-  } = user;
-
-  const { main_color, secondry_color, accent_color, font } = folio;
-
+const First = ({
+  name = "",
+  bio = "",
+  avatar = "",
+  resume = "",
+  education = [],      // ✅ default to array
+  social = [],         // ✅ default to array
+  skills = [],         // ✅ default to array
+  projects = [],       // ✅ default to array
+  experience = [],     // ✅ default to array
+  testimonials = [],   // ✅ default to array
+  accent_color = "#007bff" // ✅ added default accent color
+}) => {
   const styles = {
     container: {
-      fontFamily: font || "Arial, sans-serif",
-      backgroundColor: secondry_color,
-      color: main_color,
+      fontFamily: "Arial, sans-serif",
+      backgroundColor: "#f4f4f4",
+      color: "#333",
       minHeight: "100vh",
       padding: "2rem",
     },
@@ -34,7 +31,7 @@ const PortfolioTemplate = ({ user, folio }) => {
       height: "120px",
       borderRadius: "50%",
       objectFit: "cover",
-      border: `3px solid ${accent_color}`,
+      border: `3px solid ${accent_color}`, // ✅ give border a color
     },
     name: {
       fontSize: "2rem",
@@ -49,11 +46,11 @@ const PortfolioTemplate = ({ user, folio }) => {
     },
     sectionTitle: {
       fontSize: "1.5rem",
-      color: accent_color,
+      color: "#555",
       marginBottom: "0.5rem",
     },
     card: {
-      border: `1px solid ${main_color}`,
+      border: `1px solid ${accent_color}`, // ✅ give border a color
       borderRadius: "8px",
       padding: "1rem",
       marginBottom: "1rem",
@@ -82,7 +79,7 @@ const PortfolioTemplate = ({ user, folio }) => {
       </header>
 
       {/* Social Links */}
-      {social?.length > 0 && (
+      {social.length > 0 && (
         <section style={styles.section}>
           <h2 style={styles.sectionTitle}>Connect</h2>
           <ul>
@@ -98,7 +95,7 @@ const PortfolioTemplate = ({ user, folio }) => {
       )}
 
       {/* Education */}
-      {education?.length > 0 && (
+      {education.length > 0 && (
         <section style={styles.section}>
           <h2 style={styles.sectionTitle}>Education</h2>
           {education.map((edu, i) => (
@@ -115,7 +112,7 @@ const PortfolioTemplate = ({ user, folio }) => {
       )}
 
       {/* Skills */}
-      {skills?.length > 0 && (
+      {skills.length > 0 && (
         <section style={styles.section}>
           <h2 style={styles.sectionTitle}>Skills</h2>
           <ul>
@@ -127,7 +124,7 @@ const PortfolioTemplate = ({ user, folio }) => {
       )}
 
       {/* Projects */}
-      {projects?.length > 0 && (
+      {projects.length > 0 && (
         <section style={styles.section}>
           <h2 style={styles.sectionTitle}>Projects</h2>
           {projects.map((p, i) => (
@@ -155,7 +152,7 @@ const PortfolioTemplate = ({ user, folio }) => {
       )}
 
       {/* Experience */}
-      {experience?.length > 0 && (
+      {experience.length > 0 && (
         <section style={styles.section}>
           <h2 style={styles.sectionTitle}>Experience</h2>
           {experience.map((exp, i) => (
@@ -178,7 +175,7 @@ const PortfolioTemplate = ({ user, folio }) => {
       )}
 
       {/* Testimonials */}
-      {testimonials?.length > 0 && (
+      {testimonials.length > 0 && (
         <section style={styles.section}>
           <h2 style={styles.sectionTitle}>Testimonials</h2>
           {testimonials.map((t, i) => (
@@ -195,4 +192,4 @@ const PortfolioTemplate = ({ user, folio }) => {
   );
 };
 
-export default PortfolioTemplate;
+export default First;

@@ -7,10 +7,10 @@ const folioSchema = new mongoose.Schema({
     required: true,
   },
   template_id: { type: String, required: true },
-  main_color: { type: String, default: "#000000" },
-  secondry_color: { type: String, default: "#FFFFFF" },
-  accent_color: { type: String, default: "#FFFFFF" },
-  font: { type: String, default: "Arial" },
+  // main_color: { type: String, default: "#000000" },
+  // secondry_color: { type: String, default: "#FFFFFF" },
+  // accent_color: { type: String, default: "#FFFFFF" },
+  // font: { type: String, default: "Arial" },
 });
 
 export const Folio = mongoose.model("Folio", folioSchema);
