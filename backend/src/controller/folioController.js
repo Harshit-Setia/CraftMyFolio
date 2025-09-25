@@ -13,10 +13,10 @@ export const createFolio = async (req, res) => {
   const {
     user_id,
     template_id,
-    main_color,
-    secondry_color,
-    accent_color,
-    font,
+    // main_color,
+    // secondry_color,
+    // accent_color,
+    // font,
   } = req.body;
   const existingFolio = await Folio.findOne({ user_id });
   if (existingFolio) {
@@ -27,10 +27,10 @@ export const createFolio = async (req, res) => {
   const folio = new Folio({
     user_id,
     template_id,
-    main_color,
-    secondry_color,
-    accent_color,
-    font,
+    // main_color,
+    // secondry_color,
+    // accent_color,
+    // font,
   });
   await folio.save();
   res.status(201).json(folio);

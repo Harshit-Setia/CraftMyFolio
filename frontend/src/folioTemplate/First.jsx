@@ -1,78 +1,97 @@
 import React from "react";
 
-const First = ({
-  name = "",
-  bio = "",
-  avatar = "",
-  resume = "",
-  education = [],      // ✅ default to array
-  social = [],         // ✅ default to array
-  skills = [],         // ✅ default to array
-  projects = [],       // ✅ default to array
-  experience = [],     // ✅ default to array
-  testimonials = [],   // ✅ default to array
-  accent_color = "#007bff" // ✅ added default accent color
-}) => {
-  const styles = {
-    container: {
-      fontFamily: "Arial, sans-serif",
-      backgroundColor: "#f4f4f4",
-      color: "#333",
-      minHeight: "100vh",
-      padding: "2rem",
+// The helper function is still useful for formatting dates in the static data
+const getYear = (dateString) => {
+  if (!dateString) return null;
+  const date = new Date(dateString);
+  return !isNaN(date.getTime()) ? date.getFullYear() : null;
+};
+
+// Hardcoded static data for previewing the template
+const staticData = {
+  name: "Alex Doe",
+  bio: "A passionate Full Stack Developer with a love for creating intuitive, dynamic user experiences. Skilled in React, Node.js, and modern web technologies.",
+  avatar: "https://i.pravatar.cc/150?u=alexdoe",
+  resume: "#",
+  social: [
+    { id: 1, platform: "GitHub", url: "#" },
+    { id: 2, platform: "LinkedIn", url: "#" },
+    { id: 3, platform: "Twitter", url: "#" },
+  ],
+  education: [
+    {
+      id: 1,
+      degree: "B.Sc. in Computer Science",
+      institution: "State University",
+      yearOfCompletion: "2020-05-20",
+      fieldOfStudy: "Software Engineering",
     },
-    header: {
-      display: "flex",
-      alignItems: "center",
-      gap: "1rem",
+  ],
+  skills: ["React", "JavaScript (ES6+)", "Node.js", "Tailwind CSS", "Next.js", "MongoDB"],
+  projects: [
+    {
+      id: 1,
+      title: "E-commerce Platform",
+      description: "A full-featured online store built with the MERN stack, including payment gateway integration.",
+      github: "#",
+      deployed: "#",
     },
-    avatar: {
-      width: "120px",
-      height: "120px",
-      borderRadius: "50%",
-      objectFit: "cover",
-      border: `3px solid ${accent_color}`, // ✅ give border a color
+    {
+      id: 2,
+      title: "Task Management App",
+      description: "A collaborative tool for teams to manage projects and track progress in real-time.",
+      github: "#",
+      deployed: "#",
     },
-    name: {
-      fontSize: "2rem",
-      fontWeight: "bold",
+  ],
+  experience: [
+    {
+      id: 1,
+      title: "Software Engineer",
+      company: "Tech Solutions Inc.",
+      from: "2020-08-01",
+      isCurrent: true,
+      description: "Developing and maintaining web applications using React and Express.",
     },
-    bio: {
-      marginTop: "0.5rem",
-      fontSize: "1.1rem",
+  ],
+  testimonials: [
+    {
+      id: 1,
+      name: "Jane Smith",
+      role: "Project Manager",
+      feedback: "Alex is a proactive and detail-oriented developer. A true asset to any team.",
     },
-    section: {
-      marginTop: "2rem",
-    },
-    sectionTitle: {
-      fontSize: "1.5rem",
-      color: "#555",
-      marginBottom: "0.5rem",
-    },
-    card: {
-      border: `1px solid ${accent_color}`, // ✅ give border a color
-      borderRadius: "8px",
-      padding: "1rem",
-      marginBottom: "1rem",
-    },
-  };
+  ],
+};
+
+
+const First = () => {
+  // ✅ Destructure from the hardcoded `staticData` object instead of props
+  const {
+    name, bio, avatar, resume, education, social,
+    skills, projects, experience, testimonials
+  } = staticData;
 
   return (
-    <div style={styles.container}>
+    <div className="font-sans bg-white text-gray-800 min-h-screen p-4 sm:p-8 max-w-4xl mx-auto">
       {/* Header */}
-      <header style={styles.header}>
-        <img src={avatar} alt={name} style={styles.avatar} />
-        <div>
-          <h1 style={styles.name}>{name}</h1>
-          <p style={styles.bio}>{bio}</p>
+      <header className="flex flex-col md:flex-row items-center gap-8 pb-8 border-b border-gray-200">
+        <img
+          src={avatar}
+          alt={name}
+          className="w-32 h-32 rounded-full object-cover border-4 border-indigo-500 shadow-lg"
+        />
+        <div className="text-center md:text-left">
+          <h1 className="text-4xl md:text-5xl font-bold text-gray-900">{name}</h1>
+          <p className="mt-2 text-lg text-gray-600">{bio}</p>
           {resume && (
             <a
               href={resume}
               target="_blank"
               rel="noopener noreferrer"
-              style={{ color: accent_color }}
+              className="inline-block mt-4 font-semibold text-indigo-600 hover:text-indigo-800 transition-colors"
             >
-              Download Resume
+              Download Resume &rarr;
             </a>
           )}
         </div>
@@ -80,12 +99,12 @@ const First = ({
 
       {/* Social Links */}
       {social.length > 0 && (
-        <section style={styles.section}>
-          <h2 style={styles.sectionTitle}>Connect</h2>
-          <ul>
-            {social.map((s, i) => (
-              <li key={i}>
-                <a href={s.url} target="_blank" rel="noopener noreferrer">
+        <section className="mt-10">
+          <h2 className="text-2xl font-bold border-b-2 border-indigo-500 inline-block pb-1 mb-4">Connect</h2>
+          <ul className="flex flex-wrap gap-4">
+            {social.map((s) => (
+              <li key={s.id}>
+                <a href={s.url} target="_blank" rel="noopener noreferrer" className="font-medium text-gray-600 hover:text-indigo-600">
                   {s.platform}
                 </a>
               </li>
@@ -96,28 +115,31 @@ const First = ({
 
       {/* Education */}
       {education.length > 0 && (
-        <section style={styles.section}>
-          <h2 style={styles.sectionTitle}>Education</h2>
-          {education.map((edu, i) => (
-            <div key={i} style={styles.card}>
-              <h3>{edu.level}</h3>
-              <p>
-                {edu.institution} ({edu.yearOfCompletion})
-              </p>
-              <p>{edu.degree ? `${edu.degree}, ${edu.fieldOfStudy}` : ""}</p>
-              <p>{edu.score}</p>
-            </div>
-          ))}
+        <section className="mt-10">
+          <h2 className="text-2xl font-bold border-b-2 border-indigo-500 inline-block pb-1 mb-4">Education</h2>
+          <div className="space-y-4">
+            {education.map((edu) => (
+              <div key={edu.id} className="bg-gray-50 p-4 rounded-lg border-l-4 border-indigo-500">
+                <h3 className="font-bold text-lg">{edu.degree}</h3>
+                <p className="text-gray-600">
+                  {edu.institution} ({getYear(edu.yearOfCompletion)})
+                </p>
+                <p className="text-sm text-gray-500">{edu.fieldOfStudy}</p>
+              </div>
+            ))}
+          </div>
         </section>
       )}
 
       {/* Skills */}
       {skills.length > 0 && (
-        <section style={styles.section}>
-          <h2 style={styles.sectionTitle}>Skills</h2>
-          <ul>
+        <section className="mt-10">
+          <h2 className="text-2xl font-bold border-b-2 border-indigo-500 inline-block pb-1 mb-4">Skills</h2>
+          <ul className="flex flex-wrap gap-3">
             {skills.map((skill, i) => (
-              <li key={i}>{skill}</li>
+              <li key={i} className="bg-indigo-100 text-indigo-800 font-medium px-4 py-1 rounded-full text-sm">
+                {skill}
+              </li>
             ))}
           </ul>
         </section>
@@ -125,67 +147,61 @@ const First = ({
 
       {/* Projects */}
       {projects.length > 0 && (
-        <section style={styles.section}>
-          <h2 style={styles.sectionTitle}>Projects</h2>
-          {projects.map((p, i) => (
-            <div key={i} style={styles.card}>
-              <h3>{p.title}</h3>
-              <p>{p.description}</p>
-              {p.github && (
-                <a href={p.github} target="_blank" rel="noopener noreferrer">
-                  GitHub
-                </a>
-              )}
-              {p.deployed && (
-                <a
-                  href={p.deployed}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  style={{ marginLeft: "1rem" }}
-                >
-                  Live
-                </a>
-              )}
-            </div>
-          ))}
+        <section className="mt-10">
+          <h2 className="text-2xl font-bold border-b-2 border-indigo-500 inline-block pb-1 mb-4">Projects</h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {projects.map((p) => (
+              <div key={p.id} className="bg-gray-50 p-4 rounded-lg border-l-4 border-indigo-500">
+                <h3 className="font-bold text-lg">{p.title}</h3>
+                <p className="text-gray-600 mt-1">{p.description}</p>
+                <div className="mt-4 flex gap-4">
+                  {p.github && (
+                    <a href={p.github} target="_blank" rel="noopener noreferrer" className="font-semibold text-indigo-600 hover:text-indigo-800 transition-colors">
+                      GitHub
+                    </a>
+                  )}
+                  {p.deployed && (
+                    <a href={p.deployed} target="_blank" rel="noopener noreferrer" className="font-semibold text-indigo-600 hover:text-indigo-800 transition-colors">
+                      Live Demo
+                    </a>
+                  )}
+                </div>
+              </div>
+            ))}
+          </div>
         </section>
       )}
 
       {/* Experience */}
       {experience.length > 0 && (
-        <section style={styles.section}>
-          <h2 style={styles.sectionTitle}>Experience</h2>
-          {experience.map((exp, i) => (
-            <div key={i} style={styles.card}>
-              <h3>
-                {exp.title} @ {exp.company}
-              </h3>
-              <p>
-                {new Date(exp.from).getFullYear()} -{" "}
-                {exp.isCurrent
-                  ? "Present"
-                  : exp.to
-                  ? new Date(exp.to).getFullYear()
-                  : ""}
-              </p>
-              <p>{exp.description}</p>
-            </div>
-          ))}
+        <section className="mt-10">
+          <h2 className="text-2xl font-bold border-b-2 border-indigo-500 inline-block pb-1 mb-4">Experience</h2>
+          <div className="space-y-4">
+            {experience.map((exp) => (
+              <div key={exp.id} className="bg-gray-50 p-4 rounded-lg border-l-4 border-indigo-500">
+                <h3 className="font-bold text-lg">{exp.title} @ {exp.company}</h3>
+                <p className="text-sm text-gray-500">
+                  {getYear(exp.from)} - {exp.isCurrent ? "Present" : getYear(exp.to)}
+                </p>
+                <p className="text-gray-600 mt-1">{exp.description}</p>
+              </div>
+            ))}
+          </div>
         </section>
       )}
 
       {/* Testimonials */}
       {testimonials.length > 0 && (
-        <section style={styles.section}>
-          <h2 style={styles.sectionTitle}>Testimonials</h2>
-          {testimonials.map((t, i) => (
-            <div key={i} style={styles.card}>
-              <p>"{t.feedback}"</p>
-              <p>
-                — {t.name}, {t.role}
-              </p>
-            </div>
-          ))}
+        <section className="mt-10">
+          <h2 className="text-2xl font-bold border-b-2 border-indigo-500 inline-block pb-1 mb-4">Testimonials</h2>
+          <div className="space-y-4">
+            {testimonials.map((t) => (
+              <div key={t.id} className="bg-gray-50 p-4 rounded-lg border-l-4 border-gray-300">
+                <p className="italic text-gray-600">"{t.feedback}"</p>
+                <p className="text-right font-semibold mt-2">— {t.name}, {t.role}</p>
+              </div>
+            ))}
+          </div>
         </section>
       )}
     </div>
