@@ -122,4 +122,32 @@ const loginUser = async (req, res) => {
   }
 };
 
-export { registerUser, loginUser };
+const updateUser = async (req, res) => {
+  try {
+    const userId = req.params.id;
+    const updates = req.body;
+    const updatedUser = await User.findByIdAndUpdate(userId, updates, { new: true });
+    if (!updatedUser) {
+      return res.status(404).json({
+        success: false,
+        message: "User not found.",
+      });
+    }
+    const userResponse =  updatedUser.toObject();
+    delete userResponse.password;
+    return res.status(200).json({
+      success: true,
+      message: "User updated successfully.",
+      data: userResponse,
+    });
+  } catch (error) {
+    console.error("Update User Error:", error);
+    return res.status(500).json({
+      success: false,
+      message: "Internal Server Error",
+    });
+  }
+};
+
+
+export { registerUser, loginUser , updateUser};
