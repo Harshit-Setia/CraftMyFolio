@@ -25,7 +25,7 @@ function SearchBar() {
       </span>
       <input
         type="text"
-        placeholder="Find templates..."
+        placeholder="Find Portfolios..."
         className="w-full bg-gray-100 text-gray-700 border border-transparent rounded-lg py-2 pl-10 pr-4 focus:outline-none focus:ring-2 focus:ring-indigo-500"
       />
     </div>
