@@ -1,6 +1,7 @@
 import React, { useState, useRef } from "react";
 import { Link, Navigate, useNavigate } from "react-router-dom";
-import { useAuth } from "../context/AuthContext";
+// 1. UPDATED: Import the correct hook
+import { useAuth } from "../hooks/useAuth";
 
 // --- Reusable Components & Icons ---
 const CameraIcon = () => (
@@ -63,6 +64,7 @@ const FormInput = ({
   placeholder,
   error,
   required,
+  disabled
 }) => (
   <div className="flex-1 min-w-[48%]">
     <label htmlFor={id} className="block text-sm font-medium text-gray-700">
@@ -75,7 +77,8 @@ const FormInput = ({
       value={value}
       onChange={onChange}
       placeholder={placeholder}
-      className={`mt-1 w-full bg-gray-100 border rounded-md py-2 px-3 text-gray-700 focus:outline-none focus:ring-2 ${error ? "border-red-500 focus:ring-red-500" : "border-transparent focus:ring-indigo-500"}`}
+      disabled={disabled}
+      className={`mt-1 w-full bg-gray-100 border rounded-md py-2 px-3 text-gray-700 focus:outline-none focus:ring-2 ${error ? "border-red-500 focus:ring-red-500" : "border-transparent focus:ring-indigo-500"} disabled:bg-gray-200`}
     />
     {error && <p className="text-red-500 text-xs mt-1">{error}</p>}
   </div>
@@ -651,8 +654,8 @@ const Step5_FinalDetails = ({ data, handleInputChange, errors }) => (
 // --- Main Multi-Step Form Component ---
 
 const SignUpForm = () => {
-  // eslint-disable-next-line no-unused-vars
-  const { login, user } = useAuth();
+  // 2. UPDATED: Get 'token' from useAuth, not 'user' or 'login'
+  const { token } = useAuth();
   const [step, setStep] = useState(1);
   const [formData, setFormData] = useState({
     name: "",
@@ -675,16 +678,8 @@ const SignUpForm = () => {
       },
     ],
     hasExperience: false,
-    experience: [
-      {
-        title: "",
-        company: "",
-        location: "",
-        from: "",
-        to: "",
-        description: "",
-      },
-    ],
+    // 3. FIXED: Initialize experience as an empty array
+    experience: [],
     skills: "",
     address: "",
     dob: "",
@@ -696,7 +691,6 @@ const SignUpForm = () => {
 
   const handleInputChange = (e) => {
     const { name, value, type, checked } = e.target;
-    // console.log("INPUT EVENT:", { name, value, type, checked }); // Debug
     setFormData((prev) => ({
       ...prev,
       [name]: type === "checkbox" ? checked : value,
@@ -753,20 +747,24 @@ const SignUpForm = () => {
   };
 
   const addExperience = () => {
-    setFormData((prev) => ({
-      ...prev,
-      experience: [
-        ...prev.experience,
-        {
-          title: "",
-          company: "",
-          location: "",
-          from: "",
-          to: "",
-          description: "",
-        },
-      ],
-    }));
+    // 4. FIXED: Only add a new entry if hasExperience is true
+    if (formData.hasExperience) {
+      setFormData((prev) => ({
+        ...prev,
+        experience: [
+          ...prev.experience,
+          {
+            title: "",
+            company: "",
+            location: "",
+            from: "",
+            to: "",
+            isCurrent: false,
+            description: "",
+          },
+        ],
+      }));
+    }
   };
 
   const removeExperience = (index) => {
@@ -818,11 +816,20 @@ const SignUpForm = () => {
     if (step === 3) {
       if (formData.hasExperience) {
         const expErrors = [];
+        // Only validate if there are experience entries
+        if (formData.experience.length === 0) {
+            // If they toggled 'yes' but added no entries, add one
+            addExperience();
+        }
         formData.experience.forEach((exp, index) => {
           const error = {};
           if (!exp.title) error.title = "Title is required.";
           if (!exp.company) error.company = "Company is required.";
           if (!exp.from) error.from = "Start date is required.";
+          // 5. UPDATED: Validation for 'to' date
+          if (!exp.isCurrent && !exp.to) {
+            error.to = "End date is required if not currently working here.";
+          }
           if (Object.keys(error).length > 0) expErrors[index] = error;
         });
         if (expErrors.length > 0) newErrors.experience = expErrors;
@@ -856,11 +863,27 @@ const SignUpForm = () => {
           .map((s) => s.trim())
           .filter(Boolean),
       };
-      if (!finalData.hasExperience) {
+      
+      // 6. UPDATED: Clean up experience data before sending
+      if (finalData.hasExperience) {
+        finalData.experience = finalData.experience.map(exp => {
+          if (exp.isCurrent) {
+            return { ...exp, to: null }; // Set 'to' to null if current
+          }
+          return exp;
+        });
+      } else {
         finalData.experience = [];
       }
+      
       delete finalData.confirmPassword;
       delete finalData.hasExperience;
+      
+      // We don't need to send the avatar file in the JSON
+      // This needs to be handled with FormData, which is a bigger change.
+      // For now, let's remove it from the JSON payload.
+      delete finalData.avatar; 
+      // console.log("Final Data Submitted:", finalData);
 
       try {
         const response = await fetch(`${import.meta.env.VITE_BE_URL}/signup`, {
@@ -871,15 +894,13 @@ const SignUpForm = () => {
           body: JSON.stringify(finalData),
         });
 
+        const result = await response.json(); // Read the response
+        
         if (!response.ok) {
-          console.log(response);
-          const errorData = await response.json();
-          throw new Error(errorData.message || "Something went wrong");
+          throw new Error(result.message || "Something went wrong");
         }
-
-        const result = await response.json();
-        console.log("Server Response:", result);
-        // login(result.data);
+        
+        // console.log("Server Response:", result);
         alert("Signed up successfully! Redirecting to Login Page.");
         navigate("/signin");
       } catch (error) {
@@ -893,7 +914,8 @@ const SignUpForm = () => {
 
   return (
     <>
-      {user ? (
+      {/* 2. UPDATED: Check for 'token' instead of 'user' */}
+      {token ? (
         <Navigate to="/dashboard" />
       ) : (
         <div className="min-h-screen bg-gray-50 flex flex-col items-center justify-center py-12 px-4">

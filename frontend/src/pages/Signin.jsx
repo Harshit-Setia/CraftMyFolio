@@ -2,7 +2,9 @@ import React, { useState } from "react";
 import { Link, Navigate, useNavigate } from "react-router-dom";
 import FormButton from "../components/FormButton";
 import FormInput from "../components/FormInput";
-import { useAuth } from "../context/AuthContext";
+// 1. Corrected import path for your new hook
+import { useAuth } from "../hooks/useAuth";
+
 // --- SVG Icons ---
 const EmailIcon = () => (
   <svg
@@ -38,7 +40,6 @@ const PasswordIcon = () => (
   </svg>
 );
 
-// Eye Open Icon
 const EyeOpenIcon = () => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
@@ -57,13 +58,12 @@ const EyeOpenIcon = () => (
       strokeLinecap="round"
       strokeLinejoin="round"
       d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 
-         0 8.268 2.943 9.542 7-1.274 4.057-5.064 
-         7-9.542 7-4.477 0-8.268-2.943-9.542-7z"
+          0 8.268 2.943 9.542 7-1.274 4.057-5.064 
+          7-9.542 7-4.477 0-8.268-2.943-9.542-7z"
     />
   </svg>
 );
 
-// Eye Closed Icon (with slash)
 const EyeClosedIcon = () => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
@@ -77,32 +77,36 @@ const EyeClosedIcon = () => (
       strokeLinecap="round"
       strokeLinejoin="round"
       d="M3 3l18 18M10.477 10.477A3 3 0 0012 15c.795 
-         0 1.517-.31 2.047-.813m-3.57-3.57A3 3 0 
-         0115 12m4.243-4.243A9.973 9.973 0 
-         0121.542 12C20.268 16.057 16.478 19 
-         12 19a9.958 9.958 0 01-4.243-.757M6.343 
-         6.343A9.958 9.958 0 002.458 12c1.274 
-         4.057 5.064 7 9.542 7 1.61 0 3.13-.38 
-         4.457-1.05"
+          0 1.517-.31 2.047-.813m-3.57-3.57A3 3 0 
+          0115 12m4.243-4.243A9.973 9.973 0 
+          0121.542 12C20.268 16.057 16.478 19 
+          12 19a9.958 9.958 0 01-4.243-.757M6.343 
+          6.343A9.958 9.958 0 002.458 12c1.274 
+          4.057 5.064 7 9.542 7 1.61 0 3.13-.38 
+          4.457-1.05"
     />
   </svg>
 );
+// --- End Icons ---
 
 const SignIn = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [errors, setErrors] = useState({});
-  const { login, user } = useAuth();
+  const [isSubmitting, setIsSubmitting] = useState(false); // 5. Added loading state
+
+  // 2. Correctly get 'token' and 'login' from our new useAuth hook
+  const { login, token } = useAuth();
   const navigate = useNavigate();
 
   const validateEmail = (email) => {
-    // Simple regex for email validation
     return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setErrors({}); // Clear old errors
     const newErrors = {};
 
     // Email validation
@@ -119,12 +123,12 @@ const SignIn = () => {
 
     setErrors(newErrors);
 
-    // If there are no errors, proceed with form submission
-    if (!Object.keys(newErrors).length === 0) {
-      // console.log("Form submitted:", { email, password });
-      // Here you would typically make an API call to authenticate the user
-      return;
+    // 3. Corrected validation check
+    if (Object.keys(newErrors).length > 0) {
+      return; // Stop submission if there are errors
     }
+
+    setIsSubmitting(true); // Disable button
 
     try {
       const res = await fetch(`${import.meta.env.VITE_BE_URL}/signin`, {
@@ -135,23 +139,32 @@ const SignIn = () => {
         body: JSON.stringify({ email, password }),
       });
 
+      const response = await res.json(); // Get JSON response regardless of 'ok'
+
       if (!res.ok) {
-        // console.log(res);
-        const errorData = await res.json();
-        throw new Error(errorData.message || "Something went wrong");
+        // Use the error message from the backend
+        throw new Error(response.message || "Something went wrong");
       }
-      const response = await res.json();
-      console.log(response);
-      login(response.data);
+      
+      // 4. This is the main fix!
+      // Our new 'login' function only wants the token.
+      // Assuming response is { data: { user: {...}, token: "..." } }
+      login(response.data.token);
+
       navigate("/dashboard");
     } catch (error) {
       console.error("Submission Failed:", error);
+      // Set an API error to display to the user
+      setErrors({ api: error.message });
+    } finally {
+      setIsSubmitting(false); // Re-enable button
     }
   };
 
   return (
     <>
-      {user ? (
+      {/* 2. Check for 'token' instead of 'user' */}
+      {token ? (
         <Navigate to="/dashboard" />
       ) : (
         <div className="min-h-screen bg-gray-50 flex flex-col justify-center items-center py-6">
@@ -167,8 +180,14 @@ const SignIn = () => {
           <div className="mt-8 w-full max-w-md">
             <form
               onSubmit={handleSubmit}
+              noValidate // Disable browser validation, we do our own
               className="bg-white py-8 px-10 rounded-xl shadow-md border border-gray-100"
             >
+              {/* Display API errors */}
+              {errors.api && (
+                <p className="text-red-500 text-center text-sm mb-4">{errors.api}</p>
+              )}
+
               <FormInput
                 id="email"
                 label="Email Address"
@@ -210,7 +229,10 @@ const SignIn = () => {
                 </Link>
               </div>
 
-              <FormButton>Sign In</FormButton>
+              {/* Pass the 'isSubmitting' state to the button */}
+              <FormButton type="submit" disabled={isSubmitting}>
+                {isSubmitting ? "Signing In..." : "Sign In"}
+              </FormButton>
             </form>
 
             <div className="text-center mt-6">

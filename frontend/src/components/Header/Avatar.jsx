@@ -1,9 +1,8 @@
 import React, { useState, useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
-import { useAuth } from "../../context/AuthContext";
+import { useAuth } from "../../hooks/useAuth";
 
 // --- SVG Icons ---
-
 // Fallback user icon
 const UserIcon = () => (
   <svg
@@ -58,8 +57,7 @@ const LogoutIcon = () => (
   </svg>
 );
 
-// The component now accepts props for customization
-const Avatar = ({ imageUrl, userName = "Harshit Singla" }) => {
+const Avatar = ({ imageUrl, userName = "User" }) => {
   const { logout } = useAuth();
 
   const [isOpen, setIsOpen] = useState(false);
@@ -114,7 +112,6 @@ const Avatar = ({ imageUrl, userName = "Harshit Singla" }) => {
       >
         <div className="py-1" role="none">
           <div className="px-4 py-2">
-            {/* <p className="text-sm text-gray-700">Signed in as</p> */}
             <p className="text-sm font-medium text-gray-900 truncate">
               {userName}
             </p>

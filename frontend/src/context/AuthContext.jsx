@@ -1,80 +1,41 @@
-import { createContext, useContext, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
+import { useQueryClient } from "@tanstack/react-query";
 
-const AuthContext = createContext();
-
-const fetchUserData = async (token) => {
-  // console.log("Starting the verification frontend")
-  try {
-    const res = await fetch(`${import.meta.env.VITE_BE_URL}/me`, {
-      method: "GET",
-      headers: {
-        // The 'Authorization' header is the standard way to send a token
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      },
-    });
-
-    if (!res.ok) {
-      const errorData = await res
-        .json()
-        .catch(() => ({ message: res.statusText }));
-      throw new Error(errorData.message || "Failed to authenticate token.");
-    }
-
-    const response = await res.json();
-    // console.log(response);
-    return response;
-  } catch (error) {
-    console.error(error.message);
-  }
-};
+import { AuthContext } from "./AuthContextStore.js";
 
 export default function AuthProvider({ children }) {
-  const [user, setUser] = useState(null);
-  const [loading, setLoading] = useState(true);
+  const [token, setToken] = useState(() => localStorage.getItem("token"));
+  const queryClient = useQueryClient();
 
+  // This effect syncs any changes to the token state (e.g., from another tab)
+  // This is a more robust way to handle the initial load.
   useEffect(() => {
-    const intializeAuth = async () => {
-      const token = localStorage.getItem("token");
-
-      if (token) {
-        try {
-          const userData = await fetchUserData(token);
-          // console.log("User Data " ,userData)
-          setUser(userData.data);
-        } catch (error) {
-          console.error("Authentication Error", error.message);
-          localStorage.removeItem("token");
-        }
-      }
-
-      setLoading(false);
+    const handleStorageChange = () => {
+      setToken(localStorage.getItem("token"));
     };
-
-    intializeAuth();
+    
+    // Listen for storage changes from other tabs
+    window.addEventListener('storage', handleStorageChange);
+    // Clean up listener
+    return () => window.removeEventListener('storage', handleStorageChange);
   }, []);
 
-  const login = (userData) => {
-    setUser(userData);
-    localStorage.setItem("token", userData.token);
+  const login = (newToken) => {
+    localStorage.setItem("token", newToken);
+    setToken(newToken);
   };
+
   const logout = () => {
-    setUser(null);
+    setToken(null);
     localStorage.removeItem("token");
+    // MODIFICATION: More precise cache removal
+    // This just removes the user's data, not all other queries.
+    queryClient.removeQueries({ queryKey: ['user'] });
   };
 
   return (
-    <AuthContext.Provider value={{ user, loading, login, logout, setUser }}>
-      {!loading && children}
+    <AuthContext.Provider value={{ token, login, logout }}>
+      {children}
     </AuthContext.Provider>
   );
-}
-
-// eslint-disable-next-line react-refresh/only-export-components
-export function useAuth() {
-  const context = useContext(AuthContext);
-  if (context === undefined) {
-    throw new Error("useAuth must be used within an AuthProvider");
-  }
-  return context;
 }
