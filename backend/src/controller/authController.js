@@ -1,4 +1,5 @@
 import { User } from "../model/userModel.js";
+import asyncHandler from '../util/asyncHandler.js'; // Adjust the path
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 
@@ -122,32 +123,63 @@ const loginUser = async (req, res) => {
   }
 };
 
-const updateUser = async (req, res) => {
-  try {
-    const userId = req.params.id;
-    const updates = req.body;
-    const updatedUser = await User.findByIdAndUpdate(userId, updates, { new: true });
-    if (!updatedUser) {
-      return res.status(404).json({
-        success: false,
-        message: "User not found.",
-      });
-    }
-    const userResponse =  updatedUser.toObject();
-    delete userResponse.password;
-    return res.status(200).json({
-      success: true,
-      message: "User updated successfully.",
-      data: userResponse,
-    });
-  } catch (error) {
-    console.error("Update User Error:", error);
-    return res.status(500).json({
-      success: false,
-      message: "Internal Server Error",
-    });
+const updateUser = asyncHandler(async (req, res) => {
+  // 1. Get the user from the database.
+  // We trust `req.user._id` because it comes from your secure authMiddleware.
+  const user = await User.findById(req.user._id);
+
+  if (!user) {
+    res.status(404);
+    throw new Error('User not found.');
   }
-};
+
+  // 2. Create a "whitelist" of fields that are safe to update.
+  // We will manually pull data from `req.body` instead of just
+  // passing the whole body. This prevents a user from maliciously
+  // sending `{"isAdmin": true}` and elevating their privileges.
+
+  // Update basic information (from your BasicDetailsForm)
+  user.name = req.body.name || user.name;
+  user.phone = req.body.phone || user.phone;
+  user.address = req.body.address || user.address;
+  user.dob = req.body.dob || user.dob;
+  user.bio = req.body.bio || user.bio;
+  user.avatar = req.body.avatar || user.avatar;
+  user.resume = req.body.resume || user.resume;
+
+  // Update arrays (for your other forms, if they are sent)
+  // This assumes the front end sends the *entire* new array for the section being edited.
+  if (req.body.education) {
+    user.education = req.body.education;
+  }
+  if (req.body.experience) {
+    user.experience = req.body.experience;
+  }
+  if (req.body.projects) {
+    user.projects = req.body.projects;
+  }
+  if (req.body.skills) {
+    // Assuming skills are sent as an array, as per your schema
+    user.skills = req.body.skills;
+  }
+  if (req.body.social) {
+    user.social = req.body.social;
+  }
+  
+  // NOTE: We deliberately DO NOT update:
+  // - user.password (must go through a separate "change password" flow)
+  // - user.email (usually requires a re-verification process)
+  // - user.isAdmin (can only be set by an admin)
+
+  const updatedUser = await user.save();
+
+  // 4. Send the updated user back to the front end.
+  // We wrap it in a 'data' object to match what your
+  // useMutation's `onSuccess` callback expects.
+  res.status(200).json({
+    data: updatedUser,
+  });
+});
 
 
 export { registerUser, loginUser , updateUser};

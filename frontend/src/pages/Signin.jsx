@@ -175,6 +175,7 @@ const SignIn = () => {
                 type="email"
                 placeholder="Enter your email"
                 value={email}
+                autoComplete="username"
                 onChange={(e) => setEmail(e.target.value)}
                 error={errors.email}
                 icon={<EmailIcon />}
@@ -186,6 +187,7 @@ const SignIn = () => {
                 type={showPassword ? "text" : "password"}
                 placeholder="Enter your password"
                 value={password}
+                autoComplete="current-password"
                 onChange={(e) => setPassword(e.target.value)}
                 error={errors.password}
                 icon={<PasswordIcon />}

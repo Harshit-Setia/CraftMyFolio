@@ -8,6 +8,6 @@ router.post("/signup", registerUser);
 router.post("/signin", loginUser);
 router.get("/me", protect, sendRes);
 // router.post('/logout',logoutUser);
-router.patch("/me",updateUser);
+router.patch("/me",protect ,updateUser);
 
 export { router };
