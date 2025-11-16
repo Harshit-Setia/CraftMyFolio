@@ -2,6 +2,7 @@ import { User } from "../model/userModel.js";
 import asyncHandler from '../util/asyncHandler.js'; // Adjust the path
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
+import { uploadOnCloudinary } from "../util/cloudUpload.js";
 
 const registerUser = async (req, res) => {
   try {
@@ -11,7 +12,7 @@ const registerUser = async (req, res) => {
 
     // 2. Validate that all required fields are present
     const requiredFields = { name, email, password, dob, address, phone };
-    console.log(req.body);
+    // console.log(req.body);
     for (const [key, value] of Object.entries(requiredFields)) {
       if (!value) {
         return res.status(400).json({
@@ -30,11 +31,27 @@ const registerUser = async (req, res) => {
         message: "A user with this email already exists.",
       });
     }
+    //4 Handle avatar upload if file is provided
+    // console.log("File in Request:", req.file);
+    const avatarLocalPath=req.file?.path;
+    // console.log("Avatar Local Path:", avatarLocalPath);
+        let avatar;
+        if(!avatarLocalPath){
+          // console.log("No avatar file provided.");
+            avatar="";
+        }
+        else{
+            avatar=await uploadOnCloudinary(avatarLocalPath);
+            avatar=avatar?.url;
+            if(!avatar){
+              return res.status(500).json({message:"Cloudinary error"});
+            }
+        }
 
-    // 4. Hash the password for security
+    // 5. Hash the password for security
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    // 5. Create the new user in the database
+    // 6. Create the new user in the database
     const newUser = await User.create({
       ...req.body, // extra optional fields first
       name,
@@ -43,6 +60,7 @@ const registerUser = async (req, res) => {
       dob,
       address,
       phone,
+      avatar,
     });
 
     // Exclude the password from the response
@@ -144,7 +162,16 @@ const updateUser = asyncHandler(async (req, res) => {
   user.address = req.body.address || user.address;
   user.dob = req.body.dob || user.dob;
   user.bio = req.body.bio || user.bio;
-  user.avatar = req.body.avatar || user.avatar;
+  if (req.file) {
+        const avatarLocalPath = req.file.path;
+        const cloudinaryResponse = await uploadOnCloudinary(avatarLocalPath);
+        if (!cloudinaryResponse) {
+          return res.status(500).json({ message: 'Error uploading new avatar to Cloudinary' });
+        }
+        user.avatar = cloudinaryResponse.url;
+  }else{
+        user.avatar = user.avatar;
+  }
   user.resume = req.body.resume || user.resume;
 
   // Update arrays (for your other forms, if they are sent)

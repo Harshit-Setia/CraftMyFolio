@@ -882,8 +882,9 @@ const SignUpForm = () => {
       // We don't need to send the avatar file in the JSON
       // This needs to be handled with FormData, which is a bigger change.
       // For now, let's remove it from the JSON payload.
+      if(!finalData.avatar)
       delete finalData.avatar; 
-      // console.log("Final Data Submitted:", finalData);
+      console.log("Final Data Submitted:", finalData);
 
       try {
         const response = await fetch(`${import.meta.env.VITE_BE_URL}/signup`, {
