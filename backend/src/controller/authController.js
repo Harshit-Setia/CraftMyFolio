@@ -3,8 +3,13 @@ import asyncHandler from '../util/asyncHandler.js'; // Adjust the path
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import { uploadOnCloudinary } from "../util/cloudUpload.js";
+import { saveUserAndRespond } from "../util/controllerUtils.js";
+
 
 const registerUser = async (req, res) => {
+  console.log("REQ FILE:", req.file);
+  console.log("REQ BODY:", req.body);
+
   try {
     // 1. Extract all required fields from the request body
     const { name, email, password, dob, address, phone } = req.body;
@@ -34,6 +39,7 @@ const registerUser = async (req, res) => {
     //4 Handle avatar upload if file is provided
     // console.log("File in Request:", req.file);
     const avatarLocalPath=req.file?.path;
+    console.log("Avatar local Path " ,avatarLocalPath)
     // console.log("Avatar Local Path:", avatarLocalPath);
         let avatar;
         if(!avatarLocalPath){
@@ -42,6 +48,7 @@ const registerUser = async (req, res) => {
         }
         else{
             avatar=await uploadOnCloudinary(avatarLocalPath);
+            console.log("Succesful upload of Avatar " , avatar)
             avatar=avatar?.url;
             if(!avatar){
               return res.status(500).json({message:"Cloudinary error"});
@@ -208,5 +215,27 @@ const updateUser = asyncHandler(async (req, res) => {
   });
 });
 
+const updateUserAvatar = asyncHandler(async (req, res) => {
+  const user = await User.findById(req.user._id);
+  if (!user) {
+    res.status(404); throw new Error('User not found.');
+  }
 
-export { registerUser, loginUser , updateUser};
+  // 1. Check if the 'upload' middleware attached a file
+  if (!req.file) {
+    res.status(400); throw new Error('No image file provided.');
+  }
+
+  // 2. Upload the file buffer to your cloud service (S3, Cloudinary, etc.)
+  // req.file.buffer contains the image data
+const imageUrl = await uploadOnCloudinary(req.file?.path);
+
+  // 3. Save the *new URL* to the user's avatar field
+  user.avatar = imageUrl;
+
+  // 4. Save the user and send back the updated data
+  await saveUserAndRespond(user, res);
+});
+
+
+export { registerUser, loginUser , updateUser , updateUserAvatar};
