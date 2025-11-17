@@ -2,57 +2,9 @@ import React, { useState, useRef } from "react";
 import { Link, Navigate, useNavigate } from "react-router-dom";
 // 1. UPDATED: Import the correct hook
 import { useAuth } from "../hooks/useAuth";
+import {CameraIcon , PlusIcon , TrashIcon}  from '../components/ui/icons.jsx'
 
-// --- Reusable Components & Icons ---
-const CameraIcon = () => (
-  <svg
-    xmlns="http://www.w3.org/2000/svg"
-    className="h-8 w-8 text-indigo-400 group-hover:text-indigo-600"
-    fill="none"
-    viewBox="0 0 24 24"
-    stroke="currentColor"
-    strokeWidth={2}
-  >
-    <path
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"
-    />
-    <path
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"
-    />
-  </svg>
-);
-const PlusIcon = () => (
-  <svg
-    xmlns="http://www.w3.org/2000/svg"
-    className="h-5 w-5 mr-2"
-    fill="none"
-    viewBox="0 0 24 24"
-    stroke="currentColor"
-    strokeWidth={2}
-  >
-    <path strokeLinecap="round" strokeLinejoin="round" d="M12 4v16m8-8H4" />
-  </svg>
-);
-const TrashIcon = () => (
-  <svg
-    xmlns="http://www.w3.org/2000/svg"
-    className="h-5 w-5 text-gray-500 hover:text-red-600"
-    fill="none"
-    viewBox="0 0 24 24"
-    stroke="currentColor"
-    strokeWidth={2}
-  >
-    <path
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
-    />
-  </svg>
-);
+// --- Reusable Components ---
 
 const FormInput = ({
   id,
@@ -854,62 +806,143 @@ const SignUpForm = () => {
   };
   const prevStep = () => setStep((prev) => prev - 1);
 
-  const handleSubmit = async () => {
-    if (validateStep()) {
-      const finalData = {
-        ...formData,
-        skills: formData.skills
-          .split(",")
-          .map((s) => s.trim())
-          .filter(Boolean),
-      };
+  // const handleSubmit = async () => {
+  //   if (validateStep()) {
+  //     const finalData = {
+  //       ...formData,
+  //       skills: formData.skills
+  //         .split(",")
+  //         .map((s) => s.trim())
+  //         .filter(Boolean),
+  //     };
       
-      // 6. UPDATED: Clean up experience data before sending
-      if (finalData.hasExperience) {
-        finalData.experience = finalData.experience.map(exp => {
-          if (exp.isCurrent) {
-            return { ...exp, to: null }; // Set 'to' to null if current
+  //     // 6. UPDATED: Clean up experience data before sending
+  //     if (finalData.hasExperience) {
+  //       finalData.experience = finalData.experience.map(exp => {
+  //         if (exp.isCurrent) {
+  //           return { ...exp, to: null }; // Set 'to' to null if current
+  //         }
+  //         return exp;
+  //       });
+  //     } else {
+  //       finalData.experience = [];
+  //     }
+      
+  //     delete finalData.confirmPassword;
+  //     delete finalData.hasExperience;
+      
+  //     // We don't need to send the avatar file in the JSON
+  //     // This needs to be handled with FormData, which is a bigger change.
+  //     // For now, let's remove it from the JSON payload.
+  //     if(!finalData.avatar)
+  //     delete finalData.avatar; 
+  //     console.log("Final Data Submitted:", finalData);
+
+  //     try {
+  //       const response = await fetch(`${import.meta.env.VITE_BE_URL}/signup`, {
+  //         method: "POST",
+  //         headers: {
+  //           "Content-Type": "application/json",
+  //         },
+  //         body: JSON.stringify(finalData),
+  //       });
+
+  //       const result = await response.json(); // Read the response
+        
+  //       if (!response.ok) {
+  //         throw new Error(result.message || "Something went wrong");
+  //       }
+        
+  //       // console.log("Server Response:", result);
+  //       alert("Signed up successfully! Redirecting to Login Page.");
+  //       navigate("/signin");
+  //     } catch (error) {
+  //       console.error("Submission Failed:", error);
+  //       alert(`Error: ${error.message}`);
+  //     }
+  //   }
+  // };
+
+const handleSubmit = async () => {
+  if (validateStep()) {
+
+    // 1. Prepare the final cleaned data (same as before)
+    const finalData = {
+      ...formData,
+      skills: formData.skills
+        .split(",")
+        .map((s) => s.trim())
+        .filter(Boolean),
+    };
+
+    if (finalData.hasExperience) {
+      finalData.experience = finalData.experience.map(exp =>
+        exp.isCurrent ? { ...exp, to: null } : exp
+      );
+    } else {
+      finalData.experience = [];
+    }
+
+    delete finalData.confirmPassword;
+    delete finalData.hasExperience;
+
+    // --- IMPORTANT CHANGE BELOW ---
+
+    // 2. Create FormData (instead of JSON)
+    const fd = new FormData();
+
+    // 3. Append normal fields
+    for (const key in finalData) {
+      if (key === "avatar") continue; // handle separately
+      if (Array.isArray(finalData[key])) {
+        // Handle array correctly
+        finalData[key].forEach((item, idx) => {
+          if (typeof item === "object") {
+            // Object inside array (education, experience)
+            for (const field in item) {
+              fd.append(`${key}[${idx}][${field}]`, item[field]);
+            }
+          } else {
+            // Simple array (skills)
+            fd.append(`${key}[]`, item);
           }
-          return exp;
         });
       } else {
-        finalData.experience = [];
-      }
-      
-      delete finalData.confirmPassword;
-      delete finalData.hasExperience;
-      
-      // We don't need to send the avatar file in the JSON
-      // This needs to be handled with FormData, which is a bigger change.
-      // For now, let's remove it from the JSON payload.
-      if(!finalData.avatar)
-      delete finalData.avatar; 
-      console.log("Final Data Submitted:", finalData);
-
-      try {
-        const response = await fetch(`${import.meta.env.VITE_BE_URL}/signup`, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(finalData),
-        });
-
-        const result = await response.json(); // Read the response
-        
-        if (!response.ok) {
-          throw new Error(result.message || "Something went wrong");
-        }
-        
-        // console.log("Server Response:", result);
-        alert("Signed up successfully! Redirecting to Login Page.");
-        navigate("/signin");
-      } catch (error) {
-        console.error("Submission Failed:", error);
-        alert(`Error: ${error.message}`);
+        fd.append(key, finalData[key]);
       }
     }
-  };
+
+    // 4. Append the file (THIS is what Multer reads)
+    if (finalData.avatar) {
+      fd.append("avatar", finalData.avatar); 
+    }
+
+    console.log("Sending FormData…");
+    console.log(finalData)
+
+    // 5. Send the request (IMPORTANT: no JSON headers)
+    try {
+      const response = await fetch(`${import.meta.env.VITE_BE_URL}/signup`, {
+        method: "POST",
+        body: fd, // ← FormData here
+      });
+
+      const result = await response.json();
+
+      if (!response.ok) {
+        throw new Error(result.message || "Something went wrong");
+      }
+
+      alert("Signed up successfully! Redirecting to Login Page.");
+      navigate("/signin");
+
+    } catch (error) {
+      console.error("Submission Failed:", error);
+      alert(`Error: ${error.message}`);
+    }
+  }
+};
+
 
   const totalSteps = 5;
 

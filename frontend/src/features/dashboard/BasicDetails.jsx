@@ -1,11 +1,15 @@
-// src/features/dashboard/BasicDetails.jsx
-import React, { useState } from "react";
-import Modal from "../../components/ui/Modal";
-import EditButton from "../../components/ui/EditButton";
-import BasicDetailsForm from "./BasicDetailsForm";
+import React, { useState } from 'react';
+import Modal from '../../components/ui/Modal';
+import EditButton from '../../components/ui/EditButton';
+import BasicDetailsForm from './BasicDetailsForm';
+// 1. Import our new AvatarUploadForm
+import AvatarUploadForm from './AvatarUploadForm';
 
 const BasicDetails = ({ user }) => {
-  const [isEditOpen, setIsEditOpen] = useState(false);
+  // 2. We now need state for BOTH modals
+  const [isDetailsModalOpen, setIsDetailsModalOpen] = useState(false);
+  const [isPhotoModalOpen, setIsPhotoModalOpen] = useState(false);
+  
   const formatDate = (dateString) => {
     if (!dateString) return "Not provided";
     return new Date(dateString).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
@@ -19,11 +23,32 @@ const BasicDetails = ({ user }) => {
           <h1 className="text-3xl font-bold text-gray-800">Basic Details</h1>
           <p className="text-gray-500 mt-1">Manage your personal information and profile</p>
         </div>
-        <EditButton text="Edit Profile" onClick={() => setIsEditOpen(true)} />
+        {/* 3. This button opens the DETAILS modal */}
+        <EditButton text="Edit Profile" onClick={() => setIsDetailsModalOpen(true)} />
       </div>
+
       <div className="bg-white p-6 md:p-8 rounded-xl shadow-md border border-gray-100">
         <div className="flex flex-col md:flex-row items-center md:space-x-6">
-          <img className="w-24 h-24 rounded-full object-cover" src={user.avatar || 'https://placehold.co/100x100/E2E8F0/4A5568?text=??'} alt={user.name} />
+          
+          {/* 4. This is the new Avatar section */}
+          <div className="relative w-24 h-24 flex-shrink-0">
+            <img 
+              className="w-24 h-24 rounded-full object-cover" 
+              src={user.avatar || 'https://placehold.co/100x100/E2E8F0/4A5568?text=??'} 
+              alt={user.name} 
+            />
+            {/* 5. This button opens the PHOTO modal */}
+            <button 
+              onClick={() => setIsPhotoModalOpen(true)}
+              className="absolute -bottom-1 -right-1 w-8 h-8 bg-indigo-600 rounded-full flex items-center justify-center text-white border-2 border-white hover:bg-indigo-700 transition"
+              aria-label="Change profile photo"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                <path d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z" />
+              </svg>
+            </button>
+          </div>
+          
           <div className="mt-4 md:mt-0 text-center md:text-left">
             <div className="flex items-center justify-center md:justify-start space-x-3">
               <h2 className="text-2xl font-bold text-gray-800">{user.name}</h2>
@@ -53,8 +78,14 @@ const BasicDetails = ({ user }) => {
         </div>
       </div>
       
-      <Modal isOpen={isEditOpen} onClose={() => setIsEditOpen(false)} title="Edit Basic Details">
-        <BasicDetailsForm user={user} onClose={() => setIsEditOpen(false)} />
+      {/* 6. Render the DETAILS modal */}
+      <Modal isOpen={isDetailsModalOpen} onClose={() => setIsDetailsModalOpen(false)} title="Edit Basic Details">
+        <BasicDetailsForm user={user} onClose={() => setIsDetailsModalOpen(false)} />
+      </Modal>
+
+      {/* 7. Render the new PHOTO modal */}
+      <Modal isOpen={isPhotoModalOpen} onClose={() => setIsPhotoModalOpen(false)} title="Update Profile Photo">
+        <AvatarUploadForm user={user} onClose={() => setIsPhotoModalOpen(false)} />
       </Modal>
     </div>
   );
