@@ -1,7 +1,11 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import { useUser } from "../hooks/useUser";
+
 
 const HeroSection = () => {
+  const {data : user} = useUser();
+
   return (
     <div className="bg-white">
       <div className="text-center w-full mx-auto py-24 sm:py-32 md:py-40 px-4 sm:px-6 lg:px-8">
@@ -22,7 +26,7 @@ const HeroSection = () => {
             to="/create"
             className="bg-indigo-600 text-white font-semibold px-8 py-3 rounded-lg shadow-lg hover:bg-indigo-700 transition-all transform hover:scale-105 duration-300 ease-in-out"
           >
-            Create Your Portfolio
+            {user?.folio_id ? "Change Your Portfolio" : "Create Your Portfolio"}
           </Link>
         </div>
       </div>
