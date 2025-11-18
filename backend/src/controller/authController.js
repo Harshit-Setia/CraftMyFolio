@@ -41,7 +41,7 @@ const registerUser = async (req, res) => {
     const avatarLocalPath=req.file?.path;
     console.log("Avatar local Path " ,avatarLocalPath)
     // console.log("Avatar Local Path:", avatarLocalPath);
-        let avatar;
+        let avatar=undefined;
         if(!avatarLocalPath){
           // console.log("No avatar file provided.");
             avatar="";
@@ -49,8 +49,7 @@ const registerUser = async (req, res) => {
         else{
             avatar=await uploadOnCloudinary(avatarLocalPath);
             console.log("Succesful upload of Avatar " , avatar)
-            avatar=avatar?.url;
-            if(!avatar){
+            if(avatar==undefined){
               return res.status(500).json({message:"Cloudinary error"});
             }
         }

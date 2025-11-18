@@ -13,6 +13,7 @@ import cloudinary from "cloudinary";
 
 export const uploadOnCloudinary = async (localFilePath) => {
   try {
+    // console.log("Uploading to cloudinary:", localFilePath);
     if (!localFilePath) return null;
 
     // upload to cloudinary
