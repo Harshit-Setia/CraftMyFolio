@@ -63,7 +63,7 @@ const AvatarUploadForm = ({ onClose }) => {
         </button>
         <button 
           type="submit" 
-          disabled={!file || mutation.isLoading || mutation.isPending} 
+          disabled={!file || mutation.isPending} 
           className="px-4 py-2 rounded-lg bg-indigo-600 text-white hover:bg-indigo-700 disabled:bg-indigo-300"
         >
           {mutation.isPending ? "Uploading..." : "Save Photo"}

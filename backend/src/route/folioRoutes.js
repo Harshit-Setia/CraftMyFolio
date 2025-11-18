@@ -1,23 +1,25 @@
-import express from "express";
+import express from 'express';
+import { protect } from '../middleware/authMiddleware.js';
 import {
-  getFolio,
   createFolio,
-  updateFolio,
-  deleteFolio,
-} from "../controller/folioController.js";
+  getPublicFolio,
+  getMyFolio,
+  updateMyFolio,
+  deleteMyFolio
+  ,checkSlugAvailability
+} from '../controller/folioController.js';
 
-const router = express.Router();
+export const router = express.Router();
 
-// Get a folio by user_id
-router.get("/:id", getFolio);
+// --- Private Routes (Require Token) ---
+router.post('/', protect, createFolio);
+router.get('/me', protect, getMyFolio);
+router.patch('/me', protect, updateMyFolio);
+router.delete('/me', protect, deleteMyFolio);
 
-// Create a new folio
-router.post("/", createFolio);
+// --- Public Route (Anyone can access) ---
+router.get('/:slug', getPublicFolio);
 
-// Update a folio by user_id
-router.put("/:id", updateFolio);
+// export const router;
 
-// Delete a folio by user_id
-router.delete("/:id", deleteFolio);
-
-export {router}
+router.get('/check-slug/:slug', checkSlugAvailability);

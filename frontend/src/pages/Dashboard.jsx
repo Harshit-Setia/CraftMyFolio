@@ -1,6 +1,6 @@
 // src/pages/DashboardPage.jsx
-import React, { useState } from "react";
-import { Navigate } from "react-router-dom";
+import React, { useState} from "react";
+import { Navigate ,useNavigate} from "react-router-dom";
 import { useUser } from "../hooks/useUser"; // 1. Import the new useUser hook
 import { IconWrapper, icons } from "../components/ui/icons";
 
@@ -9,17 +9,37 @@ import BasicDetails from "../features/dashboard/BasicDetails";
 import EducationDetails from "../features/dashboard/EducationDetails";
 import ExperienceDetails from "../features/dashboard/ExperienceDetails";
 import ProjectsDetails from "../features/dashboard/ProjectsDetails";
+import SkillsDetails from "../features/dashboard/SkillsDetails";
+import SocialLinksDetails from "../features/dashboard/SocialLinks";
+import TestimonialsDetails from "../features/dashboard/TestimonialsDetails";
 
 const DashboardPage = () => {
   // 3. Use the new hook to get data, loading, and error states
   const { data: user, isLoading, isError } = useUser();
+  const navigate = useNavigate();
 
-  const menuItems = [ "Basic Details", "Education Details", "Internship & Work Experience", "Projects" ];
+  const menuItems = [
+    "Basic Details",
+    "Education Details",
+    "Internship & Work Experience",
+    "Projects",
+    "Skills",
+    "Social Links",
+    "Testimonials",
+  ];
   const [activeItem, setActiveItem] = useState(menuItems[0]);
+
+  const handleViewFolio = () => {
+    if (user && user.folio_id && user.folio_id.slug) {
+      navigate(`/folio/${user.folio_id.slug}`);
+    } else {
+      navigate("/create");
+    }
+  };
 
   const renderContent = () => {
     if (!user) return null; // Content is only rendered if user exists
-    
+
     switch (activeItem) {
       case "Basic Details":
         return <BasicDetails user={user} />;
@@ -29,6 +49,12 @@ const DashboardPage = () => {
         return <ExperienceDetails experience={user.experience} />;
       case "Projects":
         return <ProjectsDetails projects={user.projects} />;
+      case "Skills" : 
+        return <SkillsDetails skills={user.skills} />
+      case "Social Links":
+        return <SocialLinksDetails social={user.social} />;
+      case "Testimonials":
+        return <TestimonialsDetails testimonials={user.testimonials} />;
       default:
         return <BasicDetails user={user} />;
     }
@@ -38,7 +64,9 @@ const DashboardPage = () => {
   if (isLoading) {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <p className="text-lg font-medium text-gray-600">Loading your session...</p>
+        <p className="text-lg font-medium text-gray-600">
+          Loading your session...
+        </p>
       </div>
     );
   }
@@ -58,6 +86,17 @@ const DashboardPage = () => {
           <h1 className="text-2xl font-bold text-indigo-700">Dashboard</h1>
           <p className="text-sm text-gray-500">User Profile</p>
         </div>
+
+        <button
+          onClick={handleViewFolio}
+          className="w-full mb-6 px-4 py-2 bg-indigo-100 text-indigo-700 font-semibold rounded-lg hover:bg-indigo-200 transition-colors flex items-center justify-center"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+            <path strokeLinecap="round" strokeLinejoin="round" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+          </svg>
+          {user.folio_id ? "View My Folio" : "Create My Folio"}
+        </button>
+
         <nav className="flex-grow">
           <ul>
             {menuItems.map((item) => (
