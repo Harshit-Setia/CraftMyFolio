@@ -16,7 +16,8 @@ const FormInput = ({
   placeholder,
   error,
   required,
-  disabled
+  disabled,
+  autocomplete
 }) => (
   <div className="flex-1 min-w-[48%]">
     <label htmlFor={id} className="block text-sm font-medium text-gray-700">
@@ -30,6 +31,7 @@ const FormInput = ({
       onChange={onChange}
       placeholder={placeholder}
       disabled={disabled}
+      autoComplete={autocomplete}
       className={`mt-1 w-full bg-gray-100 border rounded-md py-2 px-3 text-gray-700 focus:outline-none focus:ring-2 ${error ? "border-red-500 focus:ring-red-500" : "border-transparent focus:ring-indigo-500"} disabled:bg-gray-200`}
     />
     {error && <p className="text-red-500 text-xs mt-1">{error}</p>}
@@ -186,6 +188,7 @@ const Step1_BasicInfo = ({
           onChange={handleInputChange}
           placeholder="+91 12345 67890"
           error={errors.phone}
+          autoComplete="tel"
           required
         />
         <FormInput
@@ -197,6 +200,7 @@ const Step1_BasicInfo = ({
           onChange={handleInputChange}
           placeholder="Create a strong password"
           error={errors.password}
+          autoComplete="new-password"
           required
         />
         <FormInput
@@ -208,6 +212,7 @@ const Step1_BasicInfo = ({
           onChange={handleInputChange}
           placeholder="Confirm your password"
           error={errors.confirmPassword}
+          autoComplete="new-password"
           required
         />
       </div>

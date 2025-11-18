@@ -9,6 +9,7 @@ import SignIn from "./pages/Signin";
 import SignUpForm from "./pages/Signup";
 import CreateFolio from "./pages/CreateFolio";
 import First from "./folioTemplate/First";
+import PublicFolioPage from "./pages/PublicFolioPage";
 
 // 2. Define the Error Page
 
@@ -65,6 +66,11 @@ const router = createBrowserRouter([
   {
     path: "signup",
     element: <SignUpForm />,
+    errorElement: <ErrorPage />,
+  },
+  {
+    path: "/folio/:slug",
+    element: <PublicFolioPage />,
     errorElement: <ErrorPage />,
   },
 ]);
