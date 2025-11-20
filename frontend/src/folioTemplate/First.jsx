@@ -1,211 +1,81 @@
-import React from "react";
+import React from 'react';
 
-// The helper function is still useful for formatting dates in the static data
-const getYear = (dateString) => {
-  if (!dateString) return null;
-  const date = new Date(dateString);
-  return !isNaN(date.getTime()) ? date.getFullYear() : null;
-};
-
-// Hardcoded static data for previewing the template
-const staticData = {
-  name: "Alex Doe",
-  bio: "A passionate Full Stack Developer with a love for creating intuitive, dynamic user experiences. Skilled in React, Node.js, and modern web technologies.",
-  avatar: "https://i.pravatar.cc/150?u=alexdoe",
-  resume: "#",
-  social: [
-    { id: 1, platform: "GitHub", url: "#" },
-    { id: 2, platform: "LinkedIn", url: "#" },
-    { id: 3, platform: "Twitter", url: "#" },
-  ],
-  education: [
-    {
-      id: 1,
-      degree: "B.Sc. in Computer Science",
-      institution: "State University",
-      yearOfCompletion: "2020-05-20",
-      fieldOfStudy: "Software Engineering",
-    },
-  ],
-  skills: ["React", "JavaScript (ES6+)", "Node.js", "Tailwind CSS", "Next.js", "MongoDB"],
-  projects: [
-    {
-      id: 1,
-      title: "E-commerce Platform",
-      description: "A full-featured online store built with the MERN stack, including payment gateway integration.",
-      github: "#",
-      deployed: "#",
-    },
-    {
-      id: 2,
-      title: "Task Management App",
-      description: "A collaborative tool for teams to manage projects and track progress in real-time.",
-      github: "#",
-      deployed: "#",
-    },
-  ],
-  experience: [
-    {
-      id: 1,
-      title: "Software Engineer",
-      company: "Tech Solutions Inc.",
-      from: "2020-08-01",
-      isCurrent: true,
-      description: "Developing and maintaining web applications using React and Express.",
-    },
-  ],
-  testimonials: [
-    {
-      id: 1,
-      name: "Jane Smith",
-      role: "Project Manager",
-      feedback: "Alex is a proactive and detail-oriented developer. A true asset to any team.",
-    },
-  ],
-};
-
-
-const First = () => {
-  // ✅ Destructure from the hardcoded `staticData` object instead of props
+const TemplateGlass = ({ user }) => {
   const {
-    name, bio, avatar, resume, education, social,
-    skills, projects, experience, testimonials
-  } = staticData;
+    name, bio, avatar, resume, email,
+    skills = [],
+    projects = [],
+  } = user || {};
 
   return (
-    <div className="font-sans bg-white text-gray-800 min-h-screen p-4 sm:p-8 max-w-4xl mx-auto">
-      {/* Header */}
-      <header className="flex flex-col md:flex-row items-center gap-8 pb-8 border-b border-gray-200">
-        <img
-          src={avatar}
-          alt={name}
-          className="w-32 h-32 rounded-full object-cover border-4 border-indigo-500 shadow-lg"
-        />
-        <div className="text-center md:text-left">
-          <h1 className="text-4xl md:text-5xl font-bold text-gray-900">{name}</h1>
-          <p className="mt-2 text-lg text-gray-600">{bio}</p>
-          {resume && (
-            <a
-              href={resume}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-block mt-4 font-semibold text-indigo-600 hover:text-indigo-800 transition-colors"
-            >
-              Download Resume &rarr;
-            </a>
-          )}
+    <div className="min-h-screen font-sans text-slate-800 p-4 md:p-12 relative overflow-hidden">
+      
+      {/* --- Background Gradient --- */}
+      {/* In a real app, you could let the user pick these colors */}
+      <div className="absolute inset-0 bg-gradient-to-br from-pink-300 via-purple-300 to-indigo-400 -z-10"></div>
+      
+      {/* --- Floating Shapes for effect --- */}
+      <div className="absolute top-0 left-0 w-72 h-72 bg-purple-400 rounded-full mix-blend-multiply filter blur-xl opacity-70 animate-blob -z-10"></div>
+      <div className="absolute top-0 right-0 w-72 h-72 bg-yellow-300 rounded-full mix-blend-multiply filter blur-xl opacity-70 animate-blob animation-delay-2000 -z-10"></div>
+      <div className="absolute -bottom-8 left-20 w-72 h-72 bg-pink-300 rounded-full mix-blend-multiply filter blur-xl opacity-70 animate-blob animation-delay-4000 -z-10"></div>
+
+      <div className="max-w-5xl mx-auto space-y-8">
+        
+        {/* --- Header Card --- */}
+        <div className="bg-white/30 backdrop-blur-md border border-white/20 rounded-3xl p-8 md:p-12 shadow-xl flex flex-col md:flex-row items-center gap-8 text-center md:text-left">
+           {avatar && <img src={avatar} alt={name} className="w-40 h-40 rounded-full object-cover border-4 border-white/50 shadow-lg" />}
+           <div className="flex-1">
+             <h1 className="text-5xl md:text-6xl font-extrabold text-white drop-shadow-sm mb-4">{name}</h1>
+             <p className="text-lg md:text-xl text-slate-800 font-medium max-w-2xl">{bio}</p>
+             
+             <div className="mt-8 flex flex-wrap justify-center md:justify-start gap-4">
+               {email && <a href={`mailto:${email}`} className="px-6 py-3 bg-white text-purple-600 font-bold rounded-full shadow-md hover:shadow-lg hover:scale-105 transition transform">Contact Me</a>}
+               {resume && <a href={resume} target="_blank" rel="noopener noreferrer" className="px-6 py-3 bg-purple-600 text-white font-bold rounded-full shadow-md hover:shadow-lg hover:bg-purple-700 transition transform">Download CV</a>}
+             </div>
+           </div>
         </div>
-      </header>
 
-      {/* Social Links */}
-      {social.length > 0 && (
-        <section className="mt-10">
-          <h2 className="text-2xl font-bold border-b-2 border-indigo-500 inline-block pb-1 mb-4">Connect</h2>
-          <ul className="flex flex-wrap gap-4">
-            {social.map((s) => (
-              <li key={s.id}>
-                <a href={s.url} target="_blank" rel="noopener noreferrer" className="font-medium text-gray-600 hover:text-indigo-600">
-                  {s.platform}
-                </a>
-              </li>
-            ))}
-          </ul>
-        </section>
-      )}
-
-      {/* Education */}
-      {education.length > 0 && (
-        <section className="mt-10">
-          <h2 className="text-2xl font-bold border-b-2 border-indigo-500 inline-block pb-1 mb-4">Education</h2>
-          <div className="space-y-4">
-            {education.map((edu) => (
-              <div key={edu.id} className="bg-gray-50 p-4 rounded-lg border-l-4 border-indigo-500">
-                <h3 className="font-bold text-lg">{edu.degree}</h3>
-                <p className="text-gray-600">
-                  {edu.institution} ({getYear(edu.yearOfCompletion)})
-                </p>
-                <p className="text-sm text-gray-500">{edu.fieldOfStudy}</p>
-              </div>
-            ))}
-          </div>
-        </section>
-      )}
-
-      {/* Skills */}
-      {skills.length > 0 && (
-        <section className="mt-10">
-          <h2 className="text-2xl font-bold border-b-2 border-indigo-500 inline-block pb-1 mb-4">Skills</h2>
-          <ul className="flex flex-wrap gap-3">
-            {skills.map((skill, i) => (
-              <li key={i} className="bg-indigo-100 text-indigo-800 font-medium px-4 py-1 rounded-full text-sm">
-                {skill}
-              </li>
-            ))}
-          </ul>
-        </section>
-      )}
-
-      {/* Projects */}
-      {projects.length > 0 && (
-        <section className="mt-10">
-          <h2 className="text-2xl font-bold border-b-2 border-indigo-500 inline-block pb-1 mb-4">Projects</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {projects.map((p) => (
-              <div key={p.id} className="bg-gray-50 p-4 rounded-lg border-l-4 border-indigo-500">
-                <h3 className="font-bold text-lg">{p.title}</h3>
-                <p className="text-gray-600 mt-1">{p.description}</p>
-                <div className="mt-4 flex gap-4">
-                  {p.github && (
-                    <a href={p.github} target="_blank" rel="noopener noreferrer" className="font-semibold text-indigo-600 hover:text-indigo-800 transition-colors">
-                      GitHub
-                    </a>
-                  )}
-                  {p.deployed && (
-                    <a href={p.deployed} target="_blank" rel="noopener noreferrer" className="font-semibold text-indigo-600 hover:text-indigo-800 transition-colors">
-                      Live Demo
-                    </a>
-                  )}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            
+            {/* --- Projects Column (2/3 width) --- */}
+            <div className="md:col-span-2 space-y-8">
+                <div className="bg-white/40 backdrop-blur-md border border-white/20 rounded-3xl p-8 shadow-xl">
+                    <h2 className="text-3xl font-bold text-purple-900 mb-6">Selected Work</h2>
+                    <div className="space-y-8">
+                        {projects.map((p, i) => (
+                            <div key={i} className="group">
+                                <div className="flex justify-between items-baseline">
+                                   <h3 className="text-2xl font-bold text-slate-900 group-hover:text-purple-700 transition">{p.title}</h3>
+                                   {p.deployed && <a href={p.deployed} className="text-sm font-bold uppercase tracking-wider text-purple-800 border border-purple-800 px-3 py-1 rounded-full hover:bg-purple-800 hover:text-white transition">Visit</a>}
+                                </div>
+                                <p className="mt-2 text-slate-700 leading-relaxed">{p.description}</p>
+                            </div>
+                        ))}
+                        {projects.length === 0 && <p className="text-slate-600">Coming soon...</p>}
+                    </div>
                 </div>
-              </div>
-            ))}
-          </div>
-        </section>
-      )}
+            </div>
 
-      {/* Experience */}
-      {experience.length > 0 && (
-        <section className="mt-10">
-          <h2 className="text-2xl font-bold border-b-2 border-indigo-500 inline-block pb-1 mb-4">Experience</h2>
-          <div className="space-y-4">
-            {experience.map((exp) => (
-              <div key={exp.id} className="bg-gray-50 p-4 rounded-lg border-l-4 border-indigo-500">
-                <h3 className="font-bold text-lg">{exp.title} @ {exp.company}</h3>
-                <p className="text-sm text-gray-500">
-                  {getYear(exp.from)} - {exp.isCurrent ? "Present" : getYear(exp.to)}
-                </p>
-                <p className="text-gray-600 mt-1">{exp.description}</p>
-              </div>
-            ))}
-          </div>
-        </section>
-      )}
+            {/* --- Sidebar Column (Skills & More) --- */}
+            <div className="space-y-8">
+                <div className="bg-white/40 backdrop-blur-md border border-white/20 rounded-3xl p-8 shadow-xl">
+                    <h2 className="text-2xl font-bold text-purple-900 mb-4">Toolbox</h2>
+                    <div className="flex flex-wrap gap-2">
+                        {skills.map((skill, i) => (
+                            <span key={i} className="bg-white/60 px-3 py-1 rounded-lg text-sm font-semibold text-purple-900 shadow-sm">
+                                {skill}
+                            </span>
+                        ))}
+                         {skills.length === 0 && <p className="text-slate-600 text-sm">No skills listed.</p>}
+                    </div>
+                </div>
+            </div>
 
-      {/* Testimonials */}
-      {testimonials.length > 0 && (
-        <section className="mt-10">
-          <h2 className="text-2xl font-bold border-b-2 border-indigo-500 inline-block pb-1 mb-4">Testimonials</h2>
-          <div className="space-y-4">
-            {testimonials.map((t) => (
-              <div key={t.id} className="bg-gray-50 p-4 rounded-lg border-l-4 border-gray-300">
-                <p className="italic text-gray-600">"{t.feedback}"</p>
-                <p className="text-right font-semibold mt-2">— {t.name}, {t.role}</p>
-              </div>
-            ))}
-          </div>
-        </section>
-      )}
+        </div>
+
+      </div>
     </div>
   );
 };
 
-export default First;
+export default TemplateGlass;
