@@ -198,6 +198,9 @@ const updateUser = asyncHandler(async (req, res) => {
   if (req.body.social) {
     user.social = req.body.social;
   }
+  if(req.body.testimonials){
+    user.testimonials=req.body.testimonials;
+  }
   
   // NOTE: We deliberately DO NOT update:
   // - user.password (must go through a separate "change password" flow)
