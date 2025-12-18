@@ -1,55 +1,97 @@
-import TemplateGlass from "./First";
-import Third from "./Third";
+import FirstImg from '../assets/templates/FirstImg.jpg'
 
 // export const templates = {
-//     TemplateGlass,
-//     Second
-// }
+    //     TemplateGlass,
+    //     Second
+    // }
 
-import FirstImg from '../assets/templates/FirstImg.jpg'
-import TemplateClassic from "./TemplateClassic";
-import TemplateDev from "./Modern";
-import TemplateBento from "./Bento";
-import TemplateTerminal from "./Terminal";
-import TemplateNeoBrutal from "./Neon";
+import TemplateHazard from './TemplateHazard'
+import TemplateBento from './TemplateBento'
+import TemplateClassic from './TemplateClassic'
+import TemplateCyberpunk from './TemplateCyberpunk'
+import TemplateDev from './TemplateDev'
+import TemplateGlass from './TemplateGlass'
+import TemplateNeoBrutal from './TemplateNeoBrutal'
+import TemplateNeoPop from './TemplateNeoPop'
+import TemplateResume from './TemplateResume'
+import TemplateTerminal from './TemplateTerminal'
+import TemplateTimeline from './TemplateTimeline'
+
 
 
 export const templateInfo = [
     {
         id : "Third",
-        name : "Sexist (Real Data)",
+        name : "Industry Hazard",
         thumbnail : FirstImg,
-        component : Third
+        component : TemplateHazard
     },
     {
-        id:"Modern",
-        name : "Modern Template",
+        id : "Industry Hazard",
+        name : "Industry Hazard",
         thumbnail : FirstImg,
-        component : TemplateDev
+        component : TemplateHazard
     },
     {
-        id:"Bento",
-        name : "Bento Template",
+        id : "Bento",
+        name : "Bento",
         thumbnail : FirstImg,
         component : TemplateBento
     },
     {
-        id:"Glass",
-        name : "Glass Template",
+        id : "CyberPunk",
+        name : "CyberPunk",
+        thumbnail : FirstImg,
+        component : TemplateCyberpunk
+    },
+    {
+        id : "Dev",
+        name : "Dev",
+        thumbnail : FirstImg,
+        component : TemplateDev
+    },
+    {
+        id : "Glass",
+        name : "Glass",
         thumbnail : FirstImg,
         component : TemplateGlass
     },
     {
-        id:"Terminal",
-        name : "Terminal Template",
+        id : "NeoBrutual",
+        name : "NeoBrutual",
+        thumbnail : FirstImg,
+        component : TemplateNeoBrutal
+    },
+    {
+        id : "Classic",
+        name : "Classic",
+        thumbnail : FirstImg,
+        component : TemplateClassic
+    },
+    {
+        id : "NeoPop",
+        name : "NeoPop",
+        thumbnail : FirstImg,
+        component : TemplateNeoPop
+    },
+    {
+        id : "Resume",
+        name : "Feels Like a Resume",
+        thumbnail : FirstImg,
+        component : TemplateResume
+    },
+    {
+        id : "Terminal",
+        name : "Terminal",
         thumbnail : FirstImg,
         component : TemplateTerminal
     },
     {
-        id:"NeoBrutal",
-        name : "NeoBrutal Template",
+        id : "Timeline",
+        name : "Timeline",
         thumbnail : FirstImg,
-        component : TemplateNeoBrutal
+        component : TemplateTimeline
     },
+    
 
 ]

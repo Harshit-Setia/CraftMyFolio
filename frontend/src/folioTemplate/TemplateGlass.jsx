@@ -25,7 +25,7 @@ const TemplateGlass = ({ user }) => {
         <div className="bg-white/30 backdrop-blur-md border border-white/20 rounded-3xl p-8 md:p-12 shadow-xl flex flex-col md:flex-row items-center gap-8 text-center md:text-left">
            {avatar && <img src={avatar} alt={name} className="w-40 h-40 rounded-full object-cover border-4 border-white/50 shadow-lg" />}
            <div className="flex-1">
-             <h1 className="text-5xl md:text-6xl font-extrabold text-white drop-shadow-sm mb-4">{name}</h1>
+             <h1 className="text-5xl md:text-6xl font-extrabold text-purple-500 drop-shadow-sm mb-4">{name}</h1>
              <p className="text-lg md:text-xl text-slate-800 font-medium max-w-2xl">{bio}</p>
              
              <div className="mt-8 flex flex-wrap justify-center md:justify-start gap-4">
