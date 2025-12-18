@@ -1,4 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
+import { useEffect } from "react";
 // 1. We must now import useAuth from the hook file, not the context file
 import { useAuth } from "../hooks/useAuth"; 
 
@@ -37,34 +38,14 @@ export function useUser() {
   // 2. Get BOTH 'token' and 'logout' from useAuth
   const { token, logout } = useAuth(); 
 
-  return useQuery({
-
+  const query = useQuery({
     queryKey: ["user", token],
-
     queryFn: () => fetchUserData(token),
-
     enabled: !!token,
     
-    // 3. NEW: Add an onError handler
-    onError: (error) => {
-      // Check if the error is an authentication error
-      // These messages should match what your backend sends (e.g., from authMiddleware)
-      const authErrorMessages = [
-        'Not authorized, token failed',
-        'Failed to authenticate token.',
-        'No user found with this token'
-      ];
-      
-      if (authErrorMessages.includes(error.message)) {
-        console.error("Invalid token detected. Logging out...");
-        // This is the fix! We call logout() to clear the bad token.
-        logout();
-      }
-    },
-    
-    // 4. Update retry logic
+    // 3. Update retry logic - don't retry on auth errors
     retry: (failureCount, error) => {
-      // Don't retry if it was an auth error (we just logged out)
+      // Don't retry if it was an auth error
       const authErrorMessages = [
         'Not authorized, token failed',
         'Failed to authenticate token.',
@@ -76,4 +57,26 @@ export function useUser() {
       return failureCount < 3;
     },
   });
+
+  // 4. NEW: Use useEffect to handle errors (React Query v5 pattern)
+  useEffect(() => {
+    if (query.error) {
+      console.log("Error detected:", query.error.message);
+      
+      // Check if the error is an authentication error
+      const authErrorMessages = [
+        'Not authorized, token failed',
+        'Failed to authenticate token.',
+        'No user found with this token'
+      ];
+      
+      if (authErrorMessages.includes(query.error.message)) {
+        console.error("Invalid token detected. Logging out...");
+        // Clear the bad token
+        logout();
+      }
+    }
+  }, [query.error, logout]);
+
+  return query;
 }
