@@ -2,7 +2,7 @@ import redisClient from "../config/redisClient.js";
 
 const TTL_SECONDS = 3600;
 
-const cacheKey = (slug) => `folio:v2:${String(slug).toLowerCase()}`;
+const cacheKey = (slug) => `folio:v3:${String(slug).toLowerCase()}`;
 
 export const getCachedFolio = async (slug) => {
   if (!redisClient.isReady) return null;

@@ -1,9 +1,10 @@
 import React from 'react';
+import { telHref } from './multipage/helpers.js';
 import { BulletList } from './multipage/shared.jsx';
 import { Terminal, Cpu, Shield, Network, Database, Zap, Radio, AlertCircle, CornerDownRight } from 'lucide-react';
 
 const TemplateCyberpunk = ({ user }) => {
-  const { name, bio, avatar, skills = [], experience = [], projects = [], social = [], education = [], testimonials = [] } = user || {};
+  const { name, bio, avatar, phone, skills = [], experience = [], projects = [], social = [], education = [], testimonials = [] } = user || {};
 
   const CyberCard = ({ children, title, icon: Icon, className = "" }) => (
     <div className={`relative bg-black/80 border border-green-500/30 p-6 overflow-hidden group ${className}`}>
@@ -57,6 +58,7 @@ const TemplateCyberpunk = ({ user }) => {
               <div>
                 <h1 className="text-2xl font-bold text-green-400 mb-2 tracking-tight glitch-text">{name}</h1>
                 <p className="text-sm text-green-200/70 leading-tight">{bio || "System Integrity Check... OK. Bio missing."}</p>
+                {phone && <a href={telHref(phone)} className="mt-2 inline-block text-xs text-green-400 hover:text-green-300">TEL://{phone}</a>}
               </div>
             </div>
           </CyberCard>

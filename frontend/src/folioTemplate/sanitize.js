@@ -2,6 +2,9 @@ const SAFE_URL = /^(https?:\/\/|mailto:|tel:)/i;
 
 const safe = (url) => (SAFE_URL.test(String(url || "").trim()) ? url : undefined);
 
+export const withPhonePrivacy = (user) =>
+  user ? { ...user, phone: user.showPhone ? user.phone : undefined } : user;
+
 export const sanitizePublicUser = (user) => {
   if (!user) return user;
   return {

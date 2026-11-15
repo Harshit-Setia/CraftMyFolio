@@ -1,4 +1,5 @@
 import React from 'react';
+import { telHref } from './multipage/helpers.js';
 import { BulletList } from './multipage/shared.jsx';
 import { ExperienceSection, EducationSection, TestimonialsSection } from './shared/DataSections.jsx';
 
@@ -26,7 +27,7 @@ const bentoAccent = {
 
 const TemplateBento = ({ user }) => {
   const {
-    name, email, bio, avatar, resume,
+    name, email, phone, bio, avatar, resume,
     social = [],
     skills = [],
     projects = [],
@@ -41,9 +42,10 @@ const TemplateBento = ({ user }) => {
           {avatar && <img src={avatar} alt={name} className="w-24 h-24 rounded-full object-cover mb-6 shadow-sm" />}
           <h1 className="text-4xl md:text-5xl font-extrabold tracking-tight mb-4">{name || "Name"}</h1>
           {bio && <p className="text-lg text-gray-600 leading-relaxed">{bio}</p>}
-          <div className="mt-6 flex gap-3">
+          <div className="mt-6 flex flex-wrap gap-3">
              {email && <a href={`mailto:${email}`} className="px-4 py-2 bg-black text-white rounded-full text-sm font-medium hover:bg-gray-800 transition">Contact Me</a>}
              {resume && <a href={resume} className="px-4 py-2 border border-gray-300 rounded-full text-sm font-medium hover:bg-gray-50 transition">Resume</a>}
+             {phone && <a href={telHref(phone)} className="px-4 py-2 border border-gray-300 rounded-full text-sm font-medium hover:bg-gray-50 transition">{phone}</a>}
           </div>
         </div>
 

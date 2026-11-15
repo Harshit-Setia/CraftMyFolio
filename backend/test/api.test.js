@@ -170,14 +170,14 @@ test("cache is invalidated on update and delete", async (t) => {
   });
 
   await request(`/folio/${slug}`);
-  assert.notEqual(await redisClient.get(`folio:v2:${slug}`), null);
+  assert.notEqual(await redisClient.get(`folio:v3:${slug}`), null);
 
   await request("/me", { method: "PATCH", headers: auth, body: { bio: "changed" } });
-  assert.equal(await redisClient.get(`folio:v2:${slug}`), null);
+  assert.equal(await redisClient.get(`folio:v3:${slug}`), null);
 
   await request(`/folio/${slug}`);
   await request("/folio/me", { method: "DELETE", headers: auth });
-  assert.equal(await redisClient.get(`folio:v2:${slug}`), null);
+  assert.equal(await redisClient.get(`folio:v3:${slug}`), null);
 });
 
 test("links must be http(s) URLs", async () => {
@@ -337,4 +337,33 @@ test("deleting a portfolio deletes its analytics", async () => {
 
   await request("/folio/me", { method: "DELETE", headers: auth });
   assert.equal(await FolioStats.countDocuments({ folio_id: folio._id }), 0);
+});
+
+test("phone number is private unless the owner opts in", async () => {
+  const { user, auth } = await signUpAndLogin();
+  const slug = `phone-${Date.now()}`;
+  await request("/folio", { method: "POST", headers: auth, body: { slug, template_id: "Magazine" } });
+
+  const hidden = (await request(`/folio/${slug}`)).body.user_id;
+  assert.equal("phone" in hidden, false);
+  assert.equal("showPhone" in hidden, false);
+  assert.equal(hidden.email, user.email);
+
+  const own = await request("/me", { headers: auth });
+  assert.equal(own.body.data.phone, user.phone);
+  assert.equal(own.body.data.showPhone, false);
+
+  await request("/me", { method: "PATCH", headers: auth, body: { showPhone: true } });
+  const shown = (await request(`/folio/${slug}`)).body.user_id;
+  assert.equal(shown.phone, user.phone);
+  assert.equal("showPhone" in shown, false);
+
+  await request("/me", { method: "PATCH", headers: auth, body: { showPhone: false } });
+  assert.equal("phone" in (await request(`/folio/${slug}`)).body.user_id, false);
+
+  await request("/me", { method: "PATCH", headers: auth, body: { showPhone: "true" } });
+  assert.equal((await request(`/folio/${slug}`)).body.user_id.phone, user.phone);
+
+  await request("/me", { method: "PATCH", headers: auth, body: { showPhone: "yes please" } });
+  assert.equal("phone" in (await request(`/folio/${slug}`)).body.user_id, false);
 });

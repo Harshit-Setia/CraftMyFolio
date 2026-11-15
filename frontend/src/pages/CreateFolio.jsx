@@ -3,6 +3,7 @@ import { Navigate, useNavigate } from "react-router-dom";
 import { useUser } from "../hooks/useUser";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { templateInfo } from "../folioTemplate/index.js";
+import { withPhonePrivacy } from "../folioTemplate/sanitize.js";
 import { SlugSpinner, ErrorIcon, CheckIcon } from "../components/ui/icons.jsx";
 import { useDebounce } from "../hooks/useDebounce.js";
 import { useAuth } from "../hooks/useAuth.js";
@@ -295,7 +296,7 @@ export default function CreateFolio() {
             </div>
             <div className="flex-grow w-full overflow-y-auto">
               {TemplateComponent ? (
-                <TemplateComponent user={user} />
+                <TemplateComponent user={withPhonePrivacy(user)} />
               ) : (
                 <div className="flex flex-col items-center justify-center h-full text-slate-500 p-10 text-center">
                   <svg

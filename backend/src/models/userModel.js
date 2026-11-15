@@ -13,6 +13,7 @@ const userSchema = new mongoose.Schema({
   bio: { type: String },
   address: { type: String, required: true },
   phone: { type: String, required: true },
+  showPhone: { type: Boolean, default: false },
   avatar: { type: String },
   resume: { type: String, validate: httpUrl },
   createdAt: { type: Date, default: Date.now },

@@ -1,4 +1,5 @@
 import { Terminal, Code, ExternalLink, Github, Mail, FileText, Twitter, Linkedin, Coffee, Monitor, Layers, Cpu, DecimalsArrowLeft } from 'lucide-react';
+import { telHref } from './multipage/helpers.js';
 import { BulletList } from './multipage/shared.jsx';
 import { ExperienceSection, EducationSection, TestimonialsSection } from './shared/DataSections.jsx';
 
@@ -16,7 +17,7 @@ const neoC = {
 };
 
 const TemplateNeoBrutal = ({ user }) => {
-  const { name, bio, avatar, social = [], skills = [], projects = [] } = user || {};
+  const { name, bio, avatar, phone, social = [], skills = [], projects = [] } = user || {};
   const current = (user?.experience || []).find((e) => e.isCurrent);
 
   return (
@@ -48,6 +49,11 @@ const TemplateNeoBrutal = ({ user }) => {
                   {s.platform}
                 </a>
               ))}
+              {phone && (
+                <a href={telHref(phone)} className="px-6 py-2 bg-yellow-300 border-2 border-black font-bold shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:translate-y-1 hover:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] transition-all">
+                  {phone}
+                </a>
+              )}
             </div>
           </div>
         </div>

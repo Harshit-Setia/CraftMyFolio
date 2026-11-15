@@ -1,9 +1,10 @@
 import React from 'react';
+import { telHref } from './multipage/helpers.js';
 import { BulletList } from './multipage/shared.jsx';
-import { AlertTriangle, X, Zap, ArrowRight, Mail, MapPin, ExternalLink, Github, Linkedin, Twitter } from 'lucide-react';
+import { AlertTriangle, X, Zap, ArrowRight, Mail, MapPin, Phone, ExternalLink, Github, Linkedin, Twitter } from 'lucide-react';
 
 const TemplateHazard = ({ user }) => {
-  const { name, bio, email, address, experience = [], projects = [], skills = [], social = [], education = [], testimonials = [] } = user || {};
+  const { name, bio, email, phone, address, experience = [], projects = [], skills = [], social = [], education = [], testimonials = [] } = user || {};
 
   return (
     <div className="min-h-screen bg-yellow-400 font-mono text-black p-0 overflow-x-hidden selection:bg-black selection:text-yellow-400">
@@ -176,6 +177,13 @@ const TemplateHazard = ({ user }) => {
                 </a>
               ))}
               
+              {phone && (
+                 <a href={telHref(phone)} className="col-span-2 bg-neutral-900 border-2 border-yellow-400/30 p-4 flex flex-col items-center justify-center text-center hover:bg-yellow-400 hover:text-black transition-all duration-300">
+                    <Phone size={24} className="mb-2"/>
+                    <span className="font-bold uppercase text-xs tracking-widest">{phone}</span>
+                 </a>
+              )}
+
               {address && (
                  <div className="col-span-2 bg-neutral-900 border-2 border-yellow-400/30 p-4 flex flex-col items-center justify-center text-center opacity-70">
                     <MapPin size={24} className="mb-2"/>

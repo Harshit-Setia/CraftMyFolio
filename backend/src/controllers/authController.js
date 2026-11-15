@@ -13,6 +13,7 @@ const REGISTRATION_FIELDS = [
   "dob",
   "address",
   "phone",
+  "showPhone",
   "bio",
   "resume",
   "education",
@@ -127,6 +128,9 @@ export const updateUser = asyncHandler(async (req, res) => {
   user.address = req.body.address || user.address;
   user.dob = req.body.dob || user.dob;
   user.bio = req.body.bio || user.bio;
+  if (req.body.showPhone !== undefined) {
+    user.showPhone = req.body.showPhone === true || req.body.showPhone === "true";
+  }
   if (req.file) {
     const avatarUrl = await uploadOnCloudinary(req.file.path);
     if (!avatarUrl) {

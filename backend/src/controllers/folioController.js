@@ -9,7 +9,7 @@ import {
 } from '../utils/folioCache.js';
 
 const PUBLIC_USER_FIELDS =
-  'name email bio avatar resume address phone education social skills projects experience testimonials';
+  'name email bio avatar resume address phone showPhone education social skills projects experience testimonials';
 
 export const createFolio = asyncHandler(async (req, res) => {
   const user_id = req.user._id; 
@@ -62,6 +62,11 @@ export const getPublicFolio = asyncHandler(async (req, res) => {
   if (!folio) {
     res.status(404);
     throw new Error('Portfolio not found.');
+  }
+
+  if (folio.user_id) {
+    if (!folio.user_id.showPhone) delete folio.user_id.phone;
+    delete folio.user_id.showPhone;
   }
 
   await setCachedFolio(slug, folio);

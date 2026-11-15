@@ -15,6 +15,8 @@ export const formatRange = ({ from, to, isCurrent }) => {
   return start ? `${start} – ${end}` : end;
 };
 
+export const telHref = (phone) => `tel:${String(phone || "").replace(/[^\d+]/g, "")}`;
+
 export const safeUrl = (url) => {
   const value = String(url || "").trim();
   return /^(https?:\/\/|mailto:|tel:)/i.test(value) ? value : "#";

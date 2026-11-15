@@ -1,4 +1,5 @@
 import React from 'react';
+import { telHref } from './multipage/helpers.js';
 import { BulletList } from './multipage/shared.jsx';
 import { ExperienceSection, EducationSection, TestimonialsSection } from './shared/DataSections.jsx';
 
@@ -17,7 +18,7 @@ const glassCard = {
 
 const TemplateGlass = ({ user }) => {
   const {
-    name, bio, avatar, resume, email,
+    name, bio, avatar, resume, email, phone,
     skills = [],
     projects = [],
     social = [],
@@ -43,6 +44,7 @@ const TemplateGlass = ({ user }) => {
              <div className="mt-8 flex flex-wrap justify-center md:justify-start gap-4">
                {email && <a href={`mailto:${email}`} className="px-6 py-3 bg-white text-purple-600 font-bold rounded-full shadow-md hover:shadow-lg hover:scale-105 transition transform">Contact Me</a>}
                {resume && <a href={resume} target="_blank" rel="noopener noreferrer" className="px-6 py-3 bg-purple-600 text-white font-bold rounded-full shadow-md hover:shadow-lg hover:bg-purple-700 transition transform">Download CV</a>}
+               {phone && <a href={telHref(phone)} className="px-6 py-3 bg-white/60 text-purple-900 font-bold rounded-full shadow-md hover:bg-white transition">{phone}</a>}
                {social.map((s, i) => <a key={i} href={s.url} target="_blank" rel="noopener noreferrer" className="px-6 py-3 bg-white/50 text-purple-900 font-bold rounded-full shadow-md hover:bg-white transition">{s.platform}</a>)}
              </div>
            </div>

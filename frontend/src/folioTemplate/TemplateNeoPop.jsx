@@ -1,9 +1,10 @@
 import React from 'react';
+import { telHref } from './multipage/helpers.js';
 import { BulletList } from './multipage/shared.jsx';
 import { MoveRight, Github, Globe, Star, Box } from 'lucide-react';
 
 const TemplateNeoPop = ({ user }) => {
-  const { name, bio, skills = [], experience = [], projects = [], social = [], education = [], testimonials = [] } = user || {};
+  const { name, bio, phone, skills = [], experience = [], projects = [], social = [], education = [], testimonials = [] } = user || {};
 
   const NeoCard = ({ children, className = "", color = "bg-white" }) => (
     <div className={`${color} border-2 border-black p-6 shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] transition-all duration-200 ${className}`}>
@@ -24,12 +25,17 @@ const TemplateNeoPop = ({ user }) => {
                <p className="text-xl font-bold font-mono">{bio}</p>
             </NeoCard>
             
-            <div className="flex gap-4 pt-4">
+            <div className="flex flex-wrap gap-4 pt-4">
               {social.map((s, i) => (
                 <a key={i} href={s.url} className="px-6 py-2 bg-pink-400 border-2 border-black font-bold shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:bg-pink-300 hover:shadow-none hover:translate-y-1 transition-all">
                   {s.platform}
                 </a>
               ))}
+              {phone && (
+                <a href={telHref(phone)} className="px-6 py-2 bg-yellow-300 border-2 border-black font-bold shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:shadow-none hover:translate-y-1 transition-all">
+                  {phone}
+                </a>
+              )}
             </div>
           </div>
         </div>

@@ -1,4 +1,5 @@
 import { Terminal, Code, ExternalLink, Github, Mail, FileText, Twitter, Linkedin, Coffee, Monitor, Layers, Cpu } from 'lucide-react';
+import { telHref } from './multipage/helpers.js';
 
 import { BulletList } from './multipage/shared.jsx';
 import { ExperienceSection, EducationSection, TestimonialsSection } from './shared/DataSections.jsx';
@@ -17,7 +18,7 @@ const termC = {
 };
 
 const TemplateTerminal = ({ user }) => {
-  const { name, bio, social = [], skills = [], projects = [] } = user || {};
+  const { name, bio, phone, social = [], skills = [], projects = [] } = user || {};
   
   return (
     <div className="min-h-screen bg-[#0d1117] text-[#00ff41] font-mono p-4 selection:bg-[#00ff41] selection:text-black">
@@ -79,6 +80,7 @@ const TemplateTerminal = ({ user }) => {
           <TestimonialsSection user={user} c={termC} title="./testimonials" />
 
           <footer className="pt-8 border-t border-[#30363d] flex flex-wrap gap-6 text-sm text-gray-500">
+             {phone && <a href={telHref(phone)} className="hover:text-[#00ff41] transition">[ tel: {phone} ]</a>}
              {social.map((s, i) => (
                <a key={i} href={s.url} className="hover:text-[#00ff41] transition">[ {s.platform} ]</a>
              ))}
