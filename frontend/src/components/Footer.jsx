@@ -1,70 +1,41 @@
-import React from "react";
 import { Link } from "react-router-dom";
+import { useAuth } from "../hooks/useAuth";
 
 const Footer = () => {
-  const linkSections = [
-    {
-      title: "Templates",
-      links: [
-        { name: "Developer", path: "/templates" },
-        { name: "Designer", path: "/templates" },
-        { name: "Freelancer", path: "/templates" },
-        { name: "Student", path: "/templates" },
-      ],
-    },
-    {
-      title: "Features",
-      links: [
-        { name: "Custom Domain", path: "/features" },
-        { name: "SEO Optimization", path: "/features" },
-        { name: "Analytics", path: "/features" },
-        { name: "Mobile Responsive", path: "/features" },
-      ],
-    },
-    {
-      title: "Company",
-      links: [
-        { name: "About Us", path: "/about" },
-        { name: "Contact", path: "/contact" },
-        { name: "Privacy Policy", path: "/privacy" },
-        { name: "Terms of Service", path: "/terms" },
-      ],
-    },
-  ];
+  const { token } = useAuth();
 
   return (
-    <footer className="bg-white border-t pt-16 pb-8">
-      <div className="container mx-auto px-6">
-        <div className="grid gap-10 row-gap-6 mb-8 sm:grid-cols-2 lg:grid-cols-3">
-          {linkSections.map((section) => (
-            <div key={section.title}>
-              <p className="font-bold tracking-wide text-gray-900">
-                {section.title}
-              </p>
-              <ul className="mt-4 space-y-3">
-                {section.links.map((link) => (
-                  <li key={link.name}>
-                    <Link
-                      to={link.path}
-                      className="text-gray-700 transition-colors duration-300 hover:text-indigo-600"
-                    >
-                      {link.name}
-                    </Link>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          ))}
+    <footer className="border-t border-gray-200 bg-white">
+      <div className="mx-auto flex max-w-6xl flex-col items-center justify-between gap-6 px-6 py-10 sm:flex-row">
+        <div className="text-center sm:text-left">
+          <Link to="/" className="text-lg font-bold text-indigo-700">
+            CraftFolio
+          </Link>
+          <p className="mt-1 text-sm text-gray-500">Build and share your portfolio in minutes.</p>
         </div>
-
-        <div className="border-t border-gray-200 my-8"></div>
-
-        <div className="flex justify-center pt-5 pb-10">
-          <p className="text-sm text-gray-600">
-            © 2025 CraftFolio. All rights reserved.
-          </p>
-        </div>
+        <nav aria-label="Footer" className="flex gap-6 text-sm text-gray-600">
+          <Link to="/#templates" className="transition-colors hover:text-indigo-600">
+            Templates
+          </Link>
+          {token ? (
+            <Link to="/dashboard" className="transition-colors hover:text-indigo-600">
+              Dashboard
+            </Link>
+          ) : (
+            <>
+              <Link to="/signin" className="transition-colors hover:text-indigo-600">
+                Sign in
+              </Link>
+              <Link to="/signup" className="transition-colors hover:text-indigo-600">
+                Get started
+              </Link>
+            </>
+          )}
+        </nav>
       </div>
+      <p className="border-t border-gray-100 py-5 text-center text-xs text-gray-400">
+        © {new Date().getFullYear()} CraftFolio. All rights reserved.
+      </p>
     </footer>
   );
 };
