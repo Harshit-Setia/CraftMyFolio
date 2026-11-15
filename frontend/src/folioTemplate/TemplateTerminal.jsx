@@ -1,5 +1,21 @@
 import { Terminal, Code, ExternalLink, Github, Mail, FileText, Twitter, Linkedin, Coffee, Monitor, Layers, Cpu } from 'lucide-react';
 
+import { BulletList } from './multipage/shared.jsx';
+import { ExperienceSection, EducationSection, TestimonialsSection } from './shared/DataSections.jsx';
+
+const termC = {
+  section: '',
+  heading: 'text-xl text-white border-b border-[#30363d] pb-2 mb-4',
+  list: 'space-y-5',
+  card: 'border-l border-[#30363d] pl-4',
+  title: 'text-[#79c0ff] font-bold',
+  sub: 'text-gray-300',
+  meta: 'text-xs text-gray-500',
+  bullets: 'mt-2 space-y-1 text-sm text-gray-400',
+  bullet: "pl-4 relative before:content-['>'] before:absolute before:left-0 before:text-[#00ff41]",
+  quote: 'text-gray-300 italic',
+};
+
 const TemplateTerminal = ({ user }) => {
   const { name, bio, social = [], skills = [], projects = [] } = user || {};
   
@@ -48,7 +64,7 @@ const TemplateTerminal = ({ user }) => {
                      <h3 className="text-[#79c0ff] font-bold group-hover:underline">./{p.title.toLowerCase().replace(/\s/g, '-')}</h3>
                      <span className="text-xs text-gray-500">r-x</span>
                   </div>
-                  <p className="text-gray-400 text-sm mt-2 mb-4 line-clamp-2">{p.description}</p>
+                  <BulletList text={p.description} className="text-gray-400 text-sm mt-2 mb-4 space-y-1" itemClassName="pl-4 relative before:content-['>'] before:absolute before:left-0 before:text-[#00ff41]" />
                   <div className="flex gap-4 text-sm">
                     {p.github && <a href={p.github} className="flex items-center gap-1 hover:text-white"><Github size={14}/> code</a>}
                     {p.deployed && <a href={p.deployed} className="flex items-center gap-1 hover:text-white"><ExternalLink size={14}/> deploy</a>}
@@ -57,6 +73,10 @@ const TemplateTerminal = ({ user }) => {
               ))}
             </div>
           </section>
+
+          <ExperienceSection user={user} c={termC} title="./experience.log" />
+          <EducationSection user={user} c={termC} title="./education" />
+          <TestimonialsSection user={user} c={termC} title="./testimonials" />
 
           <footer className="pt-8 border-t border-[#30363d] flex flex-wrap gap-6 text-sm text-gray-500">
              {social.map((s, i) => (

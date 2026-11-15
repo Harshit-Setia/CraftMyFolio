@@ -1,7 +1,8 @@
 import React from 'react';
 import { useParams } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
-import { templateInfo } from "../folioTemplate/index.js"; 
+import { templateInfo } from "../folioTemplate/index.js";
+import { sanitizePublicUser } from "../folioTemplate/sanitize.js";
 
 const API_BASE_URL = `${import.meta.env.VITE_BE_URL}`; 
 
@@ -68,7 +69,7 @@ const PublicFolioPage = () => {
       </div>
     );
   }
-  return <TemplateComponent user={user} />;
+  return <TemplateComponent user={sanitizePublicUser(user)} basePath={`/folio/${slug}`} />;
 };
 
 export default PublicFolioPage;

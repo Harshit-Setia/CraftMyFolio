@@ -1,4 +1,28 @@
 import React from 'react';
+import { BulletList } from './multipage/shared.jsx';
+import { ExperienceSection, EducationSection, TestimonialsSection } from './shared/DataSections.jsx';
+
+const bentoLight = {
+  section: 'md:col-span-2 bg-white rounded-3xl p-8 shadow-sm',
+  heading: 'text-xl font-bold text-gray-900 mb-4',
+  list: 'space-y-5',
+  card: 'border-l-2 border-indigo-500 pl-4',
+  title: 'font-bold text-gray-800',
+  sub: 'text-sm text-gray-500',
+  meta: 'text-xs font-medium text-indigo-600',
+  bullets: 'mt-2 space-y-1 text-sm text-gray-600',
+  bullet: "pl-4 relative before:content-['•'] before:absolute before:left-0 before:text-indigo-500",
+  quote: 'text-gray-700 italic',
+};
+
+const bentoAccent = {
+  ...bentoLight,
+  section: 'md:col-span-2 bg-indigo-600 text-white rounded-3xl p-8 shadow-sm',
+  heading: 'text-xl font-bold mb-4',
+  card: 'border-l-2 border-indigo-300 pl-4',
+  meta: 'text-xs font-medium text-indigo-200',
+  quote: 'text-white italic',
+};
 
 const TemplateBento = ({ user }) => {
   const {
@@ -59,7 +83,7 @@ const TemplateBento = ({ user }) => {
                         {p.deployed && <a href={p.deployed} className="hover:text-white hover:opacity-100">Live</a>}
                     </div>
                  </div>
-                 <p className="text-gray-400 text-sm line-clamp-2">{p.description}</p>
+                 <BulletList text={p.description} className="text-gray-400 text-sm space-y-1" itemClassName="pl-4 relative before:content-['•'] before:absolute before:left-0" />
                </div>
              ))}
              {projects.length === 0 && <p className="text-gray-500">No projects added yet.</p>}
@@ -79,6 +103,9 @@ const TemplateBento = ({ user }) => {
             </div>
         </div>
 
+
+        <ExperienceSection user={user} c={bentoLight} />
+        <TestimonialsSection user={user} c={bentoAccent} title="Kind Words" />
       </div>
     </div>
   );

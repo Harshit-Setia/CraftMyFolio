@@ -1,10 +1,26 @@
 import React from 'react';
+import { BulletList } from './multipage/shared.jsx';
+import { ExperienceSection, EducationSection, TestimonialsSection } from './shared/DataSections.jsx';
+
+const glassCard = {
+  section: 'bg-white/40 backdrop-blur-md border border-white/20 rounded-3xl p-8 shadow-xl',
+  heading: 'text-2xl font-bold text-purple-900 mb-6',
+  list: 'space-y-6',
+  card: '',
+  title: 'text-lg font-bold text-slate-900',
+  sub: 'text-purple-800 font-medium',
+  meta: 'text-xs uppercase tracking-wider text-slate-500 mt-1 mb-2',
+  bullets: 'space-y-1 text-slate-700',
+  bullet: "pl-4 relative before:content-['•'] before:absolute before:left-0 before:text-purple-600",
+  quote: 'text-slate-800 italic',
+};
 
 const TemplateGlass = ({ user }) => {
   const {
     name, bio, avatar, resume, email,
     skills = [],
     projects = [],
+    social = [],
   } = user || {};
 
   return (
@@ -27,6 +43,7 @@ const TemplateGlass = ({ user }) => {
              <div className="mt-8 flex flex-wrap justify-center md:justify-start gap-4">
                {email && <a href={`mailto:${email}`} className="px-6 py-3 bg-white text-purple-600 font-bold rounded-full shadow-md hover:shadow-lg hover:scale-105 transition transform">Contact Me</a>}
                {resume && <a href={resume} target="_blank" rel="noopener noreferrer" className="px-6 py-3 bg-purple-600 text-white font-bold rounded-full shadow-md hover:shadow-lg hover:bg-purple-700 transition transform">Download CV</a>}
+               {social.map((s, i) => <a key={i} href={s.url} target="_blank" rel="noopener noreferrer" className="px-6 py-3 bg-white/50 text-purple-900 font-bold rounded-full shadow-md hover:bg-white transition">{s.platform}</a>)}
              </div>
            </div>
         </div>
@@ -43,7 +60,7 @@ const TemplateGlass = ({ user }) => {
                                    <h3 className="text-2xl font-bold text-slate-900 group-hover:text-purple-700 transition">{p.title}</h3>
                                    {p.deployed && <a href={p.deployed} className="text-sm font-bold uppercase tracking-wider text-purple-800 border border-purple-800 px-3 py-1 rounded-full hover:bg-purple-800 hover:text-white transition">Visit</a>}
                                 </div>
-                                <p className="mt-2 text-slate-700 leading-relaxed">{p.description}</p>
+                                <BulletList text={p.description} className="mt-2 space-y-1 text-slate-700 leading-relaxed" itemClassName="pl-4 relative before:content-['•'] before:absolute before:left-0 before:text-purple-600" />
                             </div>
                         ))}
                         {projects.length === 0 && <p className="text-slate-600">Coming soon...</p>}
@@ -65,6 +82,13 @@ const TemplateGlass = ({ user }) => {
                 </div>
             </div>
 
+        </div>
+
+        <ExperienceSection user={user} c={glassCard} />
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+          <EducationSection user={user} c={glassCard} />
+          <TestimonialsSection user={user} c={glassCard} title="Kind Words" />
         </div>
 
       </div>

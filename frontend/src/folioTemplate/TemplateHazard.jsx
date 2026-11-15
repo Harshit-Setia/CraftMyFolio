@@ -1,8 +1,9 @@
 import React from 'react';
+import { BulletList } from './multipage/shared.jsx';
 import { AlertTriangle, X, Zap, ArrowRight, Mail, MapPin, ExternalLink, Github, Linkedin, Twitter } from 'lucide-react';
 
 const TemplateHazard = ({ user }) => {
-  const { name, bio, email, address, experience = [], projects = [], skills = [], social = [] } = user || {};
+  const { name, bio, email, address, experience = [], projects = [], skills = [], social = [], education = [], testimonials = [] } = user || {};
 
   return (
     <div className="min-h-screen bg-yellow-400 font-mono text-black p-0 overflow-x-hidden selection:bg-black selection:text-yellow-400">
@@ -20,7 +21,7 @@ const TemplateHazard = ({ user }) => {
 
       <div className="grid grid-cols-1 md:grid-cols-12 min-h-screen border-b-4 border-black">
         
-        <div className="md:col-span-8 p-8 md:p-20 border-r-4 border-black flex flex-col justify-center relative bg-[url('https://www.transparenttextures.com/patterns/diagmonds-light.png')]">
+        <div className="md:col-span-8 p-8 md:p-20 border-r-4 border-black flex flex-col justify-center relative">
           
           <h1 className="text-[12vw] leading-[0.85] font-black uppercase tracking-tighter break-words z-10">
             {name ? name.split(' ')[0] : 'HARD'}
@@ -59,14 +60,14 @@ const TemplateHazard = ({ user }) => {
           {projects.map((p, i) => (
             <div key={i} className="group relative border-b-4 md:border-b-0 md:border-r-4 border-yellow-400 min-h-[400px] bg-neutral-900 p-8 flex flex-col justify-between hover:bg-yellow-400 hover:text-black transition-colors duration-300">
                
-               <div className="absolute inset-0 opacity-0 group-hover:opacity-10 pointer-events-none bg-[url('https://www.transparenttextures.com/patterns/noise-lines.png')]"></div>
+               <div className="absolute inset-0 opacity-0 group-hover:opacity-10 pointer-events-none"></div>
 
                <div>
                  <div className="flex justify-between items-start mb-4">
                    <h3 className="text-3xl md:text-4xl font-black uppercase leading-none">{p.title}</h3>
                    <span className="text-xl font-bold border-2 border-current px-2 rounded-full">0{i+1}</span>
                  </div>
-                 <p className="text-lg font-medium opacity-80 max-w-md">{p.description}</p>
+                 <BulletList text={p.description} className="text-lg font-medium opacity-80 max-w-md space-y-1" itemClassName="pl-5 relative before:content-['→'] before:absolute before:left-0" />
                </div>
 
                <div className="mt-8">
@@ -97,12 +98,46 @@ const TemplateHazard = ({ user }) => {
                <h4 className="text-2xl font-bold uppercase mb-4 flex items-center gap-2">
                  @ {exp.company}
                </h4>
-               <p className="text-lg font-bold leading-relaxed max-w-3xl opacity-80 group-hover:opacity-100">{exp.description}</p>
+               <BulletList text={exp.description} className="text-lg font-bold leading-relaxed max-w-3xl opacity-80 group-hover:opacity-100 space-y-1" itemClassName="pl-6 relative before:content-['→'] before:absolute before:left-0" />
              </div>
           </div>
         ))}
         <div className="border-t-4 border-black"></div>
       </div>
+
+      {(education.length > 0 || testimonials.length > 0) && (
+        <div className="bg-black text-yellow-400 p-8 md:p-20 border-t-4 border-black grid gap-16 md:grid-cols-2">
+          {education.length > 0 && (
+            <section>
+              <h2 className="text-4xl md:text-5xl font-black uppercase mb-8 border-b-4 border-yellow-400 inline-block">Training Records</h2>
+              <div className="space-y-6">
+                {education.map((edu, i) => (
+                  <div key={i} className="border-l-4 border-yellow-400 pl-4">
+                    <h3 className="text-2xl font-black uppercase">{edu.degree || edu.level}</h3>
+                    <p className="text-lg font-bold">{edu.institution}</p>
+                    <p className="text-sm font-bold opacity-70 uppercase">
+                      {[edu.fieldOfStudy, edu.yearOfCompletion, edu.status, edu.score && `Score ${edu.score}`].filter(Boolean).join(' // ')}
+                    </p>
+                  </div>
+                ))}
+              </div>
+            </section>
+          )}
+          {testimonials.length > 0 && (
+            <section>
+              <h2 className="text-4xl md:text-5xl font-black uppercase mb-8 border-b-4 border-yellow-400 inline-block">Field Reports</h2>
+              <div className="space-y-6">
+                {testimonials.map((item, i) => (
+                  <figure key={i} className="bg-yellow-400 text-black p-6 shadow-[8px_8px_0px_0px_rgba(234,179,8,0.35)]">
+                    <blockquote className="text-xl font-black uppercase leading-snug">"{item.feedback}"</blockquote>
+                    <figcaption className="mt-3 text-sm font-bold uppercase">— {item.name}{item.role && `, ${item.role}`}</figcaption>
+                  </figure>
+                ))}
+              </div>
+            </section>
+          )}
+        </div>
+      )}
 
       <div className="relative bg-black text-yellow-400 border-t-4 border-black overflow-hidden">
         
@@ -155,7 +190,7 @@ const TemplateHazard = ({ user }) => {
         </div>
       </div>
 
-      <style jsx>{`
+      <style>{`
         .text-stroke-yellow {
           -webkit-text-stroke: 2px #EAB308;
         }

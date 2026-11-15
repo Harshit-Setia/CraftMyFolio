@@ -1,8 +1,9 @@
 import React from 'react';
+import { BulletList } from './multipage/shared.jsx';
 import { Terminal, Cpu, Shield, Network, Database, Zap, Radio, AlertCircle, CornerDownRight } from 'lucide-react';
 
 const TemplateCyberpunk = ({ user }) => {
-  const { name, bio, avatar, skills = [], experience = [], projects = [], social = [] } = user || {};
+  const { name, bio, avatar, skills = [], experience = [], projects = [], social = [], education = [], testimonials = [] } = user || {};
 
   const CyberCard = ({ children, title, icon: Icon, className = "" }) => (
     <div className={`relative bg-black/80 border border-green-500/30 p-6 overflow-hidden group ${className}`}>
@@ -11,7 +12,6 @@ const TemplateCyberpunk = ({ user }) => {
       <div className="absolute bottom-0 left-0 w-2 h-2 border-b-2 border-l-2 border-green-400"></div>
       <div className="absolute bottom-0 right-0 w-2 h-2 border-b-2 border-r-2 border-green-400"></div>
       
-      <div className="absolute inset-0 bg-[url('https://toruskit.com/assets/img/docs/tutorial/scanlines.png')] opacity-10 pointer-events-none mix-blend-overlay"></div>
       
       {title && (
         <h2 className="text-green-400 font-mono text-sm uppercase tracking-widest mb-6 flex items-center gap-3 border-b border-green-500/30 pb-2">
@@ -102,7 +102,7 @@ const TemplateCyberpunk = ({ user }) => {
                     </span>
                   </div>
                   <p className="text-sm text-green-300 mb-2">@ {exp.company}</p>
-                  <p className="text-sm text-green-200/60 leading-relaxed font-light">{exp.description}</p>
+                  <BulletList text={exp.description} className="space-y-1 text-sm text-green-200/60 leading-relaxed font-light" itemClassName="pl-4 relative before:content-['>'] before:absolute before:left-0 before:text-green-500" />
                 </div>
               ))}
                {experience.length === 0 && <p className="text-xs text-green-200/50">Logs purged.</p>}
@@ -120,7 +120,7 @@ const TemplateCyberpunk = ({ user }) => {
                     {p.deployed && <Zap size={14} className="text-yellow-400 animate-pulse shrink-0"/>}
                   </div>
                   
-                  <p className="text-xs text-green-200/50 line-clamp-2 mb-4 relative z-10">{p.description}</p>
+                  <BulletList text={p.description} className="text-xs text-green-200/50 mb-4 relative z-10 space-y-1" itemClassName="pl-4 relative before:content-['>'] before:absolute before:left-0 before:text-green-500" />
                   
                   <div className="flex gap-4 text-xs font-bold relative z-10">
                     {p.github && (
@@ -139,6 +139,38 @@ const TemplateCyberpunk = ({ user }) => {
                {projects.length === 0 && <p className="text-xs text-green-200/50">No payloads deployed.</p>}
             </div>
           </CyberCard>
+
+
+          {education.length > 0 && (
+            <CyberCard title="ACADEMIC_RECORDS" icon={Database}>
+              <div className="space-y-4">
+                {education.map((edu, i) => (
+                  <div key={i} className="relative pl-6 border-l border-green-900/50">
+                    <h3 className="text-base font-bold text-green-400 uppercase">{edu.degree || edu.level}</h3>
+                    <p className="text-sm text-green-300">{edu.institution}</p>
+                    <p className="text-xs text-green-700">
+                      {[edu.fieldOfStudy, edu.yearOfCompletion, edu.status, edu.score && `Score ${edu.score}`].filter(Boolean).join(' // ')}
+                    </p>
+                  </div>
+                ))}
+              </div>
+            </CyberCard>
+          )}
+
+          {testimonials.length > 0 && (
+            <CyberCard title="INCOMING_TRANSMISSIONS" icon={Radio}>
+              <div className="space-y-4">
+                {testimonials.map((item, i) => (
+                  <figure key={i} className="border border-green-500/20 p-4 bg-black">
+                    <blockquote className="text-sm text-green-200/80 italic">"{item.feedback}"</blockquote>
+                    <figcaption className="mt-2 text-xs text-green-600 uppercase">
+                      -- {item.name}{item.role && ` / ${item.role}`}
+                    </figcaption>
+                  </figure>
+                ))}
+              </div>
+            </CyberCard>
+          )}
 
         </div>
       </div>

@@ -248,10 +248,15 @@ export default function CreateFolio() {
                   <img
                     src={template.thumbnail}
                     alt={template.name}
-                    className="w-full h-32 object-cover transition-transform duration-300 group-hover:scale-105"
+                    className="w-full h-40 object-cover object-top transition-transform duration-300 group-hover:scale-105"
                   />
                   <div className="p-2 text-center text-sm font-semibold text-slate-600">
                     {template.name}
+                    {template.multiPage && (
+                      <span className="ml-2 align-middle text-[10px] font-bold uppercase tracking-wide bg-indigo-100 text-indigo-700 px-1.5 py-0.5 rounded">
+                        Multi-page
+                      </span>
+                    )}
                   </div>
                 </button>
               ))}

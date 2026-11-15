@@ -1,5 +1,20 @@
 /* eslint-disable no-unused-vars */
 import React from 'react';
+import { BulletList } from './multipage/shared.jsx';
+import { ExperienceSection, EducationSection, TestimonialsSection } from './shared/DataSections.jsx';
+
+const devC = {
+  section: '',
+  heading: 'text-xl font-bold text-purple-400 mb-6',
+  list: 'space-y-6 border-l border-slate-700 pl-6',
+  card: 'relative',
+  title: 'text-lg font-bold text-white',
+  sub: 'text-green-400',
+  meta: 'text-sm text-slate-500',
+  bullets: 'mt-2 space-y-1 text-sm text-slate-400',
+  bullet: "pl-4 relative before:content-['*'] before:absolute before:left-0 before:text-green-500",
+  quote: 'text-slate-300 italic',
+};
 
 const getYear = (dateString) => {
   if (!dateString) return "Present";
@@ -80,7 +95,13 @@ const TemplateDev = ({ user }) => {
                 {projects.map((p, i) => (
                   <div key={i} className="border border-slate-700 p-5 rounded hover:border-green-500/50 transition-colors bg-slate-900/50">
                     <h3 className="text-xl font-bold text-yellow-400 mb-2">function {p.title.replace(/\s+/g, '')}() &#123;</h3>
-                    {p.description && <p className="text-slate-400 pl-4 mb-4 max-w-prose">/* {p.description} */</p>}
+                    {p.description && (
+                      <div className="text-slate-400 pl-4 mb-4 max-w-prose">
+                        <p>/*</p>
+                        <BulletList text={p.description} className="space-y-1 pl-2" itemClassName="pl-4 relative before:content-['*'] before:absolute before:left-0" />
+                        <p>*/</p>
+                      </div>
+                    )}
                     <div className="pl-4 flex gap-4">
                       {p.github && <a href={p.github} className="text-white hover:text-green-400 underline">return gitRepo;</a>}
                       {p.deployed && <a href={p.deployed} className="text-white hover:text-green-400 underline">return liveDemo;</a>}
@@ -101,13 +122,16 @@ const TemplateDev = ({ user }) => {
                      <div className="absolute -left-[29px] top-1 w-3 h-3 bg-slate-900 border-2 border-green-500 rounded-full"></div>
                      <div className="text-sm text-slate-500 mb-1">[{getYear(exp.from)} - {getYear(exp.to)}]</div>
                      <h3 className="text-lg font-bold text-white">{exp.title} <span className="text-green-400">@ {exp.company}</span></h3>
-                     {exp.description && <p className="text-slate-400 mt-2 text-sm">{exp.description}</p>}
+                     <BulletList text={exp.description} className="mt-2 space-y-1 text-sm text-slate-400" itemClassName="pl-4 relative before:content-['*'] before:absolute before:left-0 before:text-green-500" />
                   </div>
                 ))}
               </div>
             </section>
           )}
 
+
+          <EducationSection user={user} c={devC} title="./education" />
+          <TestimonialsSection user={user} c={{ ...devC, list: 'space-y-4', card: 'border border-slate-700 p-4 rounded bg-slate-900/50' }} title="./testimonials" />
         </div>
       </div>
     </div>

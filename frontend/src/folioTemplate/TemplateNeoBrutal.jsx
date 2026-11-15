@@ -1,6 +1,23 @@
 import { Terminal, Code, ExternalLink, Github, Mail, FileText, Twitter, Linkedin, Coffee, Monitor, Layers, Cpu, DecimalsArrowLeft } from 'lucide-react';
+import { BulletList } from './multipage/shared.jsx';
+import { ExperienceSection, EducationSection, TestimonialsSection } from './shared/DataSections.jsx';
+
+const neoC = {
+  section: 'bg-white border-4 border-black p-6 shadow-[8px_8px_0px_0px_rgba(0,0,0,1)]',
+  heading: 'text-3xl font-black mb-6 uppercase bg-yellow-300 border-2 border-black inline-block px-2',
+  list: 'space-y-6',
+  card: 'border-l-4 border-black pl-4',
+  title: 'text-xl font-black uppercase',
+  sub: 'font-bold text-gray-600',
+  meta: 'font-mono text-sm font-bold bg-black text-white inline-block px-2 py-0.5 my-1',
+  bullets: 'mt-2 space-y-1 font-medium',
+  bullet: "pl-5 relative before:content-['→'] before:absolute before:left-0 before:font-black",
+  quote: 'text-lg font-bold',
+};
+
 const TemplateNeoBrutal = ({ user }) => {
   const { name, bio, avatar, social = [], skills = [], projects = [] } = user || {};
+  const current = (user?.experience || []).find((e) => e.isCurrent);
 
   return (
     <div className="min-h-screen bg-[#FFDEE9] bg-gradient-to-b from-[#fff1eb] to-[#ace0f9] p-4 sm:p-8 font-sans text-black">
@@ -13,9 +30,11 @@ const TemplateNeoBrutal = ({ user }) => {
             </div>
           )}
           <div className="flex-1 text-center md:text-left">
-            <div className="inline-block bg-purple-400 border-2 border-black px-3 py-1 font-bold text-xs mb-2 uppercase tracking-wider transform -rotate-2">
-              Available for hire
-            </div>
+            {current && (
+              <div className="inline-block bg-purple-400 border-2 border-black px-3 py-1 font-bold text-xs mb-2 uppercase tracking-wider transform -rotate-2">
+                {current.title} @ {current.company}
+              </div>
+            )}
             <h1 className="text-5xl md:text-7xl font-black uppercase leading-none mb-4 italic tracking-tighter">
               {name}
             </h1>
@@ -58,11 +77,19 @@ const TemplateNeoBrutal = ({ user }) => {
                         {p.deployed && <a href={p.deployed} className="bg-green-300 p-2 border-2 border-black hover:bg-green-400"><ExternalLink size={20}/></a>}
                     </div>
                  </div>
-                 <p className="font-medium text-lg">{p.description}</p>
+                 <BulletList text={p.description} className="space-y-1 font-medium text-lg" itemClassName="pl-5 relative before:content-['→'] before:absolute before:left-0 before:font-black" />
                </div>
              ))}
           </div>
 
+        </div>
+
+        <div className="mt-8 space-y-8">
+          <ExperienceSection user={user} c={neoC} title="Experience" />
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <EducationSection user={user} c={neoC} />
+            <TestimonialsSection user={user} c={neoC} title="Kudos" />
+          </div>
         </div>
       </div>
     </div>

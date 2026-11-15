@@ -1,4 +1,18 @@
 import React from 'react';
+import { TestimonialsSection } from './shared/DataSections.jsx';
+
+const resumeC = {
+  section: '',
+  heading: 'text-sm font-black uppercase tracking-[0.2em] border-b-2 border-slate-900 pb-1 mb-4',
+  list: 'space-y-4',
+  card: 'border-l-2 border-slate-200 pl-4',
+  title: '',
+  sub: '',
+  meta: 'text-[10px] font-bold uppercase text-slate-500 mt-1',
+  bullets: '',
+  bullet: '',
+  quote: 'text-sm text-slate-600 italic leading-relaxed',
+};
 import { Mail, Phone, MapPin, Globe, Github, Linkedin, ExternalLink } from 'lucide-react';
 
 const TemplateResume = ({ user }) => {
@@ -27,9 +41,9 @@ const TemplateResume = ({ user }) => {
               <p className="text-slate-400 max-w-lg text-sm leading-relaxed mb-6">{bio}</p>
               
               <div className="grid grid-cols-1 md:grid-cols-2 gap-y-2 gap-x-6 text-xs font-mono opacity-80">
-                <div className="flex items-center gap-2"><Mail size={14}/> {email}</div>
-                <div className="flex items-center gap-2"><Phone size={14}/> {phone}</div>
-                <div className="flex items-center gap-2"><MapPin size={14}/> {address}</div>
+                {email && <div className="flex items-center gap-2"><Mail size={14}/> {email}</div>}
+                {phone && <div className="flex items-center gap-2"><Phone size={14}/> {phone}</div>}
+                {address && <div className="flex items-center gap-2"><MapPin size={14}/> {address}</div>}
                 {resume && (
                   <a href={resume} className="flex items-center gap-2 hover:text-blue-400 transition">
                     <Globe size={14}/> Download Full CV
@@ -58,37 +72,39 @@ const TemplateResume = ({ user }) => {
                         {formatDate(exp.from)} — {exp.isCurrent ? "Present" : formatDate(exp.to)}
                       </span>
                     </div>
-                    <p className="text-blue-600 font-semibold text-sm mb-2">{exp.company} <span className="text-slate-400 font-normal">| {exp.location}</span></p>
+                    <p className="text-blue-600 font-semibold text-sm mb-2">{exp.company} {exp.location && <span className="text-slate-400 font-normal">| {exp.location}</span>}</p>
                     <p className="text-sm text-slate-600 leading-relaxed whitespace-pre-line">{exp.description}</p>
                   </div>
                 ))}
               </div>
             </section>}
 
-            <section>
+            {projects.length > 0 && <section>
               <h2 className="text-sm font-black uppercase tracking-[0.2em] border-b-2 border-slate-900 pb-1 mb-6">Notable Projects</h2>
               <div className="grid grid-cols-1 gap-6">
                 {projects.map((proj, i) => (
                   <div key={i} className="border-l-2 border-slate-100 pl-4 hover:border-slate-900 transition-colors">
                     <div className="flex items-center gap-2 mb-1">
                       <h3 className="font-bold text-slate-800">{proj.title}</h3>
-                      {proj.deployed && <a href={proj.deployed} target='_blank' className="text-slate-400 hover:text-black"><ExternalLink size={14}/></a>}
+                      {proj.deployed && <a href={proj.deployed} target='_blank' rel='noopener noreferrer' className="text-slate-400 hover:text-black"><ExternalLink size={14}/></a>}
                     </div>
                     <p className="text-sm text-slate-600 mb-2 whitespace-pre-line">{proj.description}</p>
                     {proj.github && (
-                      <a href={proj.github} target='_blank' className="text-[10px] font-mono text-slate-400 flex items-center gap-1 hover:text-black">
+                      <a href={proj.github} target='_blank' rel='noopener noreferrer' className="text-[10px] font-mono text-slate-400 flex items-center gap-1 hover:text-black">
                         <Github size={12}/> source_code
                       </a>
                     )}
                   </div>
                 ))}
               </div>
-            </section>
+            </section>}
+
+            <TestimonialsSection user={user} c={resumeC} title="References" />
           </div>
 
           <div className="space-y-10">
             
-            <section>
+            {skills.length > 0 && <section>
               <h2 className="text-sm font-black uppercase tracking-[0.2em] border-b-2 border-slate-900 pb-1 mb-4">Core Skills</h2>
               <div className="flex flex-wrap gap-2">
                 {skills.map((skill, i) => (
@@ -97,9 +113,9 @@ const TemplateResume = ({ user }) => {
                   </span>
                 ))}
               </div>
-            </section>
+            </section>}
 
-            <section>
+            {education.length > 0 && <section>
               <h2 className="text-sm font-black uppercase tracking-[0.2em] border-b-2 border-slate-900 pb-1 mb-4">Education</h2>
               <div className="space-y-4">
                 {education.map((edu, i) => (
@@ -115,13 +131,13 @@ const TemplateResume = ({ user }) => {
                   </div>
                 ))}
               </div>
-            </section>
+            </section>}
 
-            <section>
+            {social.length > 0 && <section>
               <h2 className="text-sm font-black uppercase tracking-[0.2em] border-b-2 border-slate-900 pb-1 mb-4">Social</h2>
               <div className="space-y-2">
                 {social.map((s, i) => (
-                  <a key={i} target='_blank' href={s.url} className="flex items-center gap-3 text-xs text-slate-600 hover:text-blue-600 transition group">
+                  <a key={i} target='_blank' rel='noopener noreferrer' href={s.url} className="flex items-center gap-3 text-xs text-slate-600 hover:text-blue-600 transition group">
                     <span className="p-1.5 bg-slate-50 rounded group-hover:bg-blue-50 transition-colors">
                       {s.platform.toLowerCase().includes('github') && <Github size={14}/>}
                       {s.platform.toLowerCase().includes('linkedin') && <Linkedin size={14}/>}
@@ -131,7 +147,7 @@ const TemplateResume = ({ user }) => {
                   </a>
                 ))}
               </div>
-            </section>
+            </section>}
 
           </div>
         </div>
