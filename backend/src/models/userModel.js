@@ -1,5 +1,10 @@
 import mongoose from "mongoose";
 
+const httpUrl = {
+  validator: (value) => !value || /^https?:\/\/\S+$/i.test(value),
+  message: "{PATH} must be a valid http(s) URL.",
+};
+
 const userSchema = new mongoose.Schema({
   name: { type: String, required: true },
   email: { type: String, required: true, unique: true },
@@ -9,7 +14,7 @@ const userSchema = new mongoose.Schema({
   address: { type: String, required: true },
   phone: { type: String, required: true },
   avatar: { type: String },
-  resume: { type: String },
+  resume: { type: String, validate: httpUrl },
   createdAt: { type: Date, default: Date.now },
   isAdmin: { type: Boolean, default: false },
   folio_id: { type: mongoose.Schema.Types.ObjectId, ref: "Folio" },
@@ -37,7 +42,7 @@ const userSchema = new mongoose.Schema({
   social: [
     {
       platform: { type: String, required: true },
-      url: { type: String, required: true },
+      url: { type: String, required: true, validate: httpUrl },
       _id: false,
     },
   ],
@@ -48,8 +53,8 @@ const userSchema = new mongoose.Schema({
     {
       title: { type: String, required: true },
       description: { type: String },
-      github: { type: String },
-      deployed: { type: String },
+      github: { type: String, validate: httpUrl },
+      deployed: { type: String, validate: httpUrl },
       media: [{ type: String }],
       _id: false,
     },

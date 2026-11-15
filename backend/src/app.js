@@ -30,7 +30,8 @@ app.use("/", authRouter);
 app.use("/folio", folioRouter);
 
 app.use((err, req, res, next) => {
-  const statusCode = res.statusCode === 200 ? 500 : res.statusCode;
+  const statusCode =
+    err.name === "ValidationError" ? 400 : res.statusCode === 200 ? 500 : res.statusCode;
   res.status(statusCode).json({
     success: false,
     message: err.message,

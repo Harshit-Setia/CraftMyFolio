@@ -1,7 +1,14 @@
 import asyncHandler from '../utils/asyncHandler.js';
 import {Folio} from '../models/folioModel.js';
 import {User} from '../models/userModel.js';
-import redisClient from '../config/redisClient.js';
+import {
+  getCachedFolio,
+  setCachedFolio,
+  invalidateFolioCache,
+} from '../utils/folioCache.js';
+
+const PUBLIC_USER_FIELDS =
+  'name email bio avatar resume address phone education social skills projects experience testimonials';
 
 export const createFolio = asyncHandler(async (req, res) => {
   const user_id = req.user._id; 
@@ -42,25 +49,21 @@ export const createFolio = asyncHandler(async (req, res) => {
 export const getPublicFolio = asyncHandler(async (req, res) => {
   const slug = req.params.slug.toLowerCase();
   
-  const cacheKey = `folio:${slug}`;
-  const cachedFolio = await redisClient.get(cacheKey);
-
+  const cachedFolio = await getCachedFolio(slug);
   if (cachedFolio) {
-    return res.status(200).json(JSON.parse(cachedFolio));
+    return res.status(200).json(cachedFolio);
   }
 
-  const folio = await Folio.findOne({ slug: slug });
+  const folio = await Folio.findOne({ slug })
+    .populate({ path: 'user_id', select: PUBLIC_USER_FIELDS })
+    .lean();
 
   if (!folio) {
     res.status(404);
     throw new Error('Portfolio not found.');
   }
 
-  await folio.populate({
-    path: 'user_id',
-    select: '-password' 
-  });
-  await redisClient.setEx(cacheKey, 3600, JSON.stringify(folio));
+  await setCachedFolio(slug, folio);
 
   return res.status(200).json(folio);
 });
@@ -91,8 +94,7 @@ export const updateMyFolio = asyncHandler(async (req, res) => {
   folio.template_id = template_id || folio.template_id;
 
   const updatedFolio = await folio.save();
-  console.log("Removed from redis");
-  await redisClient.del(`folio:${folio.slug.toLowerCase()}`);
+  await invalidateFolioCache(folio.slug);
   res.status(200).json({ data: updatedFolio });
 });
 
@@ -109,6 +111,8 @@ export const deleteMyFolio = asyncHandler(async (req, res) => {
   await User.findByIdAndUpdate(user_id, {
     $unset: { folio_id: 1 }
   });
+
+  await invalidateFolioCache(folio.slug);
 
   res.status(200).json({ message: "Folio deleted successfully" });
 });

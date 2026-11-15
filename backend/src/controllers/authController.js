@@ -3,9 +3,25 @@ import asyncHandler from "../utils/asyncHandler.js";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import { uploadOnCloudinary } from "../utils/cloudUpload.js";
-import { saveUserAndRespond } from "../utils/controllerUtils.js";
+import { pick } from "../utils/controllerUtils.js";
 import { Folio } from "../models/folioModel.js";
-import redisClient from "../config/redisClient.js";
+import { invalidateFolioCache } from "../utils/folioCache.js";
+
+const REGISTRATION_FIELDS = [
+  "name",
+  "email",
+  "dob",
+  "address",
+  "phone",
+  "bio",
+  "resume",
+  "education",
+  "experience",
+  "projects",
+  "skills",
+  "social",
+  "testimonials",
+];
 
 export const registerUser = asyncHandler(async (req, res) => {
   const { name, email, password, dob, address, phone } = req.body;
@@ -43,13 +59,8 @@ export const registerUser = asyncHandler(async (req, res) => {
   const hashedPassword = await bcrypt.hash(password, 10);
 
   const newUser = await User.create({
-    ...req.body,
-    name,
-    email,
+    ...pick(req.body, REGISTRATION_FIELDS),
     password: hashedPassword,
-    dob,
-    address,
-    phone,
     avatar,
   });
 
@@ -117,14 +128,13 @@ export const updateUser = asyncHandler(async (req, res) => {
   user.dob = req.body.dob || user.dob;
   user.bio = req.body.bio || user.bio;
   if (req.file) {
-    const avatarLocalPath = req.file.path;
-    const cloudinaryResponse = await uploadOnCloudinary(avatarLocalPath);
-    if (!cloudinaryResponse) {
+    const avatarUrl = await uploadOnCloudinary(req.file.path);
+    if (!avatarUrl) {
       return res
         .status(500)
         .json({ message: "Error uploading new avatar to Cloudinary" });
     }
-    user.avatar = cloudinaryResponse.url;
+    user.avatar = avatarUrl;
   }
   user.resume = req.body.resume || user.resume;
 
@@ -150,17 +160,9 @@ export const updateUser = asyncHandler(async (req, res) => {
 
   const updatedUser = await user.save();
 
-  try {
-    const folio = await Folio.findOne({ user_id: user._id });
+  const folio = await Folio.findOne({ user_id: user._id });
+  if (folio) await invalidateFolioCache(folio.slug);
 
-    if (folio) {
-      const cacheKey = `folio:${folio.slug}`;
-      await redisClient.del(cacheKey);
-    }
-    console.log("redis deleted");
-  } catch (err) {
-    console.error("Redis Error:", err);
-  }
   res.status(200).json({
     data: updatedUser,
   });
@@ -182,13 +184,12 @@ export const updateUserAvatar = asyncHandler(async (req, res) => {
 
   user.avatar = imageUrl;
 
-  const folio = await Folio.findOne({ user_id: user._id });
-  if (folio) {
-    const cacheKey = `folio:${folio.slug}`;
-    await redisClient.del(cacheKey);
-  }
+  await user.save();
 
-  await saveUserAndRespond(user, res);
+  const folio = await Folio.findOne({ user_id: user._id });
+  if (folio) await invalidateFolioCache(folio.slug);
+
+  res.status(200).json({ data: user });
 });
 
 export const getMe = (req, res) => {
