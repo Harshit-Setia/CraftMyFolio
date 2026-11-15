@@ -1,8 +1,9 @@
-import React from 'react';
-import { useParams } from 'react-router-dom';
+import React, { useEffect, useRef } from 'react';
+import { useLocation, useParams } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import { templateInfo } from "../folioTemplate/index.js";
 import { sanitizePublicUser } from "../folioTemplate/sanitize.js";
+import { classifyLink, trackClick, trackView } from "../analytics/track.js";
 
 const API_BASE_URL = `${import.meta.env.VITE_BE_URL}`; 
 
@@ -44,6 +45,18 @@ const PublicFolioPage = () => {
     staleTime: 1000 * 60 * 5,
   });
 
+  const { pathname } = useLocation();
+  const lastTracked = useRef(null);
+  const firstView = useRef(true);
+
+  useEffect(() => {
+    if (!data || lastTracked.current === pathname) return;
+    lastTracked.current = pathname;
+    const page = pathname.split("/").filter(Boolean)[2] || "home";
+    trackView(slug, page, firstView.current);
+    firstView.current = false;
+  }, [data, pathname, slug]);
+
   if (isLoading) {
     return <FullPageLoader />;
   }
@@ -69,7 +82,19 @@ const PublicFolioPage = () => {
       </div>
     );
   }
-  return <TemplateComponent user={sanitizePublicUser(user)} basePath={`/folio/${slug}`} />;
+  const publicUser = sanitizePublicUser(user);
+
+  const handleClick = (event) => {
+    const anchor = event.target.closest?.("a[href]");
+    const link = anchor && classifyLink(anchor.getAttribute("href"), publicUser);
+    if (link) trackClick(slug, link);
+  };
+
+  return (
+    <div className="contents" onClick={handleClick}>
+      <TemplateComponent user={publicUser} basePath={`/folio/${slug}`} />
+    </div>
+  );
 };
 
 export default PublicFolioPage;

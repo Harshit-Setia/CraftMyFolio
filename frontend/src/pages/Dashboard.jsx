@@ -10,6 +10,7 @@ import ProjectsDetails from "../features/dashboard/ProjectsDetails";
 import SkillsDetails from "../features/dashboard/SkillsDetails";
 import SocialLinksDetails from "../features/dashboard/SocialLinks";
 import TestimonialsDetails from "../features/dashboard/TestimonialsDetails";
+import Analytics from "../features/dashboard/Analytics";
 
 const DashboardPage = () => {
   const { data: user, isLoading, isError } = useUser();
@@ -23,6 +24,7 @@ const DashboardPage = () => {
     "Skills",
     "Social Links",
     "Testimonials",
+    "Analytics",
   ];
   const [activeItem, setActiveItem] = useState(menuItems[0]);
 
@@ -52,6 +54,8 @@ const DashboardPage = () => {
         return <SocialLinksDetails social={user.social} />;
       case "Testimonials":
         return <TestimonialsDetails testimonials={user.testimonials} />;
+      case "Analytics":
+        return <Analytics />;
       default:
         return <BasicDetails user={user} />;
     }

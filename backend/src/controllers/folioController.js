@@ -1,6 +1,7 @@
 import asyncHandler from '../utils/asyncHandler.js';
 import {Folio} from '../models/folioModel.js';
 import {User} from '../models/userModel.js';
+import {FolioStats} from '../models/folioStatsModel.js';
 import {
   getCachedFolio,
   setCachedFolio,
@@ -112,6 +113,7 @@ export const deleteMyFolio = asyncHandler(async (req, res) => {
     $unset: { folio_id: 1 }
   });
 
+  await FolioStats.deleteMany({ folio_id: folio._id });
   await invalidateFolioCache(folio.slug);
 
   res.status(200).json({ message: "Folio deleted successfully" });
