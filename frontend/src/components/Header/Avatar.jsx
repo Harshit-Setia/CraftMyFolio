@@ -36,6 +36,23 @@ const DashboardIcon = () => (
   </svg>
 );
 
+const TemplateIcon = () => (
+  <svg
+    className="w-5 h-5 mr-3 text-gray-500"
+    xmlns="http://www.w3.org/2000/svg"
+    fill="none"
+    viewBox="0 0 24 24"
+    stroke="currentColor"
+  >
+    <path
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      strokeWidth="2"
+      d="M4 5a1 1 0 011-1h14a1 1 0 011 1v2a1 1 0 01-1 1H5a1 1 0 01-1-1V5zM4 13a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H5a1 1 0 01-1-1v-6zM16 13a1 1 0 011-1h2a1 1 0 011 1v6a1 1 0 01-1 1h-2a1 1 0 01-1-1v-6z"
+    />
+  </svg>
+);
+
 const LogoutIcon = () => (
   <svg
     className="w-5 h-5 mr-3 text-red-500"
@@ -118,6 +135,15 @@ const Avatar = ({ imageUrl, userName = "User" }) => {
           >
             <DashboardIcon />
             <span>Dashboard</span>
+          </Link>
+          <Link
+            to="/create"
+            onClick={() => setIsOpen(false)}
+            className="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
+            role="menuitem"
+          >
+            <TemplateIcon />
+            <span>Change template</span>
           </Link>
           <button
             onClick={handleLogout}

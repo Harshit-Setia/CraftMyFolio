@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import Modal from "../../components/ui/Modal";
 import EditButton from "../../components/ui/EditButton";
+import SectionHeader from "./SectionHeader";
 import EmptyStateCard from "../../components/ui/EmptyStateCard";
 import EducationForm from "./EducationForm";
 
@@ -9,13 +10,7 @@ const EducationDetails = ({ education = [] }) => {
   
   return (
     <div>
-      <div className="flex justify-between items-center mb-6">
-        <div>
-          <h1 className="text-3xl font-bold text-gray-800">Education Details</h1>
-          <p className="text-gray-500 mt-1">Manage your education history</p>
-        </div>
-        <EditButton text="Add/Edit Education" onClick={() => setIsEditOpen(true)} />
-      </div>
+      <SectionHeader title={"Education Details"} subtitle={"Manage your education history"} action={<EditButton text="Add/Edit Education" onClick={() => setIsEditOpen(true)} />} />
 
       {education.length === 0 ? (
         <EmptyStateCard 

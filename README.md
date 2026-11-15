@@ -9,8 +9,9 @@ Portfolios are public at `/folio/:slug`, backed by secure authentication, a Redi
 ## 🌟 Key Features
 
 - **15 portfolio templates**: switch designs any time; your content stays the same. Three of them are **multi-page** (real Home, About, Projects, Experience and Contact pages).
+- **Phone number privacy**: your phone number is hidden by default. Tick "Show my phone number" in the dashboard to display it on your portfolio; every template then shows it as a tap-to-call link.
 - **Custom public links**: choose your own slug (`/folio/your-name`) with live availability checking.
-- **Dashboard**: add, edit or remove education, experience, projects, skills, social links and testimonials.
+- **Dashboard**: an Overview page (your public link with copy and view buttons, a profile-strength checklist, a 7-day analytics snapshot), plus sections to add, edit or remove education, experience, projects, skills, social links and testimonials. Fully responsive, and every section has its own URL (`/dashboard?tab=projects`).
 - **Analytics**: page views, unique visitors, referrers, devices and link clicks for each portfolio. No cookies, no stored IP addresses (see [Analytics](#-analytics)).
 - **Secure authentication**: JWT sessions and Bcrypt password hashing.
 - **Media uploads**: avatar images stored on Cloudinary.
@@ -41,7 +42,7 @@ Multi-page templates are served from the same slug: `/folio/:slug`, `/folio/:slu
 2. Add a thumbnail screenshot (about 1280×660, JPEG) to `frontend/src/assets/templates/`.
 3. Register it in `frontend/src/folioTemplate/index.js`. The order of that list decides which templates appear first, and the home page shows the first 15 (`HOME_TEMPLATE_LIMIT` in `components/home/TemplateGallery.jsx`). The create page always lists them all.
 
-Every template should handle missing data (a profile with only a name must not break) and render only the sections that have content.
+Show the phone number only when `phone` is present (the server omits it unless the owner opted in), using `telHref` from `multipage/helpers.js` for the link. Every template should handle missing data (a profile with only a name must not break) and render only the sections that have content.
 
 ---
 
@@ -69,6 +70,7 @@ Each owner sees an **Analytics** tab in the dashboard (7, 30 or 90 days): views,
 
 - Signup only accepts an allowlist of profile fields (privileged fields such as `isAdmin` are ignored).
 - The public portfolio API returns only the fields a portfolio displays (no date of birth, admin flag or internal ids).
+- The phone number is **private unless the owner opts in** (`showPhone` on the user, off by default). The server removes it from the public response when the setting is off, so it cannot be read from the raw API either.
 - Links (`resume`, social URLs, project `github` and `deployed`) must be `http(s)` URLs when saved, and the public page strips any other scheme before rendering. This prevents `javascript:` links.
 - Redis is optional: if it is down, public reads fall back to MongoDB.
 
@@ -162,7 +164,7 @@ The Redis cache test is skipped automatically when no Redis is running. Set `RED
 ### `frontend/src/`
 - `pages/` - Home, Dashboard, auth pages, CreateFolio (template picker), PublicFolioPage.
 - `components/` - shared UI. `components/home/` holds the home page sections.
-- `features/dashboard/` - dashboard sections, including `Analytics.jsx`.
+- `features/dashboard/` - dashboard sections: `Overview.jsx`, `Analytics.jsx`, the per-section components and forms, `SectionHeader.jsx`, and `sections.js` (the section list and profile-completion checklist). `pages/Dashboard.jsx` is the responsive shell.
 - `folioTemplate/` - the portfolio templates.
   - `multipage/` - the multi-page framework (routing by path, preview mode, shared helpers).
   - `shared/` - section components shared by several templates.
@@ -188,8 +190,8 @@ The Redis cache test is skipped automatically when no Redis is running. Set `RED
 ### Account routes (mounted at the root)
 - `POST /signup` - register (accepts multipart/form-data for the avatar)
 - `POST /signin` - sign in, returns a JWT
-- `GET /me` - current user (Protected)
-- `PATCH /me` - update profile and portfolio content (Protected)
+- `GET /me` - current user, including `folio_id: { slug, template_id }` when a portfolio exists (Protected)
+- `PATCH /me` - update profile and portfolio content, including `showPhone` (Protected)
 - `PATCH /me/avatar` - update avatar (Protected)
 
 ### Portfolio routes (`/folio`)

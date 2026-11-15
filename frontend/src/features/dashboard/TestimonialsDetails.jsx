@@ -2,6 +2,7 @@ import {useState} from 'react'
 import TestimonialsForm from './TestimonialsForm';
 import Modal from '../../components/ui/Modal';
 import EditButton from '../../components/ui/EditButton';
+import SectionHeader from "./SectionHeader";
 import EmptyStateCard from '../../components/ui/EmptyStateCard';
 
 
@@ -9,13 +10,7 @@ const TestimonialsDetails = ({ testimonials = [] }) => {
   const [isEditOpen, setIsEditOpen] = useState(false);
   return (
     <div>
-      <div className="flex justify-between items-center mb-6">
-        <div>
-          <h1 className="text-3xl font-bold text-gray-800">Testimonials</h1>
-          <p className="text-gray-500 mt-1">Manage your received testimonials</p>
-        </div>
-        <EditButton text="Add/Edit Testimonials" onClick={() => setIsEditOpen(true)} />
-      </div>
+      <SectionHeader title={"Testimonials"} subtitle={"Manage your received testimonials"} action={<EditButton text="Add/Edit Testimonials" onClick={() => setIsEditOpen(true)} />} />
       {testimonials.length === 0 ? (
         <EmptyStateCard 
           title="No Testimonials Added"

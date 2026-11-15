@@ -1,6 +1,7 @@
 import {useState} from 'react'
 import Modal from '../../components/ui/Modal';
 import EditButton from '../../components/ui/EditButton';
+import SectionHeader from "./SectionHeader";
 import SkillsForm from './SkillsForm';
 
 
@@ -8,13 +9,7 @@ const SkillsDetails = ({ skills = [] }) => {
   const [isEditOpen, setIsEditOpen] = useState(false);
   return (
     <div>
-      <div className="flex justify-between items-center mb-6">
-        <div>
-          <h1 className="text-3xl font-bold text-gray-800">Skills</h1>
-          <p className="text-gray-500 mt-1">Manage your technical skills</p>
-        </div>
-        <EditButton text="Add/Edit Skills" onClick={() => setIsEditOpen(true)} />
-      </div>
+      <SectionHeader title={"Skills"} subtitle={"Manage your technical skills"} action={<EditButton text="Add/Edit Skills" onClick={() => setIsEditOpen(true)} />} />
       <div className="bg-white p-6 md:p-8 rounded-xl shadow-md border border-gray-100">
         {skills.length === 0 ? (
           <p className="text-gray-500 text-center">No skills added yet. Click 'Edit' to add your first skill.</p>

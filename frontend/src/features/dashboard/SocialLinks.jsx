@@ -2,19 +2,14 @@ import { useState } from "react";
 import SocialLinksForm from "./SocialLinksForm";
 import { SocialIcon } from "../../components/ui/icons";
 import EditButton from "../../components/ui/EditButton";
+import SectionHeader from "./SectionHeader";
 import Modal from "../../components/ui/Modal";
 
 const SocialLinksDetails = ({ social = [] }) => {
   const [isEditOpen, setIsEditOpen] = useState(false);
   return (
     <div>
-      <div className="flex justify-between items-center mb-6">
-        <div>
-          <h1 className="text-3xl font-bold text-gray-800">Social Links</h1>
-          <p className="text-gray-500 mt-1">Manage your professional links</p>
-        </div>
-        <EditButton text="Add/Edit Links" onClick={() => setIsEditOpen(true)} />
-      </div>
+      <SectionHeader title={"Social Links"} subtitle={"Manage your professional links"} action={<EditButton text="Add/Edit Links" onClick={() => setIsEditOpen(true)} />} />
       <div className="bg-white p-6 md:p-8 rounded-xl shadow-md border border-gray-100">
         {social.length === 0 ? (
           <p className="text-gray-500 text-center">

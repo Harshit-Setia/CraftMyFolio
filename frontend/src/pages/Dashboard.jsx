@@ -1,8 +1,10 @@
-import React, { useState } from "react";
-import { Navigate, useNavigate } from "react-router-dom";
+import React, { useEffect } from "react";
+import { Link, Navigate, useSearchParams } from "react-router-dom";
+import { Check, ExternalLink, LayoutTemplate } from "lucide-react";
 import { useUser } from "../hooks/useUser";
-import { IconWrapper, icons } from "../components/ui/icons";
+import { GROUP_TITLES, SECTIONS } from "../features/dashboard/sections";
 
+import Overview from "../features/dashboard/Overview";
 import BasicDetails from "../features/dashboard/BasicDetails";
 import EducationDetails from "../features/dashboard/EducationDetails";
 import ExperienceDetails from "../features/dashboard/ExperienceDetails";
@@ -12,60 +14,54 @@ import SocialLinksDetails from "../features/dashboard/SocialLinks";
 import TestimonialsDetails from "../features/dashboard/TestimonialsDetails";
 import Analytics from "../features/dashboard/Analytics";
 
+const renderSection = (key, user, goTo) => {
+  switch (key) {
+    case "basic":
+      return <BasicDetails user={user} />;
+    case "education":
+      return <EducationDetails education={user.education} />;
+    case "experience":
+      return <ExperienceDetails experience={user.experience} />;
+    case "projects":
+      return <ProjectsDetails projects={user.projects} />;
+    case "skills":
+      return <SkillsDetails skills={user.skills} />;
+    case "social":
+      return <SocialLinksDetails social={user.social} />;
+    case "testimonials":
+      return <TestimonialsDetails testimonials={user.testimonials} />;
+    case "analytics":
+      return <Analytics />;
+    default:
+      return <Overview user={user} goTo={goTo} />;
+  }
+};
+
+const GROUPS = ["main", "profile", "insights"];
+
 const DashboardPage = () => {
   const { data: user, isLoading, isError } = useUser();
-  const navigate = useNavigate();
+  const [params, setParams] = useSearchParams();
 
-  const menuItems = [
-    "Basic Details",
-    "Education Details",
-    "Internship & Work Experience",
-    "Projects",
-    "Skills",
-    "Social Links",
-    "Testimonials",
-    "Analytics",
-  ];
-  const [activeItem, setActiveItem] = useState(menuItems[0]);
+  const requested = params.get("tab");
+  const active = SECTIONS.some((s) => s.key === requested)
+    ? requested
+    : "overview";
+  const goTo = (key) => setParams(key === "overview" ? {} : { tab: key });
 
-  const handleViewFolio = () => {
-    if (user && user.folio_id && user.folio_id.slug) {
-      window.open(`/folio/${user.folio_id.slug}`, "_blank");
-    } else {
-      navigate("/create");
-    }
-  };
-
-  const renderContent = () => {
-    if (!user) return null;
-
-    switch (activeItem) {
-      case "Basic Details":
-        return <BasicDetails user={user} />;
-      case "Education Details":
-        return <EducationDetails education={user.education} />;
-      case "Internship & Work Experience":
-        return <ExperienceDetails experience={user.experience} />;
-      case "Projects":
-        return <ProjectsDetails projects={user.projects} />;
-      case "Skills":
-        return <SkillsDetails skills={user.skills} />;
-      case "Social Links":
-        return <SocialLinksDetails social={user.social} />;
-      case "Testimonials":
-        return <TestimonialsDetails testimonials={user.testimonials} />;
-      case "Analytics":
-        return <Analytics />;
-      default:
-        return <BasicDetails user={user} />;
-    }
-  };
+  useEffect(() => {
+    document.title = "Dashboard | CraftFolio";
+    window.scrollTo(0, 0);
+    document
+      .querySelector('[data-mobile-tab="true"][aria-current="page"]')
+      ?.scrollIntoView({ block: "nearest", inline: "center" });
+  }, [active, isLoading]);
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+      <div className="flex min-h-[60vh] items-center justify-center bg-slate-50">
         <p className="text-lg font-medium text-gray-600">
-          Loading your session...
+          Loading your dashboard...
         </p>
       </div>
     );
@@ -75,59 +71,99 @@ const DashboardPage = () => {
     return <Navigate to="/" />;
   }
 
+  const folio = user.folio_id;
+
   return (
-    <div className="min-h-screen bg-gray-50 flex">
-      <aside className="w-64 bg-white p-6 border-r border-gray-200 flex flex-col">
-        <div className="mb-8">
-          <h1 className="text-2xl font-bold text-indigo-700">Dashboard</h1>
-          <p className="text-sm text-gray-500">User Profile</p>
-        </div>
+    <div className="bg-slate-50 lg:flex lg:min-h-[70vh]">
+      <aside className="hidden w-64 shrink-0 border-r border-gray-200 bg-white lg:block">
+        <nav aria-label="Dashboard" className="sticky top-0 space-y-6 p-5 pt-8">
+          {GROUPS.map((group) => (
+            <div key={group}>
+              {GROUP_TITLES[group] && (
+                <p className="mb-2 px-3 text-xs font-semibold uppercase tracking-wider text-gray-400">
+                  {GROUP_TITLES[group]}
+                </p>
+              )}
+              <ul className="space-y-1">
+                {SECTIONS.filter((s) => s.group === group).map(
+                  ({ key, label, Icon, done }) => (
+                    <li key={key}>
+                      <button
+                        type="button"
+                        onClick={() => goTo(key)}
+                        aria-current={active === key ? "page" : undefined}
+                        className={`flex w-full items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-colors ${
+                          active === key
+                            ? "bg-indigo-50 text-indigo-700"
+                            : "text-gray-600 hover:bg-white hover:text-gray-900"
+                        }`}
+                      >
+                        <Icon size={18} aria-hidden="true" />
+                        <span className="flex-1 text-left">{label}</span>
+                        {done && done(user) && (
+                          <Check
+                            size={15}
+                            className="text-green-500"
+                            aria-label="Complete"
+                          />
+                        )}
+                      </button>
+                    </li>
+                  ),
+                )}
+              </ul>
+            </div>
+          ))}
 
-        <button
-          onClick={handleViewFolio}
-          className="w-full mb-6 px-4 py-2 bg-indigo-100 text-indigo-700 font-semibold rounded-lg hover:bg-indigo-200 transition-colors flex items-center justify-center"
-        >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            className="h-5 w-5 mr-2"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-            strokeWidth={2}
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"
-            />
-          </svg>
-          {user.folio_id ? "View My Folio" : "Create My Folio"}
-        </button>
-
-        <nav className="flex-grow">
-          <ul>
-            {menuItems.map((item) => (
-              <li key={item} className="mb-2">
-                <button
-                  onClick={() => setActiveItem(item)}
-                  className={`w-full flex items-center py-2.5 px-4 rounded-lg text-left transition-colors duration-200 ${
-                    activeItem === item
-                      ? "bg-indigo-600 text-white shadow"
-                      : "text-gray-600 hover:bg-gray-100"
-                  }`}
-                >
-                  <IconWrapper>{icons[item]}</IconWrapper>
-                  {item}
-                </button>
-              </li>
-            ))}
-          </ul>
+          <div className="space-y-2 border-t border-gray-200 pt-6">
+            {folio && (
+              <a
+                href={`/folio/${folio.slug}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-medium text-gray-600 hover:bg-white hover:text-gray-900"
+              >
+                <ExternalLink size={16} /> View portfolio
+              </a>
+            )}
+            <Link
+              to="/create"
+              className="flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-medium text-gray-600 hover:bg-white hover:text-gray-900"
+            >
+              <LayoutTemplate size={16} />{" "}
+              {folio ? "Change template" : "Create portfolio"}
+            </Link>
+          </div>
         </nav>
       </aside>
 
-      <main className="flex-1 p-10 max-h-screen overflow-y-auto">
-        {renderContent()}
-      </main>
+      <div className="min-w-0 flex-1 px-4 py-6 sm:px-6 lg:px-10 lg:py-10">
+        <div className="-mx-4 mb-6 overflow-x-auto px-4 lg:hidden">
+          <nav aria-label="Dashboard">
+            <ul className="flex w-max gap-2 pb-1">
+              {SECTIONS.map(({ key, label }) => (
+                <li key={key}>
+                  <button
+                    type="button"
+                    onClick={() => goTo(key)}
+                    aria-current={active === key ? "page" : undefined}
+                    data-mobile-tab="true"
+                    className={`whitespace-nowrap rounded-full border px-4 py-1.5 text-sm font-medium transition-colors ${
+                      active === key
+                        ? "border-indigo-600 bg-indigo-600 text-white"
+                        : "border-gray-200 bg-white text-gray-600 hover:border-gray-300"
+                    }`}
+                  >
+                    {label}
+                  </button>
+                </li>
+              ))}
+            </ul>
+          </nav>
+        </div>
+
+        <main className="max-w-[1400px]">{renderSection(active, user, goTo)}</main>
+      </div>
     </div>
   );
 };

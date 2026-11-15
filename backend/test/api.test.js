@@ -367,3 +367,14 @@ test("phone number is private unless the owner opts in", async () => {
   await request("/me", { method: "PATCH", headers: auth, body: { showPhone: "yes please" } });
   assert.equal("phone" in (await request(`/folio/${slug}`)).body.user_id, false);
 });
+
+test("the signed-in user includes their portfolio link and template", async () => {
+  const { auth } = await signUpAndLogin();
+  assert.equal((await request("/me", { headers: auth })).body.data.folio_id, undefined);
+
+  const slug = `me-${Date.now()}`;
+  await request("/folio", { method: "POST", headers: auth, body: { slug, template_id: "Showreel" } });
+  const folio = (await request("/me", { headers: auth })).body.data.folio_id;
+  assert.equal(folio.slug, slug);
+  assert.equal(folio.template_id, "Showreel");
+});

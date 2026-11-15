@@ -14,7 +14,7 @@ const Header = () => {
 
   return (
     <header className="bg-white border-b border-gray-200">
-      <nav className="container mx-auto px-6 py-4 flex justify-between items-center">
+      <nav className="flex items-center justify-between px-4 py-4 sm:px-6 lg:px-8">
         <div className="text-2xl font-bold text-indigo-700">
           <Link to="/">CraftFolio</Link>
         </div>

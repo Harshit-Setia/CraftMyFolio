@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import Modal from "../../components/ui/Modal";
 import EditButton from "../../components/ui/EditButton";
+import SectionHeader from "./SectionHeader";
 import EmptyStateCard from "../../components/ui/EmptyStateCard";
 import ProjectsForm from "./ProjectsForm";
 
@@ -9,13 +10,7 @@ const ProjectsDetails = ({ projects = [] }) => {
   
   return (
     <div>
-      <div className="flex justify-between items-center mb-6">
-        <div>
-          <h1 className="text-3xl font-bold text-gray-800">Projects</h1>
-          <p className="text-gray-500 mt-1">Manage your portfolio projects</p>
-        </div>
-        <EditButton text="Add/Edit Projects" onClick={() => setIsEditOpen(true)} />
-      </div>
+      <SectionHeader title={"Projects"} subtitle={"Manage your portfolio projects"} action={<EditButton text="Add/Edit Projects" onClick={() => setIsEditOpen(true)} />} />
 
       {projects.length === 0 ? (
         <EmptyStateCard 

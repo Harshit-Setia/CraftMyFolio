@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { useAnalytics } from "../../hooks/useAnalytics";
+import SectionHeader from "./SectionHeader";
 
 const RANGES = [7, 30, 90];
 
@@ -117,13 +118,12 @@ export default function Analytics() {
   };
 
   return (
-    <div className="max-w-5xl">
-      <div className="flex flex-wrap items-end justify-between gap-4 mb-8">
-        <div>
-          <h1 className="text-3xl font-bold text-gray-900">Analytics</h1>
-          <p className="text-gray-500 mt-1">See who visits your portfolio and what they click.</p>
-        </div>
-        <div className="inline-flex rounded-lg border border-gray-200 bg-white p-1">
+    <div>
+      <SectionHeader
+        title="Analytics"
+        subtitle="See who visits your portfolio and what they click."
+        action={
+          <div className="inline-flex rounded-lg border border-gray-200 bg-white p-1">
           {RANGES.map((range) => (
             <button
               key={range}
@@ -137,7 +137,8 @@ export default function Analytics() {
             </button>
           ))}
         </div>
-      </div>
+        }
+      />
 
       {isLoading && <p className="text-gray-500">Loading analytics...</p>}
       {isError && <p className="text-red-600">Could not load analytics. Please try again.</p>}

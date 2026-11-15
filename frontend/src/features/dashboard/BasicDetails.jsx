@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import Modal from '../../components/ui/Modal';
 import EditButton from '../../components/ui/EditButton';
+import SectionHeader from "./SectionHeader";
 import BasicDetailsForm from './BasicDetailsForm';
 import AvatarUploadForm from './AvatarUploadForm';
 
@@ -16,13 +17,7 @@ const BasicDetails = ({ user }) => {
 
   return (
     <div>
-      <div className="flex justify-between items-center mb-6">
-        <div>
-          <h1 className="text-3xl font-bold text-gray-800">Basic Details</h1>
-          <p className="text-gray-500 mt-1">Manage your personal information and profile</p>
-        </div>
-        <EditButton text="Edit Profile" onClick={() => setIsDetailsModalOpen(true)} />
-      </div>
+      <SectionHeader title={"Basic Details"} subtitle={"Manage your personal information and profile"} action={<EditButton text="Edit Profile" onClick={() => setIsDetailsModalOpen(true)} />} />
 
       <div className="bg-white p-6 md:p-8 rounded-xl shadow-md border border-gray-100">
         <div className="flex flex-col md:flex-row items-center md:space-x-6">
@@ -54,6 +49,11 @@ const BasicDetails = ({ user }) => {
               <span className="flex items-center"><svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2 text-gray-400" viewBox="0 0 20 20" fill="currentColor"><path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z" /><path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z" /></svg>{user.email}</span>
               <span className="flex items-center mt-2 md:mt-0"><svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2 text-gray-400" viewBox="0 0 20 20" fill="currentColor"><path d="M2 3a1 1 0 011-1h2.153a1 1 0 01.986.836l.74 4.435a1 1 0 01-.54 1.06l-1.548.773a11.037 11.037 0 006.105 6.105l.774-1.548a1 1 0 011.059-.54l4.435.74a1 1 0 01.836.986V17a1 1 0 01-1 1h-2C7.82 18 2 12.18 2 5V3z" /></svg>{user.phone || "Not provided"}</span>
             </div>
+            {user.phone && (
+              <p className={`mt-3 text-xs font-medium ${user.showPhone ? "text-green-700" : "text-gray-500"}`}>
+                {user.showPhone ? "Your phone number is shown on your portfolio." : "Your phone number is hidden from your portfolio."}
+              </p>
+            )}
           </div>
         </div>
         <div className="border-t border-gray-200 mt-8 pt-8">

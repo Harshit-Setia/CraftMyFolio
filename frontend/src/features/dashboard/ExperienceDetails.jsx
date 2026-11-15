@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import Modal from "../../components/ui/Modal";
 import EditButton from "../../components/ui/EditButton";
+import SectionHeader from "./SectionHeader";
 import EmptyStateCard from "../../components/ui/EmptyStateCard";
 import ExperienceForm from "./ExperienceForm";
 
@@ -13,13 +14,7 @@ const ExperienceDetails = ({ experience = [] }) => {
 
   return (
     <div>
-      <div className="flex justify-between items-center mb-6">
-        <div>
-          <h1 className="text-3xl font-bold text-gray-800">Internship & Work Experience</h1>
-          <p className="text-gray-500 mt-1">Manage your professional experience</p>
-        </div>
-        <EditButton text="Add/Edit Experience" onClick={() => setIsEditOpen(true)} />
-      </div>
+      <SectionHeader title={"Internship & Work Experience"} subtitle={"Manage your professional experience"} action={<EditButton text="Add/Edit Experience" onClick={() => setIsEditOpen(true)} />} />
 
       {experience.length === 0 ? (
         <EmptyStateCard 

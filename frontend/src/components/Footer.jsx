@@ -6,7 +6,7 @@ const Footer = () => {
 
   return (
     <footer className="border-t border-gray-200 bg-white">
-      <div className="mx-auto flex max-w-6xl flex-col items-center justify-between gap-6 px-6 py-10 sm:flex-row">
+      <div className="flex flex-col items-center justify-between gap-6 px-4 py-10 sm:flex-row sm:px-6 lg:px-8">
         <div className="text-center sm:text-left">
           <Link to="/" className="text-lg font-bold text-indigo-700">
             CraftFolio
