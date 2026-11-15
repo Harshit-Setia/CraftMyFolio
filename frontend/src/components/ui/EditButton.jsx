@@ -1,4 +1,3 @@
-// src/components/ui/EditButton.jsx
 import React from "react";
 
 const EditButton = ({ onClick, text = "Edit" }) => (

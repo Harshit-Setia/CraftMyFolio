@@ -1,10 +1,8 @@
 import React, { useState, useRef } from "react";
 import { Link, Navigate, useNavigate } from "react-router-dom";
-// 1. UPDATED: Import the correct hook
 import { useAuth } from "../hooks/useAuth";
 import {CameraIcon , PlusIcon , TrashIcon}  from '../components/ui/icons.jsx'
 
-// --- Reusable Components ---
 
 const FormInput = ({
   id,
@@ -112,7 +110,6 @@ const StepIndicator = ({ currentStep, totalSteps }) => (
   </div>
 );
 
-// --- Form Step Components (Refactored for new Schema) ---
 
 const Step1_BasicInfo = ({
   data,
@@ -608,10 +605,8 @@ const Step5_FinalDetails = ({ data, handleInputChange, errors }) => (
   </>
 );
 
-// --- Main Multi-Step Form Component ---
 
 const SignUpForm = () => {
-  // 2. UPDATED: Get 'token' from useAuth, not 'user' or 'login'
   const { token } = useAuth();
   const [step, setStep] = useState(1);
   const [formData, setFormData] = useState({
@@ -635,7 +630,6 @@ const SignUpForm = () => {
       },
     ],
     hasExperience: false,
-    // 3. FIXED: Initialize experience as an empty array
     experience: [],
     skills: "",
     address: "",
@@ -704,7 +698,6 @@ const SignUpForm = () => {
   };
 
   const addExperience = () => {
-    // 4. FIXED: Only add a new entry if hasExperience is true
     if (formData.hasExperience) {
       setFormData((prev) => ({
         ...prev,
@@ -773,9 +766,7 @@ const SignUpForm = () => {
     if (step === 3) {
       if (formData.hasExperience) {
         const expErrors = [];
-        // Only validate if there are experience entries
         if (formData.experience.length === 0) {
-            // If they toggled 'yes' but added no entries, add one
             addExperience();
         }
         formData.experience.forEach((exp, index) => {
@@ -783,7 +774,6 @@ const SignUpForm = () => {
           if (!exp.title) error.title = "Title is required.";
           if (!exp.company) error.company = "Company is required.";
           if (!exp.from) error.from = "Start date is required.";
-          // 5. UPDATED: Validation for 'to' date
           if (!exp.isCurrent && !exp.to) {
             error.to = "End date is required if not currently working here.";
           }
@@ -815,7 +805,6 @@ const SignUpForm = () => {
 const handleSubmit = async () => {
   if (validateStep()) {
 
-    // 1. Prepare the final cleaned data (same as before)
     const finalData = {
       ...formData,
       skills: formData.skills
@@ -835,24 +824,18 @@ const handleSubmit = async () => {
     delete finalData.confirmPassword;
     delete finalData.hasExperience;
 
-    // --- IMPORTANT CHANGE BELOW ---
 
-    // 2. Create FormData (instead of JSON)
     const fd = new FormData();
 
-    // 3. Append normal fields
     for (const key in finalData) {
-      if (key === "avatar") continue; // handle separately
+      if (key === "avatar") continue;
       if (Array.isArray(finalData[key])) {
-        // Handle array correctly
         finalData[key].forEach((item, idx) => {
           if (typeof item === "object") {
-            // Object inside array (education, experience)
             for (const field in item) {
               fd.append(`${key}[${idx}][${field}]`, item[field]);
             }
           } else {
-            // Simple array (skills)
             fd.append(`${key}[]`, item);
           }
         });
@@ -861,16 +844,14 @@ const handleSubmit = async () => {
       }
     }
 
-    // 4. Append the file (THIS is what Multer reads)
     if (finalData.avatar) {
       fd.append("avatar", finalData.avatar); 
     }
 
-    // 5. Send the request (IMPORTANT: no JSON headers)
     try {
       const response = await fetch(`${import.meta.env.VITE_BE_URL}/signup`, {
         method: "POST",
-        body: fd, // ← FormData here
+        body: fd,
       });
 
       const result = await response.json();
@@ -894,7 +875,6 @@ const handleSubmit = async () => {
 
   return (
     <>
-      {/* 2. UPDATED: Check for 'token' instead of 'user' */}
       {token ? (
         <Navigate to="/dashboard" />
       ) : (
@@ -902,7 +882,6 @@ const handleSubmit = async () => {
           <div className="w-full max-w-3xl mx-auto">
             <div className="mb-3 text-center">
               {" "}
-              {/* Changed from mb-2 to mb-8 and wrapped in div */}
               <Link to="/" className="text-3xl font-bold text-indigo-700">
                 CraftFolio
               </Link>

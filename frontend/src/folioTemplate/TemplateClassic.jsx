@@ -1,7 +1,5 @@
 import React from 'react';
 
-// --- Social Icons ---
-// (In a real app, you might put these in a separate file)
 const GitHubIcon = () => (
   <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path fillRule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.026 2.747-1.026.546 1.379.201 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z" clipRule="evenodd" /></svg>
 );
@@ -12,16 +10,13 @@ const LinkIcon = () => (
   <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13.19 8.688a4.5 4.5 0 011.242 7.244l-4.5 4.5a4.5 4.5 0 01-6.364-6.364l1.757-1.757m13.35-.622l1.757-1.757a4.5 4.5 0 00-6.364-6.364l-4.5 4.5a4.5 4.5 0 001.242 7.244" /></svg>
 );
 
-// Helper function to safely format dates
 const getYear = (dateString) => {
   if (!dateString) return "Present";
   const date = new Date(dateString);
   return !isNaN(date.getTime()) ? date.getFullYear() : "Present";
 };
 
-// Main Template Component
 const TemplateClassic = ({ user }) => {
-  // Destructure all possible fields from the user prop, providing defaults.
   const {
     name, email, bio, avatar, resume, address, phone,
     social = [],
@@ -35,7 +30,6 @@ const TemplateClassic = ({ user }) => {
   return (
     <div className="font-sans bg-white min-h-full text-gray-800">
       
-      {/* --- Hero Section --- */}
       <header className="bg-slate-50 text-center p-12 md:p-16">
         {avatar && (
           <img
@@ -48,7 +42,6 @@ const TemplateClassic = ({ user }) => {
         {bio && <p className="mt-4 max-w-2xl mx-auto text-lg text-slate-600">{bio}</p>}
       </header>
 
-      {/* --- Contact & Info Bar --- */}
       {(email || phone || address) && (
         <div className="bg-slate-800 text-slate-200 p-4">
           <div className="max-w-6xl mx-auto flex flex-wrap justify-center items-center gap-x-6 gap-y-2 text-sm">
@@ -74,10 +67,8 @@ const TemplateClassic = ({ user }) => {
         </div>
       )}
 
-      {/* --- Main Content Area --- */}
       <main className="p-4 sm:p-8 md:p-12 max-w-6xl mx-auto space-y-16">
         
-        {/* --- Social & Resume Links --- */}
         {(resume || (social && social.length > 0)) && (
           <section className="text-center">
             <div className="flex justify-center flex-wrap gap-4">
@@ -96,7 +87,6 @@ const TemplateClassic = ({ user }) => {
           </section>
         )}
 
-        {/* --- Experience Section --- */}
         {(experience && experience.length > 0) && (
           <section>
             <h2 className="text-3xl font-bold text-slate-900 mb-8 text-center">Experience</h2>
@@ -114,7 +104,6 @@ const TemplateClassic = ({ user }) => {
           </section>
         )}
 
-        {/* --- Skills Section --- */}
         {(skills && skills.length > 0) && (
           <section>
             <h2 className="text-3xl font-bold text-slate-900 mb-8 text-center">Skills</h2>
@@ -128,7 +117,6 @@ const TemplateClassic = ({ user }) => {
           </section>
         )}
 
-        {/* --- Projects Section --- */}
         {(projects && projects.length > 0) && (
           <section>
             <h2 className="text-3xl font-bold text-slate-900 mb-8 text-center">Projects</h2>
@@ -152,7 +140,6 @@ const TemplateClassic = ({ user }) => {
           </section>
         )}
         
-        {/* --- Education Section --- */}
         {(education && education.length > 0) && (
           <section>
             <h2 className="text-3xl font-bold text-slate-900 mb-8 text-center">Education</h2>
@@ -171,7 +158,6 @@ const TemplateClassic = ({ user }) => {
           </section>
         )}
 
-        {/* --- Testimonials Section --- */}
         {(testimonials && testimonials.length > 0) && (
           <section>
             <h2 className="text-3xl font-bold text-slate-900 mb-8 text-center">Testimonials</h2>

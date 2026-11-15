@@ -1,8 +1,7 @@
 import React from "react";
-import { Link } from "react-router-dom"; // Step 1: Import Link
+import { Link } from "react-router-dom";
 
 const Footer = () => {
-  // Step 2: Update the data to include a 'path' for each link
   const linkSections = [
     {
       title: "Templates",
@@ -36,7 +35,6 @@ const Footer = () => {
   return (
     <footer className="bg-white border-t pt-16 pb-8">
       <div className="container mx-auto px-6">
-        {/* Top section with links */}
         <div className="grid gap-10 row-gap-6 mb-8 sm:grid-cols-2 lg:grid-cols-3">
           {linkSections.map((section) => (
             <div key={section.title}>
@@ -46,7 +44,6 @@ const Footer = () => {
               <ul className="mt-4 space-y-3">
                 {section.links.map((link) => (
                   <li key={link.name}>
-                    {/* Step 3: Replace <a> with <Link> and href with to */}
                     <Link
                       to={link.path}
                       className="text-gray-700 transition-colors duration-300 hover:text-indigo-600"
@@ -60,10 +57,8 @@ const Footer = () => {
           ))}
         </div>
 
-        {/* Divider */}
         <div className="border-t border-gray-200 my-8"></div>
 
-        {/* Bottom section with copyright */}
         <div className="flex justify-center pt-5 pb-10">
           <p className="text-sm text-gray-600">
             © 2025 CraftFolio. All rights reserved.

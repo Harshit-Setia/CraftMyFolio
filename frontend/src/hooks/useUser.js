@@ -1,6 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
 import { useEffect } from "react";
-// 1. We must now import useAuth from the hook file, not the context file
 import { useAuth } from "../hooks/useAuth"; 
 
 const authErrorMessages = [
@@ -10,7 +9,6 @@ const authErrorMessages = [
       ];
 
 const fetchUserData = async (token) => {
-  // If there's no token, don't even try to fetch
   if (!token) return null;
 
   try {
@@ -26,16 +24,14 @@ const fetchUserData = async (token) => {
       const errorData = await res
         .json()
         .catch(() => ({ message: res.statusText }));
-      // We will check for this specific error message
       throw new Error(errorData.message || "Failed to authenticate token.");
     }
 
     const response = await res.json();
-    return response.data; // Return the user data object  
+    return response.data;
 
   } catch (error) {
     console.error(error.message);
-    // Re-throw the error for TanStack Query to handle
     throw error;
   }
 };
@@ -57,7 +53,6 @@ export function useUser() {
     },
   });
 
-  // 4. NEW: Use useEffect to handle errors (React Query v5 pattern)
   useEffect(() => {
     if (query.error) {
       console.log("Error detected:", query.error.message);

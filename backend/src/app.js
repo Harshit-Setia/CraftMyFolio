@@ -16,22 +16,19 @@ app.use(
 
 app.use(express.json());
 
-// (Optional) If you're sending URL-encoded form data
 app.use(express.urlencoded({ extended: true }));
 
 app.use(express.static("public"));
 
 app.set("trust proxy", true); 
-app.use(consoleLogger); // clean console logs
-app.use(fileLogger);    // file logs
+app.use(consoleLogger);
+app.use(fileLogger);
 
 app.use(cookieParser());
 
-//routes
 app.use("/", authRouter);
 app.use("/folio", folioRouter);
 
-// After all routes (Error Handling Middleware)
 app.use((err, req, res, next) => {
   const statusCode = res.statusCode === 200 ? 500 : res.statusCode;
   res.status(statusCode).json({

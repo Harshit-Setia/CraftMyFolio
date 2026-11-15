@@ -41,7 +41,6 @@ const TemplatePro = ({ user }) => {
   return (
     <div className="bg-[#0b0f19] text-white font-sans">
       
-      {/* ================= NAVBAR ================= */}
       <nav className="fixed top-0 w-full bg-[#0b0f19]/80 backdrop-blur border-b border-gray-800 z-50">
         <div className="max-w-6xl mx-auto px-6 py-4 flex justify-between items-center">
           <h1 className="font-bold text-lg">Portfolio.</h1>
@@ -56,7 +55,6 @@ const TemplatePro = ({ user }) => {
         </div>
       </nav>
 
-      {/* ================= HERO ================= */}
       <section id="home" className="min-h-screen flex items-center max-w-6xl mx-auto px-6 pt-24">
         <div className="grid md:grid-cols-2 gap-10 items-center">
           
@@ -70,7 +68,6 @@ const TemplatePro = ({ user }) => {
 
             <p className="text-gray-400 mb-6">{bio}</p>
 
-            {/* SOCIAL */}
             <div className="flex gap-4 mb-6">
               {social.map((s, i) => (
                 <a
@@ -95,7 +92,6 @@ const TemplatePro = ({ user }) => {
             )}
           </div>
 
-          {/* IMAGE */}
           <div className="flex justify-center">
             {avatar && (
               <img
@@ -107,13 +103,11 @@ const TemplatePro = ({ user }) => {
         </div>
       </section>
 
-      {/* ================= ABOUT ================= */}
       <section id="about" className="py-20 max-w-4xl mx-auto px-6 text-center">
         <h2 className="text-3xl font-bold mb-6">About Me</h2>
         <p className="text-gray-400">{bio}</p>
       </section>
 
-      {/* ================= SKILLS ================= */}
       <section id="skills" className="py-20 bg-[#111827]">
         <div className="max-w-5xl mx-auto px-6 text-center">
           <h2 className="text-3xl font-bold mb-10">Skills</h2>
@@ -131,7 +125,6 @@ const TemplatePro = ({ user }) => {
         </div>
       </section>
 
-      {/* ================= PROJECTS ================= */}
       <section id="projects" className="py-20 max-w-6xl mx-auto px-6">
         <h2 className="text-3xl font-bold text-center mb-12">Projects</h2>
 
@@ -161,7 +154,6 @@ const TemplatePro = ({ user }) => {
         </div>
       </section>
 
-      {/* ================= EXPERIENCE ================= */}
       <section id="experience" className="py-20 bg-[#111827]">
         <div className="max-w-5xl mx-auto px-6">
           <h2 className="text-3xl font-bold text-center mb-12">Experience</h2>
@@ -181,7 +173,6 @@ const TemplatePro = ({ user }) => {
         </div>
       </section>
 
-      {/* ================= EDUCATION ================= */}
       <section id="education" className="py-20 max-w-5xl mx-auto px-6">
         <h2 className="text-3xl font-bold text-center mb-12">Education</h2>
 
@@ -198,7 +189,6 @@ const TemplatePro = ({ user }) => {
         </div>
       </section>
 
-      {/* ================= CONTACT ================= */}
       <section id="contact" className="py-20 bg-[#111827] text-center">
         <h2 className="text-3xl font-bold mb-6">Contact</h2>
 

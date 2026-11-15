@@ -1,10 +1,8 @@
-// src/pages/DashboardPage.jsx
 import React, { useState } from "react";
 import { Navigate, useNavigate } from "react-router-dom";
-import { useUser } from "../hooks/useUser"; // 1. Import the new useUser hook
+import { useUser } from "../hooks/useUser";
 import { IconWrapper, icons } from "../components/ui/icons";
 
-// 2. Import all the "feature" components
 import BasicDetails from "../features/dashboard/BasicDetails";
 import EducationDetails from "../features/dashboard/EducationDetails";
 import ExperienceDetails from "../features/dashboard/ExperienceDetails";
@@ -14,7 +12,6 @@ import SocialLinksDetails from "../features/dashboard/SocialLinks";
 import TestimonialsDetails from "../features/dashboard/TestimonialsDetails";
 
 const DashboardPage = () => {
-  // 3. Use the new hook to get data, loading, and error states
   const { data: user, isLoading, isError } = useUser();
   const navigate = useNavigate();
 
@@ -38,7 +35,7 @@ const DashboardPage = () => {
   };
 
   const renderContent = () => {
-    if (!user) return null; // Content is only rendered if user exists
+    if (!user) return null;
 
     switch (activeItem) {
       case "Basic Details":
@@ -60,7 +57,6 @@ const DashboardPage = () => {
     }
   };
 
-  // 4. Handle the new loading state from TanStack Query
   if (isLoading) {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
@@ -71,14 +67,10 @@ const DashboardPage = () => {
     );
   }
 
-  // 5. Handle the new error state (e.g., bad token) or if user is just null
   if (isError || !user) {
-    // We were logged out by our useUser hook's onError,
-    // or the user just isn't found. Navigate home.
     return <Navigate to="/" />;
   }
 
-  // 6. If we are here, user is loaded and valid
   return (
     <div className="min-h-screen bg-gray-50 flex">
       <aside className="w-64 bg-white p-6 border-r border-gray-200 flex flex-col">

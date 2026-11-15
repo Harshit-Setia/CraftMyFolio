@@ -1,8 +1,6 @@
 import { useContext } from "react";
-import { AuthContext } from "../context/AuthContextStore"; // Import the context from its file
+import { AuthContext } from "../context/AuthContextStore";
 
-// 3. The hook now lives in its own file.
-// This file ONLY exports a function, which is perfect.
 export function useAuth() {
   const context = useContext(AuthContext);
   if (context === undefined) {

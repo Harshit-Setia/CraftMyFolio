@@ -1,4 +1,3 @@
-// src/components/ui/FormSelect.jsx
 import React from "react";
 
 const FormSelect = ({ id, label, value, onChange, name = id, children }) => (

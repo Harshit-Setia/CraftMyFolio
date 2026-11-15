@@ -10,9 +10,7 @@ import SignUpForm from "./pages/Signup";
 import CreateFolio from "./pages/CreateFolio";
 import PublicFolioPage from "./pages/PublicFolioPage";
 
-// 2. Define the Error Page
 
-// 3. Create the router configuration object
 const router = createBrowserRouter([
   {
     path: "/",
@@ -60,7 +58,7 @@ const router = createBrowserRouter([
   {
     path: "signin",
     element: <SignIn />,
-    errorElement: <ErrorPage />, // It's good practice for each top-level route to have an error element
+    errorElement: <ErrorPage />,
   },
   {
     path: "signup",
@@ -74,7 +72,6 @@ const router = createBrowserRouter([
   },
 ]);
 
-// 4. The main App component renders the RouterProvider
 function App() {
   return (
     <AuthProvider>

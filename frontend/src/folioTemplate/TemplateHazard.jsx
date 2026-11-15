@@ -7,7 +7,6 @@ const TemplateHazard = ({ user }) => {
   return (
     <div className="min-h-screen bg-yellow-400 font-mono text-black p-0 overflow-x-hidden selection:bg-black selection:text-yellow-400">
       
-      {/* --- SCROLLING MARQUEE HEADER --- */}
       <div className="bg-black text-yellow-400 py-3 overflow-hidden border-b-4 border-black">
         <div className="whitespace-nowrap animate-marquee font-black text-xl tracking-widest uppercase flex gap-8">
            {[...Array(10)].map((_, i) => (
@@ -21,7 +20,6 @@ const TemplateHazard = ({ user }) => {
 
       <div className="grid grid-cols-1 md:grid-cols-12 min-h-screen border-b-4 border-black">
         
-        {/* --- LEFT SIDE: THE MANIFESTO --- */}
         <div className="md:col-span-8 p-8 md:p-20 border-r-4 border-black flex flex-col justify-center relative bg-[url('https://www.transparenttextures.com/patterns/diagmonds-light.png')]">
           
           <h1 className="text-[12vw] leading-[0.85] font-black uppercase tracking-tighter break-words z-10">
@@ -34,13 +32,11 @@ const TemplateHazard = ({ user }) => {
             <p className="text-xl md:text-2xl font-bold uppercase leading-tight">{bio}</p>
           </div>
 
-          {/* Decorative Diagonal Stripes BG */}
           <div className="absolute inset-0 opacity-10 pointer-events-none" 
                style={{backgroundImage: 'repeating-linear-gradient(45deg, #000 0, #000 10px, transparent 10px, transparent 20px)'}}>
           </div>
         </div>
 
-        {/* --- RIGHT SIDE: SKILL STACK --- */}
         <div className="md:col-span-4 bg-black text-yellow-400 border-t-4 md:border-t-0 border-black flex flex-col">
           <div className="p-6 bg-yellow-500 text-black font-black uppercase border-b-4 border-black text-center">
             Operator Toolkit
@@ -54,7 +50,6 @@ const TemplateHazard = ({ user }) => {
         </div>
       </div>
 
-      {/* --- SECTION: THE PROJECTS (GRID OF DOOM) --- */}
       <div className="bg-black py-20 px-4 md:px-12 border-b-4 border-black">
         <h2 className="text-6xl md:text-8xl font-black text-stroke-yellow text-transparent mb-12 uppercase">
           Deployed<br/>Warheads
@@ -64,7 +59,6 @@ const TemplateHazard = ({ user }) => {
           {projects.map((p, i) => (
             <div key={i} className="group relative border-b-4 md:border-b-0 md:border-r-4 border-yellow-400 min-h-[400px] bg-neutral-900 p-8 flex flex-col justify-between hover:bg-yellow-400 hover:text-black transition-colors duration-300">
                
-               {/* Background noise on hover */}
                <div className="absolute inset-0 opacity-0 group-hover:opacity-10 pointer-events-none bg-[url('https://www.transparenttextures.com/patterns/noise-lines.png')]"></div>
 
                <div>
@@ -89,7 +83,6 @@ const TemplateHazard = ({ user }) => {
         </div>
       </div>
 
-      {/* --- SECTION: EXPERIENCE (RAW LIST) --- */}
       <div className="p-8 md:p-20 bg-yellow-400 text-black">
         <h2 className="text-6xl font-black uppercase mb-12 border-b-4 border-black inline-block">Battle Logs</h2>
         {experience.map((exp, i) => (
@@ -111,10 +104,8 @@ const TemplateHazard = ({ user }) => {
         <div className="border-t-4 border-black"></div>
       </div>
 
-      {/* --- SECTION: CONTACT (COMMUNICATION LINK) --- */}
       <div className="relative bg-black text-yellow-400 border-t-4 border-black overflow-hidden">
         
-        {/* Warning Stripes Background */}
         <div className="absolute inset-0 opacity-10 pointer-events-none" 
              style={{backgroundImage: 'repeating-linear-gradient(-45deg, #EAB308 0, #EAB308 20px, transparent 20px, transparent 40px)'}}>
         </div>
@@ -128,7 +119,6 @@ const TemplateHazard = ({ user }) => {
               Establish<br/>Connection
            </h2>
 
-           {/* Giant Email Button */}
            {email && (
              <a href={`mailto:${email}`} className="group relative inline-block mb-16">
                <div className="absolute inset-0 bg-yellow-600 transform translate-x-4 translate-y-4"></div>
@@ -139,11 +129,9 @@ const TemplateHazard = ({ user }) => {
              </a>
            )}
 
-           {/* Socials Grid */}
            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-3xl mx-auto">
               {social.map((s, i) => (
                 <a key={i} href={s.url} className="bg-neutral-900 border-2 border-yellow-400/30 p-4 flex flex-col items-center justify-center hover:bg-yellow-400 hover:text-black hover:border-white transition-all duration-300 group h-32">
-                   {/* Icon Logic */}
                    {s.platform.toLowerCase().includes('github') && <Github size={32} className="mb-2"/>}
                    {s.platform.toLowerCase().includes('linkedin') && <Linkedin size={32} className="mb-2"/>}
                    {s.platform.toLowerCase().includes('twitter') && <Twitter size={32} className="mb-2"/>}
@@ -153,7 +141,6 @@ const TemplateHazard = ({ user }) => {
                 </a>
               ))}
               
-              {/* Address Box */}
               {address && (
                  <div className="col-span-2 bg-neutral-900 border-2 border-yellow-400/30 p-4 flex flex-col items-center justify-center text-center opacity-70">
                     <MapPin size={24} className="mb-2"/>

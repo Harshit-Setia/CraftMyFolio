@@ -1,4 +1,3 @@
-// src/features/dashboard/EducationForm.jsx
 import React, { useState } from "react";
 import { useUpdateUser } from "../../hooks/useUpdateUser";
 import FormInput from "../../components/ui/FormInput";
@@ -26,7 +25,7 @@ const EducationForm = ({ user, onClose }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    mutation.mutate({ education: education }); // Send the entire updated array
+    mutation.mutate({ education: education });
   };
 
   return (
@@ -37,7 +36,6 @@ const EducationForm = ({ user, onClose }) => {
             <TrashIcon />
           </button>
           <div className="flex flex-wrap gap-4">
-            {/* All your FormInput and FormSelect components... */}
             <FormInput id={`institution-${index}`} name="institution" label="Institution" value={edu.institution} onChange={(e) => handleChange(index, e)} />
             <FormInput id={`degree-${index}`} name="degree" label="Degree" value={edu.degree} onChange={(e) => handleChange(index, e)} />
             <FormInput id={`fieldOfStudy-${index}`} name="fieldOfStudy" label="Field of Study" value={edu.fieldOfStudy} onChange={(e) => handleChange(index, e)} />

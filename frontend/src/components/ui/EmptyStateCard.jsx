@@ -1,4 +1,3 @@
-// src/components/ui/EmptyStateCard.jsx
 import React from "react";
 
 const EmptyStateCard = ({ title, message }) => (

@@ -1,21 +1,20 @@
-// In a new file: src/features/dashboard/AvatarUploadForm.jsx
 
 import React, { useState, useRef } from 'react';
-import { useUpdateUserAvatar } from '../../hooks/useUpdateUserAvatar'; // We will create this hook
+import { useUpdateUserAvatar } from '../../hooks/useUpdateUserAvatar';
 
 const AvatarUploadForm = ({ onClose }) => {
     const [file, setFile] = useState(null);
     const [preview, setPreview] = useState(null);
     const fileInputRef = useRef(null);
     
-    const mutation = useUpdateUserAvatar(onClose); // Use our new, specialized hook
+    const mutation = useUpdateUserAvatar(onClose);
     console.log("mutation object: ", mutation);
 
   const handleFileChange = (e) => {
     const selectedFile = e.target.files[0];
     if (selectedFile) {
       setFile(selectedFile);
-      setPreview(URL.createObjectURL(selectedFile)); // Create a temporary URL for preview
+      setPreview(URL.createObjectURL(selectedFile));
     }
   };
 
@@ -24,13 +23,12 @@ const AvatarUploadForm = ({ onClose }) => {
     console.log("SUBMIT CLICKED");       
     if (!file) return;
     console.log("SUBMIT CLICKED 2");       
-    mutation.mutate(file); // Mutate with the file object
+    mutation.mutate(file);
   };
 
   return (
     <form onSubmit={handleSubmit}>
       <div className="flex flex-col items-center">
-        {/* The Preview Image */}
         <div className="w-48 h-48 rounded-full bg-gray-100 flex items-center justify-center overflow-hidden border-2 border-gray-300">
           {preview ? (
             <img src={preview} alt="New avatar preview" className="w-full h-full object-cover" />
@@ -47,7 +45,6 @@ const AvatarUploadForm = ({ onClose }) => {
           className="hidden" 
         />
         
-        {/* The "Choose File" Button */}
         <button 
           type="button" 
           onClick={() => fileInputRef.current.click()} 

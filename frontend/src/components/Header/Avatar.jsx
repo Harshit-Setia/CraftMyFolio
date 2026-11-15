@@ -2,8 +2,6 @@ import React, { useState, useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
 import { useAuth } from "../../hooks/useAuth";
 
-// --- SVG Icons ---
-// Fallback user icon
 const UserIcon = () => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
@@ -21,7 +19,6 @@ const UserIcon = () => (
   </svg>
 );
 
-// Dashboard icon for the dropdown menu
 const DashboardIcon = () => (
   <svg
     className="w-5 h-5 mr-3 text-gray-500"
@@ -39,7 +36,6 @@ const DashboardIcon = () => (
   </svg>
 );
 
-// Logout icon for the dropdown menu
 const LogoutIcon = () => (
   <svg
     className="w-5 h-5 mr-3 text-red-500"
@@ -83,14 +79,12 @@ const Avatar = ({ imageUrl, userName = "User" }) => {
 
   return (
     <div className="relative" ref={dropdownRef}>
-      {/* Avatar Button */}
       <button
         onClick={() => setIsOpen(!isOpen)}
         className="block w-10 h-10 rounded-full overflow-hidden border-2 border-gray-300 hover:border-indigo-500 focus:outline-none focus:border-indigo-500 transition-colors duration-200"
         aria-haspopup="true"
         aria-expanded={isOpen}
       >
-        {/* Conditionally render image or fallback icon */}
         {imageUrl ? (
           <img
             className="w-full h-full object-cover"
@@ -104,7 +98,6 @@ const Avatar = ({ imageUrl, userName = "User" }) => {
         )}
       </button>
 
-      {/* Dropdown Menu with Transition */}
       <div
         className={`z-50 origin-top-right absolute right-0 mt-2 w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 transition-all duration-200 ease-in-out ${isOpen ? "opacity-100 scale-100" : "opacity-0 scale-95 pointer-events-none"}`}
         role="menu"

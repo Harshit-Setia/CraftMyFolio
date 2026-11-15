@@ -11,14 +11,11 @@ const FormInput = ({
   icon,
   rightAccessory,
 }) => {
-  // Base classes for the input field
   const baseClasses =
     "w-full bg-gray-100 text-gray-700 border rounded-lg py-3 pl-10 focus:outline-none focus:ring-2";
 
-  // Dynamically adjust right padding if there's an accessory (like the eye icon)
   const paddingClass = rightAccessory ? "pr-10" : "pr-4";
 
-  // Dynamically set border and ring color based on the error state
   const validationClasses = error
     ? "border-red-500 focus:ring-red-500"
     : "border-transparent focus:ring-indigo-500";
@@ -44,7 +41,6 @@ const FormInput = ({
           placeholder={placeholder}
           className={`${baseClasses} ${paddingClass} ${validationClasses}`}
         />
-        {/* Render the right accessory if provided */}
         {rightAccessory && (
           <div className="absolute inset-y-0 right-0 flex items-center pr-3">
             {rightAccessory}

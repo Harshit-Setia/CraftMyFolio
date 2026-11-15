@@ -1,4 +1,3 @@
-// src/components/ui/FormTextarea.jsx
 import React from "react";
 
 const FormTextarea = ({ id, label, value, onChange, name = id }) => (

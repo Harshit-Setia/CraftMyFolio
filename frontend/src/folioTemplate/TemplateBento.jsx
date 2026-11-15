@@ -13,7 +13,6 @@ const TemplateBento = ({ user }) => {
     <div className="min-h-screen bg-gray-100 p-4 sm:p-8 font-sans text-gray-800">
       <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-4 auto-rows-min">
         
-        {/* --- 1. Profile Block (Large) --- */}
         <div className="md:col-span-2 lg:col-span-2 bg-white rounded-3xl p-8 shadow-sm flex flex-col justify-center items-start">
           {avatar && <img src={avatar} alt={name} className="w-24 h-24 rounded-full object-cover mb-6 shadow-sm" />}
           <h1 className="text-4xl md:text-5xl font-extrabold tracking-tight mb-4">{name || "Name"}</h1>
@@ -24,7 +23,6 @@ const TemplateBento = ({ user }) => {
           </div>
         </div>
 
-        {/* --- 2. Socials Block --- */}
         <div className="bg-indigo-600 rounded-3xl p-8 shadow-sm flex flex-col justify-between text-white">
           <h2 className="text-2xl font-bold mb-4">Connect</h2>
           <div className="space-y-3">
@@ -37,7 +35,6 @@ const TemplateBento = ({ user }) => {
           </div>
         </div>
 
-        {/* --- 3. Skills Block (Tall) --- */}
         <div className="md:row-span-2 bg-white rounded-3xl p-8 shadow-sm overflow-hidden">
           <h2 className="text-2xl font-bold mb-6">Skills</h2>
           <div className="flex flex-wrap gap-2">
@@ -50,7 +47,6 @@ const TemplateBento = ({ user }) => {
           </div>
         </div>
 
-        {/* --- 4. Projects Block (Wide) --- */}
         <div className="md:col-span-3 bg-gray-900 text-white rounded-3xl p-8 shadow-sm">
            <h2 className="text-2xl font-bold mb-6">Featured Projects</h2>
            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -70,7 +66,6 @@ const TemplateBento = ({ user }) => {
            </div>
         </div>
 
-        {/* --- 5. Education Block --- */}
         <div className="md:col-span-2 bg-white rounded-3xl p-8 shadow-sm">
             <h2 className="text-xl font-bold text-gray-900 mb-4">Education</h2>
             <div className="space-y-4">

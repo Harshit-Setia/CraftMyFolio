@@ -9,7 +9,6 @@ const router = express.Router();
 router.post("/signup", upload.single("avatar"), registerUser);
 router.post("/signin", loginUser);
 router.get("/me", protect, getMe);
-// router.post('/logout',logoutUser);
 router.patch("/me", protect, upload.single("avatar"), updateUser);
 router.patch('/me/avatar', protect, upload.single('avatar'), updateUserAvatar);
 

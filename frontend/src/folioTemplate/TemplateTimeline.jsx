@@ -39,7 +39,6 @@ const TemplateTimeline = ({ user }) => {
   return (
     <div className="min-h-screen bg-[#111827] text-gray-100 font-sans selection:bg-purple-500 selection:text-white pb-20">
       
-      {/* ================= HERO ================= */}
       <header className="py-20 text-center px-4 bg-gradient-to-b from-gray-900 to-[#111827]">
         <div className="w-20 h-1 bg-purple-500 mx-auto mb-8 rounded-full"></div>
 
@@ -59,7 +58,6 @@ const TemplateTimeline = ({ user }) => {
           {bio}
         </p>
 
-        {/* Contact */}
         <div className="flex flex-wrap justify-center gap-4 text-sm text-gray-400 mb-6">
           {phone && (
             <span className="flex items-center gap-2">
@@ -82,7 +80,6 @@ const TemplateTimeline = ({ user }) => {
           )}
         </div>
 
-        {/* Social */}
         <div className="flex justify-center gap-6">
           {social.map((s, i) => (
             <a
@@ -105,7 +102,6 @@ const TemplateTimeline = ({ user }) => {
 
       <div className="max-w-5xl mx-auto px-4">
 
-        {/* ================= SKILLS ================= */}
         {skills.length > 0 && (
           <section className="mb-20 text-center">
             <h2 className="text-2xl font-bold mb-8">Skills</h2>
@@ -122,7 +118,6 @@ const TemplateTimeline = ({ user }) => {
           </section>
         )}
 
-        {/* ================= PROJECTS ================= */}
         {projects.length > 0 && (
           <section className="mb-20">
             <h2 className="text-center text-2xl font-bold mb-12">Projects</h2>
@@ -164,11 +159,9 @@ const TemplateTimeline = ({ user }) => {
           </section>
         )}
 
-        {/* ================= TIMELINE ================= */}
         <div className="relative">
           <div className="absolute left-4 md:left-1/2 top-0 bottom-0 w-0.5 bg-gray-800"></div>
 
-          {/* EXPERIENCE */}
           {experience.length > 0 && (
             <section className="mb-20">
               <h2 className="text-center text-2xl font-bold mb-12">
@@ -214,7 +207,6 @@ const TemplateTimeline = ({ user }) => {
             </section>
           )}
 
-          {/* EDUCATION */}
           {education.length > 0 && (
             <section className="mb-20">
               <h2 className="text-center text-2xl font-bold mb-12">
@@ -261,7 +253,6 @@ const TemplateTimeline = ({ user }) => {
           )}
         </div>
 
-        {/* ================= TESTIMONIALS ================= */}
         {testimonials.length > 0 && (
           <section className="mb-20">
             <h2 className="text-center text-2xl font-bold mb-12">

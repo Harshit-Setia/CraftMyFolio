@@ -1,13 +1,9 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { useAuth } from "./useAuth"; // Import useAuth to get token
+import { useAuth } from "./useAuth";
 
-/**
- * A reusable hook for updating user data.
- * @param {function} onClose - The function to call (e.g., to close a modal) on success.
- */
 export const useUpdateUser = (onClose) => {
   const queryClient = useQueryClient();
-  const { token } = useAuth(); // Get token from AuthContext
+  const { token } = useAuth();
 
   return useMutation({
     mutationFn: (updatedData) => {
@@ -15,18 +11,17 @@ export const useUpdateUser = (onClose) => {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}` // Use the token from context
+          'Authorization': `Bearer ${token}`
         },
-        body: JSON.stringify(updatedData), // Send only the fields to be updated
+        body: JSON.stringify(updatedData),
       }).then(res => {
         if (!res.ok) throw new Error('Failed to update profile');
         return res.json();
       });
     },
     onSuccess: () => {
-      // Invalidate the 'user' query to trigger a re-fetch
       queryClient.invalidateQueries({ queryKey: ['user'] });
-      if(onClose) onClose(); // Close the modal
+      if(onClose) onClose();
     },
     onError: (error) => {
       console.error("Update failed:", error.message);

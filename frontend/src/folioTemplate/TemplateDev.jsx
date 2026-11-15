@@ -21,7 +21,6 @@ const TemplateDev = ({ user }) => {
     <div className="min-h-screen bg-slate-900 text-green-400 font-mono p-4 md:p-10 selection:bg-green-900 selection:text-white">
       <div className="max-w-4xl mx-auto border-2 border-slate-700 rounded-lg bg-slate-950 shadow-2xl overflow-hidden">
         
-        {/* Terminal Header */}
         <div className="bg-slate-800 p-3 flex items-center gap-2 border-b-2 border-slate-700">
           <div className="w-3 h-3 rounded-full bg-red-500"></div>
           <div className="w-3 h-3 rounded-full bg-yellow-500"></div>
@@ -31,7 +30,6 @@ const TemplateDev = ({ user }) => {
 
         <div className="p-6 md:p-10 space-y-12">
 
-          {/* --- Header --- */}
           <header>
             <h1 className="text-4xl md:text-6xl font-bold text-white mb-4">
               <span className="text-green-500 mr-4">&gt;</span>
@@ -47,7 +45,6 @@ const TemplateDev = ({ user }) => {
             </div>
           </header>
 
-          {/* --- Socials as Environment Variables --- */}
           {social.length > 0 && (
             <section>
               <h2 className="text-xl font-bold text-purple-400 mb-4">./socials</h2>
@@ -61,7 +58,6 @@ const TemplateDev = ({ user }) => {
             </section>
           )}
 
-          {/* --- Skills as Array --- */}
           {skills.length > 0 && (
              <section>
               <h2 className="text-xl font-bold text-purple-400 mb-4">./skills</h2>
@@ -77,7 +73,6 @@ const TemplateDev = ({ user }) => {
             </section>
           )}
 
-          {/* --- Projects as Functions --- */}
           {projects.length > 0 && (
             <section>
               <h2 className="text-xl font-bold text-purple-400 mb-6">./projects</h2>
@@ -97,7 +92,6 @@ const TemplateDev = ({ user }) => {
             </section>
           )}
 
-          {/* --- Experience as Logs --- */}
           {experience.length > 0 && (
              <section>
               <h2 className="text-xl font-bold text-purple-400 mb-6">./experience.log</h2>

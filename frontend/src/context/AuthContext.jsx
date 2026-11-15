@@ -7,16 +7,12 @@ export default function AuthProvider({ children }) {
   const [token, setToken] = useState(() => localStorage.getItem("token"));
   const queryClient = useQueryClient();
 
-  // This effect syncs any changes to the token state (e.g., from another tab)
-  // This is a more robust way to handle the initial load.
   useEffect(() => {
     const handleStorageChange = () => {
       setToken(localStorage.getItem("token"));
     };
     
-    // Listen for storage changes from other tabs
     window.addEventListener('storage', handleStorageChange);
-    // Clean up listener
     return () => window.removeEventListener('storage', handleStorageChange);
   }, []);
 

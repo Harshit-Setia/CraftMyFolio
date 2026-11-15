@@ -6,7 +6,6 @@ const TemplateNeoBrutal = ({ user }) => {
     <div className="min-h-screen bg-[#FFDEE9] bg-gradient-to-b from-[#fff1eb] to-[#ace0f9] p-4 sm:p-8 font-sans text-black">
       <div className="max-w-5xl mx-auto">
         
-        {/* Header Card */}
         <div className="bg-white border-4 border-black p-8 mb-8 shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] flex flex-col md:flex-row gap-8 items-center md:items-start transform hover:-translate-y-1 transition-transform">
           {avatar && (
             <div className="w-32 h-32 shrink-0 bg-yellow-300 border-4 border-black overflow-hidden rounded-full relative">
@@ -36,7 +35,6 @@ const TemplateNeoBrutal = ({ user }) => {
 
         <div className="grid grid-cols-1 md:grid-cols-12 gap-8">
           
-          {/* Skills Side */}
           <div className="md:col-span-4">
             <div className="bg-[#FD9413] border-4 border-black p-6 shadow-[8px_8px_0px_0px_rgba(0,0,0,1)]">
               <h2 className="text-3xl font-black mb-6 uppercase bg-white border-2 border-black inline-block px-2">Toolbox</h2>
@@ -50,7 +48,6 @@ const TemplateNeoBrutal = ({ user }) => {
             </div>
           </div>
 
-          {/* Projects Main */}
           <div className="md:col-span-8 space-y-6">
              {projects.map((p, i) => (
                <div key={i} className="bg-white border-4 border-black p-6 shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] hover:bg-blue-50 transition">

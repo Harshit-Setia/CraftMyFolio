@@ -2,11 +2,9 @@ import React, { useState } from 'react';
 import Modal from '../../components/ui/Modal';
 import EditButton from '../../components/ui/EditButton';
 import BasicDetailsForm from './BasicDetailsForm';
-// 1. Import our new AvatarUploadForm
 import AvatarUploadForm from './AvatarUploadForm';
 
 const BasicDetails = ({ user }) => {
-  // 2. We now need state for BOTH modals
   const [isDetailsModalOpen, setIsDetailsModalOpen] = useState(false);
   const [isPhotoModalOpen, setIsPhotoModalOpen] = useState(false);
   
@@ -23,21 +21,18 @@ const BasicDetails = ({ user }) => {
           <h1 className="text-3xl font-bold text-gray-800">Basic Details</h1>
           <p className="text-gray-500 mt-1">Manage your personal information and profile</p>
         </div>
-        {/* 3. This button opens the DETAILS modal */}
         <EditButton text="Edit Profile" onClick={() => setIsDetailsModalOpen(true)} />
       </div>
 
       <div className="bg-white p-6 md:p-8 rounded-xl shadow-md border border-gray-100">
         <div className="flex flex-col md:flex-row items-center md:space-x-6">
           
-          {/* 4. This is the new Avatar section */}
           <div className="relative w-24 h-24 flex-shrink-0">
             <img 
               className="w-24 h-24 rounded-full object-cover" 
               src={user.avatar || 'https://placehold.co/100x100/E2E8F0/4A5568?text=??'} 
               alt={user.name} 
             />
-            {/* 5. This button opens the PHOTO modal */}
             <button 
               onClick={() => setIsPhotoModalOpen(true)}
               className="absolute -bottom-1 -right-1 w-8 h-8 bg-indigo-600 rounded-full flex items-center justify-center text-white border-2 border-white hover:bg-indigo-700 transition"
@@ -78,12 +73,10 @@ const BasicDetails = ({ user }) => {
         </div>
       </div>
       
-      {/* 6. Render the DETAILS modal */}
       <Modal isOpen={isDetailsModalOpen} onClose={() => setIsDetailsModalOpen(false)} title="Edit Basic Details">
         <BasicDetailsForm user={user} onClose={() => setIsDetailsModalOpen(false)} />
       </Modal>
 
-      {/* 7. Render the new PHOTO modal */}
       <Modal isOpen={isPhotoModalOpen} onClose={() => setIsPhotoModalOpen(false)} title="Update Profile Photo">
         <AvatarUploadForm user={user} onClose={() => setIsPhotoModalOpen(false)} />
       </Modal>

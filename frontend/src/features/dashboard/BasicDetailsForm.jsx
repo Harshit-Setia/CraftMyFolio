@@ -1,4 +1,3 @@
-// src/features/dashboard/BasicDetailsForm.jsx
 import React, { useState } from "react";
 import { useUpdateUser } from "../../hooks/useUpdateUser";
 import FormInput from "../../components/ui/FormInput";

@@ -1,6 +1,5 @@
 import React from "react";
 
-// SVG Icon Components for demonstration
 const TemplateIcon = () => (
   <svg
     className="h-7 w-7 text-indigo-600"

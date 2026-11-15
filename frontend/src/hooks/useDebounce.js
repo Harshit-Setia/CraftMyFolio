@@ -6,10 +6,9 @@ export const useDebounce = (value, delay) => {
     const handler = setTimeout(() => {
       setDebouncedValue(value);
     }, delay);
-    // Cancel the timeout if value changes (e.g., user is still typing)
     return () => {
       clearTimeout(handler);
     };
-  }, [value, delay]); // Only re-call effect if value or delay changes
+  }, [value, delay]);
   return debouncedValue;
 }

@@ -11,10 +11,8 @@ app.get("/", (req, res) => {
 
 const startServer = async () => {
   try {
-    // Connect to DB first
     await connectDB();
 
-    // Start Express server
     const server = app.listen(PORT, () => {
       console.log(`Server running at http://localhost:${PORT}`);
     });

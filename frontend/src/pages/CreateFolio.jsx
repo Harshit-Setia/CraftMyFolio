@@ -7,7 +7,6 @@ import { SlugSpinner, ErrorIcon, CheckIcon } from "../components/ui/icons.jsx";
 import { useDebounce } from "../hooks/useDebounce.js";
 import { useAuth } from "../hooks/useAuth.js";
 
-// --- A Simple Loading Spinner Component ---
 const FullPageLoader = () => (
   <div className="min-h-screen bg-gray-50 flex items-center justify-center">
     <p className="text-lg font-medium text-gray-600">Loading user data...</p>
@@ -44,7 +43,6 @@ export default function CreateFolio() {
 
   const debouncedSlug = useDebounce(slug, 500);
 
-  // 4. Slug availability check
   const { data: slugAvailability, isLoading: isCheckingSlug } = useQuery({
     queryKey: ["slugCheck", debouncedSlug],
     queryFn: () => checkSlug(debouncedSlug),
@@ -133,7 +131,6 @@ export default function CreateFolio() {
 
     const folioData = { template_id: selected, slug };
 
-    // 7. Call the correct mutation
     if (isEditMode) {
       updateMutation.mutate(folioData);
     } else {
@@ -141,7 +138,6 @@ export default function CreateFolio() {
     }
   };
 
-  // --- Render Logic ---
   if (isUserLoading) {
     return <FullPageLoader />;
   }
@@ -157,7 +153,6 @@ export default function CreateFolio() {
   const selectedTemplate = templateInfo.find((t) => t.id === selected);
   const TemplateComponent = selectedTemplate?.component;
 
-  // 8. Determine the validation state
   const isSlugValid =
     slugAvailability?.available === true || slug === existingFolio?.slug;
   const isSlugInvalid =
@@ -173,7 +168,6 @@ export default function CreateFolio() {
           className="flex-grow flex flex-col space-y-8"
         >
           <div className="space-y-1">
-            {/* 9. Dynamic UI Text */}
             <h2 className="text-3xl font-bold text-slate-800">
               {isEditMode ? "Change Your Folio" : "Create New Folio"}
             </h2>
@@ -275,7 +269,6 @@ export default function CreateFolio() {
             }
             className="w-full bg-indigo-600 text-white font-semibold py-3 px-4 rounded-lg transition hover:bg-indigo-700 disabled:bg-slate-300 disabled:cursor-not-allowed focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
           >
-            {/* 9. Dynamic Button Text */}
             {isMutating
               ? isEditMode
                 ? "Saving Changes..."
@@ -287,7 +280,6 @@ export default function CreateFolio() {
         </form>
       </div>
 
-      {/* Right: Live Preview Pane */}
       <div className="hidden md:block col-span-7 bg-slate-100 p-8">
         <div className="sticky top-8">
           <div className="w-full h-[calc(100vh-4rem)] bg-white rounded-xl shadow-lg flex flex-col overflow-hidden">

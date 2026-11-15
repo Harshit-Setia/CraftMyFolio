@@ -1,4 +1,3 @@
-// src/features/dashboard/EducationDetails.jsx
 import React, { useState } from "react";
 import Modal from "../../components/ui/Modal";
 import EditButton from "../../components/ui/EditButton";

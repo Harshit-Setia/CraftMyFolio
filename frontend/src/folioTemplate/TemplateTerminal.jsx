@@ -6,7 +6,6 @@ const TemplateTerminal = ({ user }) => {
   return (
     <div className="min-h-screen bg-[#0d1117] text-[#00ff41] font-mono p-4 selection:bg-[#00ff41] selection:text-black">
       <div className="max-w-4xl mx-auto border border-[#30363d] rounded-lg overflow-hidden bg-[#010409] shadow-2xl">
-        {/* Window Header */}
         <div className="bg-[#161b22] border-b border-[#30363d] p-3 flex items-center gap-2">
           <div className="w-3 h-3 rounded-full bg-red-500"></div>
           <div className="w-3 h-3 rounded-full bg-yellow-500"></div>
@@ -14,10 +13,8 @@ const TemplateTerminal = ({ user }) => {
           <span className="ml-2 text-xs text-gray-400">user@dev-portfolio:~</span>
         </div>
 
-        {/* Content */}
         <div className="p-6 md:p-10 space-y-8">
           
-          {/* Header Section */}
           <section>
             <p className="mb-2 text-blue-400">Last login: {new Date().toDateString()} on ttys000</p>
             <h1 className="text-4xl md:text-6xl font-bold mb-2 text-white">
@@ -30,7 +27,6 @@ const TemplateTerminal = ({ user }) => {
             </p>
           </section>
 
-          {/* Skills Array */}
           <section>
              <div className="text-yellow-400 mb-2">const skills = [</div>
              <div className="pl-6 grid grid-cols-2 md:grid-cols-4 gap-2 text-gray-300">
@@ -41,7 +37,6 @@ const TemplateTerminal = ({ user }) => {
              <div className="text-yellow-400 mt-2">];</div>
           </section>
 
-          {/* Projects "Files" */}
           <section>
             <h2 className="text-xl text-white border-b border-[#30363d] pb-2 mb-4 flex items-center gap-2">
               <Terminal size={18} /> ./projects
@@ -63,7 +58,6 @@ const TemplateTerminal = ({ user }) => {
             </div>
           </section>
 
-          {/* Social Footer */}
           <footer className="pt-8 border-t border-[#30363d] flex flex-wrap gap-6 text-sm text-gray-500">
              {social.map((s, i) => (
                <a key={i} href={s.url} className="hover:text-[#00ff41] transition">[ {s.platform} ]</a>

@@ -2,7 +2,6 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useAuth } from "./useAuth";
 
-// This hook is ONLY for uploading the avatar file
 export const useUpdateUserAvatar = (onClose) => {
   const queryClient = useQueryClient();
   const { token } = useAuth();
@@ -25,9 +24,8 @@ export const useUpdateUserAvatar = (onClose) => {
     },
 
     onSuccess: () => {
-      // 6. Invalidate the 'user' query to update the UI everywhere
       queryClient.invalidateQueries({ queryKey: ["user"] });
-      onClose(); // Close the modal
+      onClose();
     },
     onError: (error) => {
       console.error("Avatar update failed:", error.message);

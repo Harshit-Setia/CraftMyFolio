@@ -3,10 +3,8 @@ import { useParams } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import { templateInfo } from "../folioTemplate/index.js"; 
 
-// Placeholder for your environment variable
 const API_BASE_URL = `${import.meta.env.VITE_BE_URL}`; 
 
-// --- Loading Component ---
 const FullPageLoader = () => (
   <div className="min-h-screen bg-white flex flex-col items-center justify-center">
     <div className="animate-spin rounded-full h-16 w-16 border-t-4 border-b-4 border-indigo-600 mb-4"></div>
@@ -14,7 +12,6 @@ const FullPageLoader = () => (
   </div>
 );
 
-// --- Error Component ---
 const ErrorView = ({ message }) => (
   <div className="min-h-screen flex flex-col items-center justify-center bg-gray-50 px-4 text-center">
     <svg xmlns="http://www.w3.org/2000/svg" className="h-24 w-24 text-gray-400 mb-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -26,35 +23,30 @@ const ErrorView = ({ message }) => (
   </div>
 );
 
-// --- Data Fetcher ---
 const fetchPublicFolio = async (slug) => {
   const res = await fetch(`${API_BASE_URL}/folio/${slug}`);
   
   if (!res.ok) {
-    // This handles 404s (portfolio not found) or 500s
     throw new Error('Portfolio not found');
   }
   
   return res.json();
 };
 
-// --- Main Component ---
 const PublicFolioPage = () => {
   const { slug } = useParams();
 
   const { data, isLoading, error } = useQuery({
     queryKey: ['folio', slug], 
     queryFn: () => fetchPublicFolio(slug),
-    retry: 1, // Don't retry too many times if it's a 404
-    staleTime: 1000 * 60 * 5, // Cache for 5 minutes (public data changes rarely)
+    retry: 1,
+    staleTime: 1000 * 60 * 5,
   });
 
-  // 3. Handle Loading
   if (isLoading) {
     return <FullPageLoader />;
   }
 
-  // 4. Handle Errors (404 or Network)
   if (error) {
     return <ErrorView message={error.message} />;
   }
@@ -64,7 +56,6 @@ const PublicFolioPage = () => {
   const selectedTemplate = templateInfo.find(t => t.id === template_id);
   const TemplateComponent = selectedTemplate?.component;
 
-  // 7. Handle invalid template ID (e.g., if you deleted a template but DB still references it)
   if (!TemplateComponent) {
     return (
       <div className="min-h-screen flex items-center justify-center text-center p-10">

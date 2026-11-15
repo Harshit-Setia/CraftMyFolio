@@ -4,13 +4,11 @@ import FormTextarea from '../../components/ui/FormTextarea';
 
 
 const SkillsForm = ({ user, onClose }) => {
-  // We manage skills as a simple string for the text area
   const [skills, setSkills] = useState(user.skills ? user.skills.join(', ') : '');
   const mutation = useUpdateUser(onClose);
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // Convert the string back into an array for the backend
     const skillsArray = skills.split(',').map(s => s.trim()).filter(Boolean);
     mutation.mutate({ skills: skillsArray });
   };

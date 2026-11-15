@@ -11,7 +11,6 @@ const TemplateResume = ({ user }) => {
     social = []
   } = user || {};
 
-  // Helper to format dates
   const formatDate = (date) => {
     if (!date) return "";
     return new Date(date).toLocaleDateString('en-US', { month: 'short', year: 'numeric' });
@@ -21,7 +20,6 @@ const TemplateResume = ({ user }) => {
     <div className="min-h-screen bg-white text-slate-900 p-4 md:p-12 font-sans selection:bg-slate-200">
       <div className="max-w-4xl mx-auto border border-slate-100 shadow-2xl rounded-sm overflow-hidden bg-white">
         
-        {/* Top Header / Contact Bar */}
         <header className="bg-slate-900 text-white p-8 md:p-12">
           <div className="flex flex-col md:flex-row justify-between items-start gap-6">
             <div className="flex-1">
@@ -47,10 +45,8 @@ const TemplateResume = ({ user }) => {
 
         <div className="p-8 md:p-12 grid grid-cols-1 md:grid-cols-3 gap-12">
           
-          {/* Main Content Area */}
           <div className="md:col-span-2 space-y-10">
             
-            {/* Experience Section */}
             { experience && experience.length > 0 && <section>
               <h2 className="text-sm font-black uppercase tracking-[0.2em] border-b-2 border-slate-900 pb-1 mb-6">Professional Experience</h2>
               <div className="space-y-8">
@@ -69,7 +65,6 @@ const TemplateResume = ({ user }) => {
               </div>
             </section>}
 
-            {/* Projects Section */}
             <section>
               <h2 className="text-sm font-black uppercase tracking-[0.2em] border-b-2 border-slate-900 pb-1 mb-6">Notable Projects</h2>
               <div className="grid grid-cols-1 gap-6">
@@ -91,10 +86,8 @@ const TemplateResume = ({ user }) => {
             </section>
           </div>
 
-          {/* Sidebar Area */}
           <div className="space-y-10">
             
-            {/* Skills Section */}
             <section>
               <h2 className="text-sm font-black uppercase tracking-[0.2em] border-b-2 border-slate-900 pb-1 mb-4">Core Skills</h2>
               <div className="flex flex-wrap gap-2">
@@ -106,7 +99,6 @@ const TemplateResume = ({ user }) => {
               </div>
             </section>
 
-            {/* Education Section */}
             <section>
               <h2 className="text-sm font-black uppercase tracking-[0.2em] border-b-2 border-slate-900 pb-1 mb-4">Education</h2>
               <div className="space-y-4">
@@ -125,7 +117,6 @@ const TemplateResume = ({ user }) => {
               </div>
             </section>
 
-            {/* Social Section */}
             <section>
               <h2 className="text-sm font-black uppercase tracking-[0.2em] border-b-2 border-slate-900 pb-1 mb-4">Social</h2>
               <div className="space-y-2">
@@ -145,7 +136,6 @@ const TemplateResume = ({ user }) => {
           </div>
         </div>
         
-        {/* Print Footer */}
         <footer className="bg-slate-50 p-6 text-center border-t border-slate-100">
            <p className="text-[10px] text-slate-400 uppercase tracking-widest font-bold">Generated via {name}'s Digital Portfolio</p>
         </footer>

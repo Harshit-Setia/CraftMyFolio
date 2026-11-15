@@ -10,18 +10,14 @@ const TemplateGlass = ({ user }) => {
   return (
     <div className="min-h-screen font-sans text-slate-800 p-4 md:p-12 relative overflow-hidden">
       
-      {/* --- Background Gradient --- */}
-      {/* In a real app, you could let the user pick these colors */}
       <div className="absolute inset-0 bg-gradient-to-br from-pink-300 via-purple-300 to-indigo-400 -z-10"></div>
       
-      {/* --- Floating Shapes for effect --- */}
       <div className="absolute top-0 left-0 w-72 h-72 bg-purple-400 rounded-full mix-blend-multiply filter blur-xl opacity-70 animate-blob -z-10"></div>
       <div className="absolute top-0 right-0 w-72 h-72 bg-yellow-300 rounded-full mix-blend-multiply filter blur-xl opacity-70 animate-blob animation-delay-2000 -z-10"></div>
       <div className="absolute -bottom-8 left-20 w-72 h-72 bg-pink-300 rounded-full mix-blend-multiply filter blur-xl opacity-70 animate-blob animation-delay-4000 -z-10"></div>
 
       <div className="max-w-5xl mx-auto space-y-8">
         
-        {/* --- Header Card --- */}
         <div className="bg-white/30 backdrop-blur-md border border-white/20 rounded-3xl p-8 md:p-12 shadow-xl flex flex-col md:flex-row items-center gap-8 text-center md:text-left">
            {avatar && <img src={avatar} alt={name} className="w-40 h-40 rounded-full object-cover border-4 border-white/50 shadow-lg" />}
            <div className="flex-1">
@@ -37,7 +33,6 @@ const TemplateGlass = ({ user }) => {
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             
-            {/* --- Projects Column (2/3 width) --- */}
             <div className="md:col-span-2 space-y-8">
                 <div className="bg-white/40 backdrop-blur-md border border-white/20 rounded-3xl p-8 shadow-xl">
                     <h2 className="text-3xl font-bold text-purple-900 mb-6">Selected Work</h2>
@@ -56,7 +51,6 @@ const TemplateGlass = ({ user }) => {
                 </div>
             </div>
 
-            {/* --- Sidebar Column (Skills & More) --- */}
             <div className="space-y-8">
                 <div className="bg-white/40 backdrop-blur-md border border-white/20 rounded-3xl p-8 shadow-xl">
                     <h2 className="text-2xl font-bold text-purple-900 mb-4">Toolbox</h2>

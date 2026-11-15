@@ -2,10 +2,8 @@ import React, { useState } from "react";
 import { Link, Navigate, useNavigate } from "react-router-dom";
 import FormButton from "../components/FormButton";
 import FormInput from "../components/FormInput";
-// 1. Corrected import path for your new hook
 import { useAuth } from "../hooks/useAuth";
 
-// --- SVG Icons ---
 const EmailIcon = () => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
@@ -87,16 +85,14 @@ const EyeClosedIcon = () => (
     />
   </svg>
 );
-// --- End Icons ---
 
 const SignIn = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [errors, setErrors] = useState({});
-  const [isSubmitting, setIsSubmitting] = useState(false); // 5. Added loading state
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
-  // 2. Correctly get 'token' and 'login' from our new useAuth hook
   const { login, token } = useAuth();
   const navigate = useNavigate();
 
@@ -106,29 +102,26 @@ const SignIn = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setErrors({}); // Clear old errors
+    setErrors({});
     const newErrors = {};
 
-    // Email validation
     if (!email) {
       newErrors.email = "Email address is required.";
     } else if (!validateEmail(email)) {
       newErrors.email = "Please enter a valid email address.";
     }
 
-    // Password validation
     if (!password) {
       newErrors.password = "Password is required.";
     }
 
     setErrors(newErrors);
 
-    // 3. Corrected validation check
     if (Object.keys(newErrors).length > 0) {
-      return; // Stop submission if there are errors
+      return;
     }
 
-    setIsSubmitting(true); // Disable button
+    setIsSubmitting(true);
 
     try {
       const res = await fetch(`${import.meta.env.VITE_BE_URL}/signin`, {
@@ -139,31 +132,25 @@ const SignIn = () => {
         body: JSON.stringify({ email, password }),
       });
 
-      const response = await res.json(); // Get JSON response regardless of 'ok'
+      const response = await res.json();
 
       if (!res.ok) {
-        // Use the error message from the backend
         throw new Error(response.message || "Something went wrong");
       }
       
-      // 4. This is the main fix!
-      // Our new 'login' function only wants the token.
-      // Assuming response is { data: { user: {...}, token: "..." } }
       login(response.data.token);
 
       navigate("/dashboard");
     } catch (error) {
       console.error("Submission Failed:", error);
-      // Set an API error to display to the user
       setErrors({ api: error.message });
     } finally {
-      setIsSubmitting(false); // Re-enable button
+      setIsSubmitting(false);
     }
   };
 
   return (
     <>
-      {/* 2. Check for 'token' instead of 'user' */}
       {token ? (
         <Navigate to="/dashboard" />
       ) : (
@@ -180,10 +167,9 @@ const SignIn = () => {
           <div className="mt-8 w-full max-w-md">
             <form
               onSubmit={handleSubmit}
-              noValidate // Disable browser validation, we do our own
+              noValidate
               className="bg-white py-8 px-10 rounded-xl shadow-md border border-gray-100"
             >
-              {/* Display API errors */}
               {errors.api && (
                 <p className="text-red-500 text-center text-sm mb-4">{errors.api}</p>
               )}
@@ -229,7 +215,6 @@ const SignIn = () => {
                 </Link>
               </div>
 
-              {/* Pass the 'isSubmitting' state to the button */}
               <FormButton type="submit" disabled={isSubmitting}>
                 {isSubmitting ? "Signing In..." : "Sign In"}
               </FormButton>

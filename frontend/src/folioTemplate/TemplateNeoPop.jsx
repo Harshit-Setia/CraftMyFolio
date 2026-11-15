@@ -4,7 +4,6 @@ import { MoveRight, Github, Globe, Star, Box } from 'lucide-react';
 const TemplateNeoPop = ({ user }) => {
   const { name, bio, skills = [], experience = [], projects = [], social = [] } = user || {};
 
-  // Reusable Neo-Brutalist Card
   const NeoCard = ({ children, className = "", color = "bg-white" }) => (
     <div className={`${color} border-2 border-black p-6 shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] transition-all duration-200 ${className}`}>
       {children}
@@ -15,7 +14,6 @@ const TemplateNeoPop = ({ user }) => {
     <div className="min-h-screen bg-[#fffbf0] text-black font-sans p-6 md:p-12 selection:bg-pink-400 selection:text-white">
       <div className="max-w-5xl mx-auto space-y-16">
 
-        {/* --- Hero Section --- */}
         <div className="flex flex-col md:flex-row gap-8 items-center md:items-start">
           <div className="flex-1 space-y-6">
             <h1 className="text-6xl md:text-8xl font-black uppercase leading-none tracking-tighter">
@@ -35,7 +33,6 @@ const TemplateNeoPop = ({ user }) => {
           </div>
         </div>
 
-        {/* --- Skills Marquee (Static representation) --- */}
         <div className="border-y-2 border-black py-4 bg-black overflow-hidden">
           <div className="flex gap-8 text-white font-mono font-bold uppercase tracking-widest overflow-x-auto no-scrollbar whitespace-nowrap">
             {skills.map((s, i) => (
@@ -46,7 +43,6 @@ const TemplateNeoPop = ({ user }) => {
           </div>
         </div>
 
-        {/* --- Projects Grid --- */}
         <section>
           <div className="flex items-center gap-4 mb-8">
              <div className="w-4 h-4 bg-black"></div>
@@ -69,7 +65,6 @@ const TemplateNeoPop = ({ user }) => {
           </div>
         </section>
 
-        {/* --- Experience List --- */}
         <section>
            <div className="flex items-center gap-4 mb-8">
              <div className="w-4 h-4 bg-black"></div>

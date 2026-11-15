@@ -21,7 +21,7 @@ export const uploadOnCloudinary = async (localFilePath) => {
     return result.secure_url;
   } catch (error) {
     console.error('Cloudinary upload failed:', error.message);
-    try { fs.unlinkSync(localFilePath); } catch { } // safe cleanup
+    try { fs.unlinkSync(localFilePath); } catch { }
     throw new Error('File upload failed');
   }
 };

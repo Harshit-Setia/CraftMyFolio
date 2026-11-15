@@ -20,7 +20,6 @@ const Header = () => {
         </div>
         <SearchBar />
 
-        {/* 4. This is the new, robust display logic */}
         <div className="flex items-center space-x-5">
           {isLoading && token ? ( 
             <div className="h-10 w-10 rounded-full bg-gray-200 animate-pulse"></div>

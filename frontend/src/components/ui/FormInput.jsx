@@ -1,4 +1,3 @@
-// src/components/ui/FormInput.jsx
 import React from "react";
 
 const FormInput = ({ id, label, value, onChange, type = "text", name = id }) => (
